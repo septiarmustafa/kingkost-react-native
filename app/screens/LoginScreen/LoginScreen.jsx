@@ -94,7 +94,10 @@ export default function LoginScreen() {
         <TouchableOpacity style={styles.googleButton}>
           <Text style={styles.buttonText}>Login with Google</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.appleButton}>
+        <TouchableOpacity
+          style={styles.appleButton}
+          onPress={() => navigation.navigate("BottomTabNavigation")}
+        >
           <Text style={styles.buttonText}>Login with Apple</Text>
         </TouchableOpacity>
         <View style={styles.register}>

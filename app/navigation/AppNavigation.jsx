@@ -41,6 +41,11 @@ export const AppNavigation = () => {
             component={RegisterScreen}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="BottomTabNavigation"
+            component={BottomTabNavigation}
+            options={{ headerShown: false }}
+          />
         </>
       )}
     </Stack.Navigator>
