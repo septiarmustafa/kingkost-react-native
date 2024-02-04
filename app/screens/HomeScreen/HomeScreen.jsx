@@ -51,7 +51,11 @@ export default HomeScreen = ({ navigation }) => {
         {optionsList.map((option, index) => (
           <View style={style.optionsCard} key={index}>
             {/* House image */}
-            <Image source={option.img} style={style.optionsCardImage} />
+            <Image
+              onPress={navigation.navigate("DetailKostScreen")}
+              source={option.img}
+              style={style.optionsCardImage}
+            />
 
             {/* Option title */}
             <Text style={{ marginTop: 10, fontSize: 18, fontWeight: "bold" }}>
