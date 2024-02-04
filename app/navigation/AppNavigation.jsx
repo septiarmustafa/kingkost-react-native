@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import BottomTabNavigation from "./BottomTabNavigation";
 import LoginScreen from "../screens/LoginScreen/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen/RegisterScreen";
+import DetailKostScreen from "../screens/DetailKostScreen/DetailKostScreen";
 
 const Stack = createStackNavigator();
 
@@ -39,6 +40,16 @@ export const AppNavigation = () => {
           <Stack.Screen
             name="Register"
             component={RegisterScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="BottomTabNavigation"
+            component={BottomTabNavigation}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="DetailKostScreen"
+            component={DetailKostScreen}
             options={{ headerShown: false }}
           />
         </>
