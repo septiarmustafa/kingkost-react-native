@@ -4,15 +4,24 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  Alert,
+  Image,
+  ScrollView,
 } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { BASE_HOST } from "../../config/BaseUrl";
-import Colors from "../../utils/Colors";
+import {
+  Entypo,
+  FontAwesome,
+  MaterialIcons,
+  FontAwesome5,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 
 export default function RegisterScreen() {
+  const [hidePassword, setHidePassword] = useState(true);
   const [registrationData, setRegistrationData] = useState({
     username: "",
     password: "",
@@ -20,6 +29,15 @@ export default function RegisterScreen() {
     address: "",
     mobilePhone: "",
     email: "",
+  });
+  const [errorMessages, setErrorMessages] = useState({
+    username: "",
+    password: "",
+    name: "",
+    address: "",
+    mobilePhone: "",
+    email: "",
+    gender: "",
   });
   const navigation = useNavigation();
 
@@ -29,35 +47,35 @@ export default function RegisterScreen() {
       [field]: text,
     });
   };
+  const togglePasswordVisibility = () => {
+    setHidePassword(!hidePassword);
+  };
 
   const handleRegister = async () => {
-    const { username, password, name, address, mobilePhone, email } =
+    const { username, password, name, address, mobilePhone, email, gender } =
       registrationData;
-    if (!username || !password || !name || !address || !mobilePhone || !email) {
-      Alert.alert(
-        "Error",
-        !username
-          ? "Username is required."
-          : !password
-          ? "Password is required."
-          : !name
-          ? "Name is required."
-          : !address
-          ? "Address is required."
-          : !mobilePhone
-          ? "Mobile Phone is required."
-          : !email
-          ? "Email is required."
-          : "All field are required."
-      );
+
+    const errors = {};
+    if (!username) errors.username = "Username is required.";
+    if (!password) errors.password = "Password is required.";
+    if (!name) errors.name = "Name is required.";
+    if (!address) errors.address = "Address is required.";
+    if (!mobilePhone) errors.mobilePhone = "Mobile Phone is required.";
+    if (!email) errors.email = "Email is required.";
+    if (!gender) errors.gender = "Gender is required.";
+
+    setErrorMessages(errors);
+
+    if (Object.keys(errors).length > 0) {
       return;
     }
+
     try {
       const response = await axios.post(
         `${BASE_HOST}/api/auth/customer/register`,
         registrationData
       );
-      console.log(response);
+
       if (response.status === 201) {
         console.log("Registration successful!");
         navigation.navigate("Login");
@@ -70,149 +88,296 @@ export default function RegisterScreen() {
     }
   };
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.loginContainer}>
-        <Text style={styles.title}>Register</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          placeholderTextColor={Colors.WHITE}
-          value={registrationData.username}
-          onChangeText={(text) => handleFieldChange("username", text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor={Colors.WHITE}
-          secureTextEntry
-          value={registrationData.password}
-          onChangeText={(text) => handleFieldChange("password", text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Name"
-          placeholderTextColor={Colors.WHITE}
-          value={registrationData.name}
-          onChangeText={(text) => handleFieldChange("name", text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Address"
-          placeholderTextColor={Colors.WHITE}
-          value={registrationData.address}
-          onChangeText={(text) => handleFieldChange("address", text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Mobile Phone"
-          placeholderTextColor={Colors.WHITE}
-          value={registrationData.mobilePhone}
-          onChangeText={(text) => handleFieldChange("mobilePhone", text)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor={Colors.WHITE}
-          value={registrationData.email}
-          onChangeText={(text) => handleFieldChange("email", text)}
-        />
-        <TouchableOpacity style={styles.loginButton} onPress={handleRegister}>
-          <Text style={styles.buttonText}>Register</Text>
-        </TouchableOpacity>
+  const handleLogin = () => {
+    navigation.navigate("Login");
+  };
 
-        <View style={styles.register}>
-          <Text style={styles.signUpText}>Have an account?</Text>
-          <TouchableOpacity
-            style={styles.signUpButton}
-            onPress={() => navigation.navigate("Login")}
-          >
-            <Text style={styles.signUpButtonText}>Log In</Text>
-          </TouchableOpacity>
+  return (
+    <ScrollView>
+      <View style={styles.container}>
+        <Image
+          style={styles.loginImage}
+          source={require("../../../assets/images/register.png")}
+        />
+
+        <View style={styles.subContainer}>
+          <Text style={styles.title}>Register</Text>
+          <View>
+            <View style={styles.inputContainer}>
+              <FontAwesome
+                name="user"
+                size={24}
+                color="grey"
+                style={styles.icon}
+              />
+              <TextInput
+                style={{
+                  ...styles.input,
+                  marginTop: 10,
+                }}
+                placeholder="Username"
+                value={registrationData.username}
+                onChangeText={(text) => handleFieldChange("username", text)}
+                placeholderTextColor="grey"
+              />
+            </View>
+            {errorMessages.username ? (
+              <Text style={styles.errorMessage}>{errorMessages.username}</Text>
+            ) : null}
+            <View style={styles.passwordInputContainer}>
+              <FontAwesome
+                name="lock"
+                size={24}
+                color="grey"
+                style={styles.icon}
+              />
+              <TextInput
+                style={styles.passwordInput}
+                placeholder="Password"
+                placeholderTextColor="grey"
+                secureTextEntry={hidePassword}
+                value={registrationData.password}
+                onChangeText={(text) => handleFieldChange("password", text)}
+              />
+              <TouchableOpacity
+                style={styles.toggleButton}
+                onPress={togglePasswordVisibility}
+              >
+                {hidePassword ? (
+                  <Entypo name="eye-with-line" size={24} color="grey" />
+                ) : (
+                  <Entypo name="eye" size={24} color="grey" />
+                )}
+              </TouchableOpacity>
+            </View>
+            {errorMessages.password ? (
+              <Text style={styles.errorMessage}>{errorMessages.password}</Text>
+            ) : null}
+            <View style={styles.inputContainer}>
+              <FontAwesome name="address-card" size={16} color="grey" />
+              <TextInput
+                style={{ ...styles.input, marginTop: 10 }}
+                placeholder="Name"
+                placeholderTextColor="grey"
+                value={registrationData.name}
+                onChangeText={(text) => handleFieldChange("name", text)}
+              />
+            </View>
+            {errorMessages.name ? (
+              <Text style={styles.errorMessage}>{errorMessages.name}</Text>
+            ) : null}
+            <View style={styles.inputContainer}>
+              <FontAwesome name="street-view" size={21} color="grey" />
+              <TextInput
+                style={{ ...styles.input, marginTop: 10 }}
+                placeholder="Address"
+                placeholderTextColor="grey"
+                value={registrationData.address}
+                onChangeText={(text) => handleFieldChange("address", text)}
+              />
+            </View>
+            {errorMessages.address ? (
+              <Text style={styles.errorMessage}>{errorMessages.address}</Text>
+            ) : null}
+            <View style={styles.pickerContainer}>
+              <Picker
+                selectedValue={registrationData.gender}
+                onValueChange={(itemValue, itemIndex) =>
+                  handleFieldChange("gender", itemValue)
+                }
+                style={styles.picker}
+              >
+                <Picker.Item label="Select Gender" value="" />
+                <Picker.Item label="Laki-laki" value="male" />
+                <Picker.Item label="Perempuan" value="female" />
+              </Picker>
+            </View>
+            {errorMessages.gender ? (
+              <Text style={styles.errorMessage}>{errorMessages.gender}</Text>
+            ) : null}
+            <View style={styles.inputContainer}>
+              <MaterialCommunityIcons
+                name="email-multiple"
+                size={18}
+                color="grey"
+              />
+              <TextInput
+                style={{ ...styles.input, marginTop: 10 }}
+                placeholder="Email"
+                placeholderTextColor="grey"
+                keyboardType="email-address"
+                value={registrationData.email}
+                onChangeText={(text) => handleFieldChange("email", text)}
+              />
+            </View>
+            {errorMessages.email ? (
+              <Text style={styles.errorMessage}>{errorMessages.email}</Text>
+            ) : null}
+            <View style={styles.inputContainer}>
+              <FontAwesome5 name="phone-square-alt" size={21} color="grey" />
+              <TextInput
+                style={{ ...styles.input, marginTop: 10 }}
+                placeholder="Mobile Phone"
+                placeholderTextColor="grey"
+                keyboardType="phone-pad"
+                value={registrationData.mobilePhone}
+                onChangeText={(text) => handleFieldChange("mobilePhone", text)}
+              />
+            </View>
+            {errorMessages.mobilePhone ? (
+              <Text style={styles.errorMessage}>
+                {errorMessages.mobilePhone}
+              </Text>
+            ) : null}
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPress={handleRegister}
+            >
+              <Text style={styles.buttonText}>Register</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.loginContainer}>
+            <Text style={styles.text}>Already have account?</Text>
+            <TouchableOpacity onPress={handleLogin}>
+              <Text style={styles.signInText}>Sign in</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    alignItems: "center",
   },
-  image: {
-    flex: 1,
-    justifyContent: "center",
+  loginImage: {
+    width: "100%",
+    height: 350,
   },
-  loginContainer: {
+  subContainer: {
+    minWidth: "100%",
+    height: "100%",
+    backgroundColor: "#f1f1f1",
+    marginTop: -57,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
     padding: 20,
-    backgroundColor: "rgba(100, 100, 100, 0.25)",
-    borderRadius: 10,
-    margin: 40,
   },
   title: {
-    fontSize: 24,
-    color: "white",
-    fontWeight: "bold",
-    marginBottom: 20,
+    fontSize: 20,
+    color: "black",
     textAlign: "center",
+    marginBottom: 15,
   },
   input: {
     height: 40,
     borderColor: "white",
+    backgroundColor: "white",
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
     borderRadius: 5,
-    color: "white",
+    color: "black",
+    width: "98%",
   },
-  loginButton: {
-    backgroundColor: "#3498db",
-    padding: 10,
-    borderRadius: 5,
+  inputContainer: {
+    flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
-  },
-  googleButton: {
-    backgroundColor: "#dd4b39",
-    padding: 10,
+    borderColor: "white",
+    backgroundColor: "white",
     borderRadius: 5,
+    paddingHorizontal: 10,
+    height: 40,
+  },
+  errorMessage: {
+    color: "red",
+    fontSize: 12,
+    marginTop: -9,
+    marginBottom: 5,
+    paddingLeft: 5,
+  },
+  passwordInputContainer: {
+    flexDirection: "row",
     alignItems: "center",
     marginBottom: 10,
-  },
-  appleButton: {
-    backgroundColor: "#000",
-    padding: 10,
+    borderColor: "white",
+    backgroundColor: "white",
     borderRadius: 5,
-    alignItems: "center",
+    paddingHorizontal: 10,
+    height: 40,
   },
-  buttonText: {
-    color: "white",
-    fontWeight: "bold",
+  passwordInput: {
+    flex: 1,
+    height: 40,
+    borderColor: "white",
+    backgroundColor: "white",
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    color: "black",
   },
   toggleButton: {
     position: "absolute",
     top: 10,
     right: 10,
   },
-  toggleText: {
-    color: "white",
+  pickerContainer: {
+    height: 40,
+    borderColor: "white",
+    backgroundColor: "white",
+    borderWidth: 1,
+    marginBottom: 10,
+    borderRadius: 5,
+    overflow: "hidden",
   },
-  register: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+  picker: {
+    height: 40,
+    color: "grey",
+    marginLeft: -8,
+    marginTop: -8,
   },
-  signUpText: {
-    color: "white",
+  button: {
+    padding: 10,
+    backgroundColor: "white",
+    borderRadius: 99,
+    marginTop: 15,
+  },
+  text: {
     textAlign: "center",
-    paddingRight: 5,
+    marginTop: 10,
+    color: "white",
   },
-  signUpButton: {
+  buttonText: {
+    textAlign: "center",
+    fontSize: 17,
+    color: "grey",
+  },
+  text: {
+    color: "grey",
+  },
+  loginButton: {
+    backgroundColor: "#F9A826",
+    padding: 10,
     borderRadius: 5,
     alignItems: "center",
+    marginBottom: 10,
   },
-  signUpButtonText: {
+  loginContainer: {
+    flexDirection: "row",
+    marginTop: 10,
+    justifyContent: "center",
+  },
+  buttonText: {
     color: "white",
+    fontWeight: "bold",
+  },
+  signInText: {
+    textAlign: "center",
+    fontSize: 14,
+    color: "grey",
     fontWeight: "bold",
   },
 });
