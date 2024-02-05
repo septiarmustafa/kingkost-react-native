@@ -160,7 +160,10 @@ export default function LoginScreen() {
             <TouchableOpacity style={styles.socialButton}>
               <FontAwesome5 name="google" size={40} color="grey" />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.socialButton}>
+            <TouchableOpacity
+              style={styles.socialButton}
+              onPress={() => navigation.navigate("DetailKostScreen")}
+            >
               <AntDesign name="apple1" size={40} color="grey" />
             </TouchableOpacity>
           </View>
