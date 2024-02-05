@@ -5,34 +5,47 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
+  Image,
 } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BASE_HOST } from "../../config/BaseUrl";
+import { Entypo, AntDesign, FontAwesome } from "@expo/vector-icons";
+import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function LoginScreen() {
   const [username, setusername] = useState("");
   const [password, setPassword] = useState("");
   const [hidePassword, setHidePassword] = useState(true);
   const [err, setErr] = useState("");
+  const [errorMessages, setErrorMessages] = useState({
+    username: "",
+    password: "",
+  });
   const navigation = useNavigation();
 
   const handleUsername = (text) => {
     setusername(text);
+    setErrorMessages({ ...errorMessages, username: "" });
   };
   const handlePassword = (text) => {
     setPassword(text);
+    setErrorMessages({ ...errorMessages, password: "" });
+  };
+  const togglePasswordVisibility = () => {
+    setHidePassword(!hidePassword);
   };
 
   const handleLogin = async () => {
     if (!username) {
-      Alert.alert("Error", "Username is required.");
+      setErrorMessages({ ...errorMessages, username: "Username is required." });
       return;
     }
     if (!password) {
-      Alert.alert("Error", "Password is required.");
+      setErrorMessages({ ...errorMessages, password: "Password is required." });
       return;
     }
 
@@ -70,67 +83,127 @@ export default function LoginScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.loginContainer}>
-        <Text style={styles.title}>Login</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Username"
-          value={username}
-          onChangeText={handleUsername}
-          placeholderTextColor="white"
+    <ScrollView>
+      <View style={styles.container}>
+        <Image
+          style={styles.loginImage}
+          source={require("../../../assets/images/login.png")}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor="white"
-          secureTextEntry={hidePassword ? true : false}
-          value={password}
-          onChangeText={handlePassword}
-        />
-        <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.googleButton}>
-          <Text style={styles.buttonText}>Login with Google</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.appleButton}
-          onPress={() => navigation.navigate("BottomTabNavigation")}
-        >
-          <Text style={styles.buttonText}>Login with Apple</Text>
-        </TouchableOpacity>
-        <View style={styles.register}>
-          <Text style={styles.signUpText}>Don't have an account?</Text>
-          <TouchableOpacity
-            style={styles.signUpButton}
-            onPress={() => navigation.navigate("Register")}
-          >
-            <Text style={styles.signUpButtonText}>Sign Up</Text>
+        <View style={styles.loginContainer}>
+          <Text style={styles.title}>Login</Text>
+          <View style={styles.inputContainer}>
+            <FontAwesome
+              name="user"
+              size={24}
+              color="grey"
+              style={styles.icon}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Username"
+              value={username}
+              onChangeText={handleUsername}
+              placeholderTextColor="grey"
+            />
+          </View>
+          {errorMessages.username ? (
+            <Text style={styles.errorMessage}>{errorMessages.username}</Text>
+          ) : null}
+
+          <View style={styles.passwordInputContainer}>
+            <FontAwesome
+              name="lock"
+              size={24}
+              color="grey"
+              style={styles.icon}
+            />
+            <TextInput
+              style={styles.passwordInput}
+              placeholder="Password"
+              placeholderTextColor="grey"
+              secureTextEntry={hidePassword}
+              value={password}
+              onChangeText={handlePassword}
+            />
+            <TouchableOpacity
+              style={styles.toggleButton}
+              onPress={togglePasswordVisibility}
+            >
+              {hidePassword ? (
+                <Entypo name="eye-with-line" size={24} color="grey" />
+              ) : (
+                <Entypo name="eye" size={24} color="grey" />
+              )}
+            </TouchableOpacity>
+          </View>
+          {errorMessages.password ? (
+            <Text style={styles.errorMessage}>{errorMessages.password}</Text>
+          ) : null}
+
+          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
+            <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
+          <View style={styles.register}>
+            <Text style={styles.signUpText}>Don't have an account?</Text>
+            <TouchableOpacity
+              style={styles.signUpButton}
+              onPress={() => navigation.navigate("Register")}
+            >
+              <Text style={styles.signUpButtonText}>Sign Up</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={styles.socialLogos}>
+            <TouchableOpacity style={styles.socialButton}>
+              <FontAwesome5 name="facebook" size={40} color="grey" />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.socialButton}>
+              <FontAwesome5 name="google" size={40} color="grey" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.socialButton}
+              onPress={() => navigation.navigate("DetailKostScreen")}
+            >
+              <AntDesign name="apple1" size={40} color="grey" />
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    alignItems: "center",
   },
-  image: {
-    flex: 1,
-    justifyContent: "center",
+  loginImage: {
+    width: "100%",
+    height: 450,
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+    borderColor: "white",
+    backgroundColor: "white",
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    height: 40,
   },
   loginContainer: {
+    minWidth: "100%",
+    height: "100%",
+    backgroundColor: "#f1f1f1",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
     padding: 20,
-    backgroundColor: "rgba(100, 100, 100, 0.25)",
-    borderRadius: 10,
-    margin: 40,
+    paddingTop: 50,
+    marginTop: -65,
   },
   title: {
     fontSize: 24,
-    color: "white",
+    color: "black",
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: "center",
@@ -138,31 +211,25 @@ const styles = StyleSheet.create({
   input: {
     height: 40,
     borderColor: "white",
-    borderWidth: 1,
-    marginBottom: 10,
+    backgroundColor: "white",
     paddingHorizontal: 10,
     borderRadius: 5,
-    color: "white",
+    color: "black",
+    width: "98%",
+  },
+  errorMessage: {
+    color: "red",
+    fontSize: 12,
+    marginTop: -9,
+    marginBottom: 5,
+    paddingLeft: 5,
   },
   loginButton: {
-    backgroundColor: "#3498db",
+    backgroundColor: "#F9A826",
     padding: 10,
     borderRadius: 5,
     alignItems: "center",
     marginBottom: 10,
-  },
-  googleButton: {
-    backgroundColor: "#dd4b39",
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  appleButton: {
-    backgroundColor: "#000",
-    padding: 10,
-    borderRadius: 5,
-    alignItems: "center",
   },
   buttonText: {
     color: "white",
@@ -183,7 +250,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   signUpText: {
-    color: "white",
+    color: "grey",
     textAlign: "center",
     paddingRight: 5,
   },
@@ -192,7 +259,35 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   signUpButtonText: {
-    color: "white",
+    color: "grey",
     fontWeight: "bold",
+  },
+  passwordInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+    borderColor: "white",
+    backgroundColor: "white",
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    height: 40,
+  },
+  passwordInput: {
+    flex: 1,
+    height: 40,
+    borderColor: "white",
+    backgroundColor: "white",
+    borderWidth: 1,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    color: "black",
+  },
+  socialLogos: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 10,
+  },
+  socialButton: {
+    marginHorizontal: 10,
   },
 });
