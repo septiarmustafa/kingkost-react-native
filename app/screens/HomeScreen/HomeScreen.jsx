@@ -14,58 +14,62 @@ import {
 } from "react-native";
 import Colors from "../../utils/Colors";
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { Fontisto } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 const { width } = Dimensions.get("screen");
 export default HomeScreen = ({ navigation }) => {
   const optionsList = [
-    { title: "Buy a Home", img: require("../../../assets/favicon.png") },
-    { title: "Rent a Home", img: require("../../../assets/favicon.png") },
+    { title: "Kost Putra", img: require("../../../assets/favicon.png") },
+    { title: "Kost Putri", img: require("../../../assets/favicon.png") },
   ];
-  const categoryList = ["Popular", "Recommended", "Nearest"];
-
-  const ListCategories = () => {
-    const [selectedCategoryIndex, setSelectedCategoryIndex] = React.useState(0);
-    return (
-      <View style={style.categoryListContainer}>
-        {categoryList.map((category, index) => (
-          <Pressable
-            key={index}
-            onPress={() => setSelectedCategoryIndex(index)}
-          >
-            <Text
-              style={[
-                style.categoryListText,
-                index == selectedCategoryIndex && style.activeCategoryListText,
-              ]}
-            >
-              {category}
-            </Text>
-          </Pressable>
-        ))}
-      </View>
-    );
-  };
 
   const ListOptions = () => {
     return (
       <View style={style.optionListsContainer}>
-        {optionsList.map((option, index) => (
-          <View style={style.optionsCard} key={index}>
-            {/* House image */}
+          <View style={style.optionsCard}>
             <Image
-              onPress={navigation.navigate("DetailKostScreen")}
-              source={option.img}
+              source={optionsList[0].img}
               style={style.optionsCardImage}
             />
-
-            {/* Option title */}
             <Text style={{ marginTop: 10, fontSize: 18, fontWeight: "bold" }}>
-              {option.title}
+              {optionsList[0].title}
             </Text>
           </View>
-        ))}
+          <View style={style.optionsCard}>
+            <Image
+              source={optionsList[1].img}
+              style={style.optionsCardImage}
+            />
+            <Text style={{ marginTop: 10, fontSize: 18, fontWeight: "bold" }}>
+              {optionsList[1].title}
+            </Text>
+          </View>
       </View>
+      
     );
   };
+
+  const dummyData = [
+    {
+      id: '1',
+      title: 'Kost Martini',
+      image: require('../../../assets/favicon.png'),
+      location: 'Dramaga, Kota Bogor',
+    },
+    {
+      id: '2',
+      title: 'Green Kost',
+      image: require('../../../assets/favicon.png'),
+      location: 'Pasar Minggu, Jakarta Selatan',
+    },
+    {
+      id: '3',
+      title: 'Kost Bu Haji',
+      image: require('../../../assets/favicon.png'),
+      location: 'Ciracas, Jakarta Timur',
+    },
+  ];
   const Card = ({ house }) => {
     return (
       <Pressable
@@ -73,10 +77,8 @@ export default HomeScreen = ({ navigation }) => {
         onPress={() => navigation.navigate("DetailsScreen", house)}
       >
         <View style={style.card}>
-          {/* House image */}
           <Image source={house.image} style={style.cardImage} />
           <View style={{ marginTop: 10 }}>
-            {/* Title and price container */}
             <View
               style={{
                 flexDirection: "row",
@@ -94,29 +96,24 @@ export default HomeScreen = ({ navigation }) => {
                   fontSize: 16,
                 }}
               >
-                $1,500
+                Rp 1.500.000
               </Text>
             </View>
 
-            {/* Location text */}
 
             <Text style={{ color: Colors.GREY, fontSize: 14, marginTop: 5 }}>
               {house.location}
             </Text>
 
-            {/* Facilities container */}
             <View style={{ marginTop: 10, flexDirection: "row" }}>
               <View style={style.facility}>
-                <Icon name="hotel" size={18} />
-                <Text style={style.facilityText}>2</Text>
+              <Fontisto name="wifi-logo" size={20} color="black" />
               </View>
               <View style={style.facility}>
-                <Icon name="bathtub" size={18} />
-                <Text style={style.facilityText}>2</Text>
+              <FontAwesome5 name="parking" size={20} color="black" />
               </View>
               <View style={style.facility}>
-                <Icon name="aspect-ratio" size={18} />
-                <Text style={style.facilityText}>100m</Text>
+              <MaterialCommunityIcons name="air-conditioner" size={20} color="black" />
               </View>
             </View>
           </View>
@@ -124,32 +121,30 @@ export default HomeScreen = ({ navigation }) => {
       </Pressable>
     );
   };
+
   return (
     <SafeAreaView style={{ backgroundColor: Colors.WHITE, flex: 1 }}>
-      {/* Customise status bar */}
       <StatusBar
         translucent={false}
         backgroundColor={Colors.WHITE}
         barStyle="dark-content"
       />
-      {/* Header container */}
       <View style={style.header}>
         <View>
-          <Text style={{ color: Colors.GREY }}>Location</Text>
+          <Text style={{ color: Colors.GREY }}>Welcome,</Text>
           <Text
             style={{ color: Colors.BLACK, fontSize: 20, fontWeight: "bold" }}
           >
-            Canada
+            Septiar
           </Text>
         </View>
         <Image
           style={style.profileImage}
-          source={require("../../../assets/favicon.png")}
+          source={require("../../../assets/images/default-profile.jpg")}
         />
       </View>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Input and sort button container */}
-        <View
+        {/* <View
           style={{
             flexDirection: "row",
             justifyContent: "space-between",
@@ -158,29 +153,86 @@ export default HomeScreen = ({ navigation }) => {
         >
           <View style={style.searchInputContainer}>
             <Icon name="search" color={Colors.GREY} size={25} />
-            <TextInput placeholder="Search address, city, location" />
+            <TextInput placeholder="Cari nama kost" />
           </View>
 
           <View style={style.sortBtn}>
             <Icon name="tune" color={Colors.WHITE} size={25} />
           </View>
+        </View> */}
+
+        <Text
+            style={{ color: Colors.BLACK, fontSize: 20, fontWeight: "bold" ,  paddingHorizontal: 20,}}
+          >
+            Pilih Preferensi Kost
+          </Text>
+
+        <ListOptions />
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingHorizontal: 20,
+          }}
+        >
+
+          <View>
+            <Text
+            style={{ color: Colors.BLACK, fontSize: 20, fontWeight: "bold" ,  marginTop: 10}}
+            >
+            Kost
+            </Text>
+          </View>
+
+          <View>
+            <Text
+            style={{ color: Colors.BLACK, fontSize: 18,fontStyle: "italic", fontWeight: "normal" ,  marginTop: 10}}
+            >
+            Lihat semua
+            </Text>
+          </View>
         </View>
 
-        {/* Render list options */}
-        <ListOptions />
-
-        {/* Render categories */}
-        <ListCategories />
-
-        {/* Render Card */}
-        {/* <FlatList
+        <FlatList
           snapToInterval={width - 20}
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingLeft: 20, paddingVertical: 20 }}
           horizontal
-          data={houses}
+          data={dummyData}
           renderItem={({ item }) => <Card house={item} />}
-        /> */}
+        />
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingHorizontal: 20,
+          }}
+        >
+
+          <View>
+            <Text
+            style={{ color: Colors.BLACK, fontSize: 20, fontWeight: "bold" ,  marginTop: 10}}
+            >
+            Area Kost Terpopuler
+            </Text>
+          </View>
+
+          <View>
+            <Text
+            style={{ color: Colors.BLACK, fontSize: 18,fontStyle: "italic", fontWeight: "normal" ,  marginTop: 10}}
+            >
+            Lihat semua
+            </Text>
+          </View>
+        </View>
+         <FlatList
+          snapToInterval={width - 20}
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={{ paddingLeft: 20, paddingVertical: 20 }}
+          horizontal
+          data={dummyData}
+          renderItem={({ item }) => <Card house={item} />}
+        />
       </ScrollView>
     </SafeAreaView>
   );
@@ -236,6 +288,7 @@ const style = StyleSheet.create({
     justifyContent: "space-between",
     marginTop: 20,
     paddingHorizontal: 20,
+    marginBottom: 10
   },
   categoryListText: {
     fontSize: 16,

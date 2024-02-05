@@ -12,6 +12,9 @@ import {
 
 import Icon from "react-native-vector-icons/MaterialIcons";
 import Colors from "../../utils/Colors";
+import { Fontisto } from '@expo/vector-icons';
+import { FontAwesome5 } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 const { width } = Dimensions.get("screen");
 export default DetailKostScreen = ({ navigation, route }) => {
   const house = route.params;
@@ -28,7 +31,7 @@ export default DetailKostScreen = ({ navigation, route }) => {
         <View style={style.backgroundImageContainer}>
           <ImageBackground
             style={style.backgroundImage}
-            source={require("../../../assets/splash.png")}
+            source={require("../../../assets/favicon.png")}
           >
             <View style={style.header}>
               <View style={style.headerBtn}>
@@ -45,9 +48,9 @@ export default DetailKostScreen = ({ navigation, route }) => {
           </ImageBackground>
 
           {/* Virtual Tag View */}
-          <View style={style.virtualTag}>
+          {/* <View style={style.virtualTag}>
             <Text style={{ color: Colors.WHITE }}>Virtual tour</Text>
-          </View>
+          </View> */}
         </View>
 
         <View style={style.detailsContainer}>
@@ -57,10 +60,10 @@ export default DetailKostScreen = ({ navigation, route }) => {
           >
             <Text style={{ fontSize: 20, fontWeight: "bold" }}>Title</Text>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View style={style.ratingTag}>
-                <Text style={{ color: Colors.WHITE }}>4.8</Text>
+              <View style={style.availableTag}>
+                <Text style={{ color: Colors.WHITE }}>Available</Text>
               </View>
-              <Text style={{ fontSize: 13, marginLeft: 5 }}>155 ratings</Text>
+              <Text style={{ fontSize: 13, marginLeft: 5 }}>10 room</Text>
             </View>
           </View>
 
@@ -68,20 +71,17 @@ export default DetailKostScreen = ({ navigation, route }) => {
           <Text style={{ fontSize: 16, color: Colors.GREY }}>Bogor</Text>
 
           {/* Facilities container */}
-          <View style={{ flexDirection: "row", marginTop: 20 }}>
-            <View style={style.facility}>
-              <Icon name="hotel" size={18} />
-              <Text style={style.facilityText}>2</Text>
+          <View style={{ marginTop: 10, flexDirection: "row" }}>
+              <View style={style.facility}>
+              <Fontisto name="wifi-logo" size={20} color="black" />
+              </View>
+              <View style={style.facility}>
+              <FontAwesome5 name="parking" size={20} color="black" />
+              </View>
+              <View style={style.facility}>
+              <MaterialCommunityIcons name="air-conditioner" size={20} color="black" />
+              </View>
             </View>
-            <View style={style.facility}>
-              <Icon name="bathtub" size={18} />
-              <Text style={style.facilityText}>2</Text>
-            </View>
-            <View style={style.facility}>
-              <Icon name="aspect-ratio" size={18} />
-              <Text style={style.facilityText}>100m area</Text>
-            </View>
-          </View>
           <Text style={{ marginTop: 20, color: Colors.GREY }}>Detail</Text>
 
           {/* Interior list */}
@@ -104,7 +104,7 @@ export default DetailKostScreen = ({ navigation, route }) => {
                   fontSize: 18,
                 }}
               >
-                $1,500
+                Rp 1.500.000
               </Text>
               <Text
                 style={{ fontSize: 12, color: Colors.GREY, fontWeight: "bold" }}
@@ -150,9 +150,9 @@ const style = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  ratingTag: {
+  availableTag: {
     height: 30,
-    width: 35,
+    width: 70,
     backgroundColor: Colors.GREEN,
     borderRadius: 5,
     justifyContent: "center",
