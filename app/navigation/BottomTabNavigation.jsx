@@ -3,7 +3,12 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Colors from "../utils/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomeScreen from "../screens/HomeScreen/HomeScreen";
-import Icon from "react-native-vector-icons/MaterialIcons";
+import DetailKostScreen from "../screens/DetailKostScreen/DetailKostScreen";
+import ProfileScreen from "../screens/ProfileScreen/ProfileScreen";
+import { AntDesign } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -24,11 +29,29 @@ export default function BottomTabNavigation() {
       }}
     >
       <Tab.Screen
-        name="HomeScreen"
+        name="Home"
         component={HomeScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Icon name="home" size={size} color={color} />
+            <Entypo name="home" size={size} color={color} />
+          ),
+        }}
+      />
+       <Tab.Screen
+        name="Transaction"
+        component={DetailKostScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="shopping-cart"  size={size} color={color} />
+          ),
+        }}
+      />
+       <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" size={size} color={color} />
           ),
         }}
       />
