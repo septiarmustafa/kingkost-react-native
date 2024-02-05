@@ -6,8 +6,9 @@ import HomeScreen from "../screens/HomeScreen/HomeScreen";
 import DetailKostScreen from "../screens/DetailKostScreen/DetailKostScreen";
 import ProfileScreen from "../screens/ProfileScreen/ProfileScreen";
 import { AntDesign } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,7 +33,7 @@ export default function BottomTabNavigation() {
         component={HomeScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Feather name="home" size={size} color={color} />
+            <Entypo name="home" size={size} color={color} />
           ),
         }}
       />
@@ -41,7 +42,7 @@ export default function BottomTabNavigation() {
         component={DetailKostScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <AntDesign name="shoppingcart" size={size} color={color} />
+            <FontAwesome name="shopping-cart"  size={size} color={color} />
           ),
         }}
       />
@@ -50,7 +51,7 @@ export default function BottomTabNavigation() {
         component={ProfileScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="person-outline" size={size} color={color} />
+            <Ionicons name="person" size={size} color={color} />
           ),
         }}
       />

@@ -17,7 +17,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 const { width } = Dimensions.get("screen");
 export default DetailKostScreen = ({ navigation, route }) => {
-  const house = route.params;
+  const kost = route.params;
 
   const InteriorCard = ({ interior }) => {
     return <Image source={interior} style={style.interiorImage} />;
@@ -26,7 +26,7 @@ export default DetailKostScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.WHITE }}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* House image */}
+        {/* kost image */}
 
         <View style={style.backgroundImageContainer}>
           <ImageBackground
@@ -90,7 +90,7 @@ export default DetailKostScreen = ({ navigation, route }) => {
             horizontal
             showsHorizontalScrollIndicator={false}
             keyExtractor={(_, key) => key.toString()}
-            data={house.interiors}
+            data={kost.interiors}
             renderItem={({ item }) => <InteriorCard interior={item} />}
           /> */}
 
