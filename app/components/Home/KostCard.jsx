@@ -16,7 +16,7 @@ export default KostCard = ({ kost, navigation }) => {
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 10 }}>
             <Text style={{ fontSize: 16, fontWeight: "bold" }}>{kost.title}</Text>
             <Text style={{ fontWeight: "bold", color: Colors.GREEN, fontSize: 16 }}>
-              Rp 1.500.000
+              Rp 1.500.000 / Bulan
             </Text>
           </View>
           <Text style={{ color: Colors.GREY, fontSize: 14, marginTop: 5 }}>

@@ -12,13 +12,16 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import Icon from "react-native-vector-icons/MaterialIcons";
 import Colors from "../../utils/Colors";
 import { Fontisto } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FlatList } from "react-native-gesture-handler";
 import { AntDesign } from '@expo/vector-icons';
+import BackgroundImage from "../../components/DetailKost/BackgroundImage";
+import ImageCardList from "../../components/DetailKost/ImageCardList";
+import ImageModal from "../../components/DetailKost/ImageModal";
+import DetailSection from "../../components/DetailKost/DetailSection";
 const { width } = Dimensions.get("screen");
 
 export default DetailKostScreen = ({ navigation, route }) => {
@@ -49,23 +52,7 @@ export default DetailKostScreen = ({ navigation, route }) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.WHITE }}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={style.backgroundImageContainer}>
-          <ImageBackground
-            style={style.backgroundImage}
-            source={require("../../../assets/images/jakarta.jpg")}
-          >
-            <View style={style.header}>
-              <View style={style.headerBtn}>
-                <Icon
-                  name="arrow-back-ios"
-                  size={20}
-                  onPress={navigation.goBack}
-                />
-              </View>
-            </View>
-          </ImageBackground>
-        </View>
-
+      <BackgroundImage source={require('../../../assets/images/jakarta.jpg')} onPress={navigation.goBack} />
         <View style={style.flatlistContainer}>
         <FlatList
           contentContainerStyle={{ marginTop: 20 }}
@@ -74,50 +61,35 @@ export default DetailKostScreen = ({ navigation, route }) => {
           keyExtractor={(_, key) => key.toString()}
           data={kost.interiors}
           renderItem={({ item, index }) => (
-            <InteriorCard interior={item} index={index} onPress={openModal} />
+            <ImageCardList interior={item} index={index} onPress={openModal} />
           )}
         />
         </View>
+        <ImageModal
+          visible={isModalVisible}
+          closeModal={closeModal}
+          imageSource={kost.interiors[selectedImageIndex]}
+        />
 
-          <Modal visible={isModalVisible} transparent>
-            <View style={style.modalContainer}>
-              <Image source={kost.interiors[selectedImageIndex]} style={style.modalImageLarge} />
-              <TouchableOpacity onPress={closeModal} style={style.closeButton}>
-              <AntDesign name="closecircle" size={35} color={Colors.PRIMARY_COLOR} />
-              </TouchableOpacity>
-            </View>
-          </Modal>
+        <DetailSection
+          title="Your Kost Title"
+          availability="Available"
+          roomCount={10}
+          city="Bogor"
+          province="Jawa Barat"
+          wifi="wifi" 
+          parking={null} 
+          airConditioner="air conditioner" 
+          description="Kostan murah, lokasi strategis"
+        />
 
-        <View style={style.detailsContainer}>
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>Title</Text>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View style={style.availableTag}>
-                <Text style={{ color: Colors.WHITE }}>Available</Text>
-              </View>
-              <Text style={{ fontSize: 13, marginLeft: 5 }}>10 room</Text>
-            </View>
-          </View>
-
-          <Text style={{ fontSize: 16, color: Colors.GREY }}>Bogor</Text>
-
-          <View style={{ marginTop: 10, flexDirection: "row" }}>
-              <View style={style.facility}>
-              <Fontisto name="wifi-logo" size={20} color="black" />
-              </View>
-              <View style={style.facility}>
-              <FontAwesome5 name="parking" size={20} color="black" />
-              </View>
-              <View style={style.facility}>
-              <MaterialCommunityIcons name="air-conditioner" size={20} color="black" />
-              </View>
-            </View>
-          <Text style={{ marginTop: 20, color: Colors.GREY }}>Detail</Text>
-
-          <View style={style.footer}>
+          <View style={style.price}>
             <View>
+            <Text
+                style={{ fontSize: 12, color: Colors.GREY, fontWeight: "bold" }}
+              >
+                Price
+              </Text>
               <Text
                 style={{
                   color: Colors.GREEN,
@@ -125,19 +97,13 @@ export default DetailKostScreen = ({ navigation, route }) => {
                   fontSize: 18,
                 }}
               >
-                Rp 1.500.000
-              </Text>
-              <Text
-                style={{ fontSize: 12, color: Colors.GREY, fontWeight: "bold" }}
-              >
-                Total Price
+                Rp 1.500.000 / Bulan
               </Text>
             </View>
             <View style={style.bookNowBtn}>
-              <Text style={{ color: Colors.BLACK , fontWeight: "bold"}}>Book Now</Text>
+              <Text style={{ color: Colors.BLACK , fontWeight: "bold"}}>Pesan Sekarang</Text>
             </View>
           </View>
-        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -196,7 +162,7 @@ const style = StyleSheet.create({
     marginRight: 10,
     borderRadius: 10,
   },
-  footer: {
+  price: {
     height: 70,
     backgroundColor: Colors.WHITE,
     borderRadius: 10,
@@ -204,6 +170,7 @@ const style = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     marginVertical: 10,
+    paddingHorizontal: 20
   },
   bookNowBtn: {
     height: 50,
