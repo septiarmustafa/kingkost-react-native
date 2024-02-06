@@ -18,32 +18,32 @@ const { width } = Dimensions.get("screen");
 export default HomeScreen = ({ navigation }) => {
   const dummyData = [
     {
-      id: '1',
-      title: 'Kost Martini',
-      image: require('../../../assets/images/jakarta.jpg'),
-      location: 'Dramaga, Kota Bogor',
-      city: 'Jakarta'
+      id: "1",
+      title: "Kost Martini",
+      image: require("../../../assets/images/jakarta.jpg"),
+      location: "Dramaga, Kota Bogor",
+      city: "Jakarta",
     },
     {
-      id: '2',
-      title: 'Green Kost',
-      image: require('../../../assets/images/jakarta.jpg'),
-      location: 'Pasar Minggu, Jakarta Selatan',
-      city: 'Bandung'
+      id: "2",
+      title: "Green Kost",
+      image: require("../../../assets/images/jakarta.jpg"),
+      location: "Pasar Minggu, Jakarta Selatan",
+      city: "Bandung",
     },
     {
-      id: '3',
-      title: 'Kost Bu Haji',
-      image: require('../../../assets/images/jakarta.jpg'),
-      location: 'Ciracas, Jakarta Timur',
-      city: 'Tangerang'
+      id: "3",
+      title: "Kost Bu Haji",
+      image: require("../../../assets/images/jakarta.jpg"),
+      location: "Ciracas, Jakarta Timur",
+      city: "Tangerang",
     },
   ];
 
   const carouselImages = [
-    require('../../../assets/images/banner1.jpg'),
-    require('../../../assets/images/banner2.jpg'),
-    require('../../../assets/images/banner3.jpg'),
+    require("../../../assets/images/banner1.jpg"),
+    require("../../../assets/images/banner2.jpg"),
+    require("../../../assets/images/banner3.jpg"),
   ];
 
   return (
@@ -55,9 +55,8 @@ export default HomeScreen = ({ navigation }) => {
       />
       <Header />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ marginBottom:20 }}>
-       
-        <CustomTitle title="Pilih Preferensi Kost" />
+        <View style={{ marginBottom: 20 }}>
+          <CustomTitle title="Pilih Preferensi Kost" />
         </View>
         <ListOptions />
         <CustomTitle title="Area Kost Terpopuler" />
@@ -67,7 +66,9 @@ export default HomeScreen = ({ navigation }) => {
           contentContainerStyle={{ paddingLeft: 20, paddingVertical: 20 }}
           horizontal
           data={dummyData}
-          renderItem={({ item }) => <KostAreaCard kostArea={item} navigation={navigation} />}
+          renderItem={({ item }) => (
+            <KostAreaCard kostArea={item} navigation={navigation} />
+          )}
         />
         <CustomTitle title="Kost" subTitle="Lihat Semua" />
         <FlatList
@@ -76,7 +77,9 @@ export default HomeScreen = ({ navigation }) => {
           contentContainerStyle={{ paddingLeft: 20, paddingVertical: 20 }}
           horizontal
           data={dummyData}
-          renderItem={({ item }) => <KostCard kost={item} navigation={navigation} />}
+          renderItem={({ item }) => (
+            <KostCard kost={item} navigation={navigation} />
+          )}
         />
       </ScrollView>
     </SafeAreaView>

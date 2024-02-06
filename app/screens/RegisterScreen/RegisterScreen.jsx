@@ -15,7 +15,6 @@ import { BASE_HOST } from "../../config/BaseUrl";
 import {
   Entypo,
   FontAwesome,
-  MaterialIcons,
   FontAwesome5,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
@@ -230,13 +229,13 @@ export default function RegisterScreen() {
               </Text>
             ) : null}
             <TouchableOpacity
-              style={styles.loginButton}
+              style={styles.registerButton}
               onPress={handleRegister}
             >
               <Text style={styles.buttonText}>Register</Text>
             </TouchableOpacity>
           </View>
-          <View style={styles.loginContainer}>
+          <View style={styles.registerButtonContainer}>
             <Text style={styles.text}>Already have account?</Text>
             <TouchableOpacity onPress={handleLogin}>
               <Text style={styles.signInText}>Sign in</Text>
@@ -272,15 +271,15 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   input: {
-    height: 40,
+    height: 35,
     borderColor: "white",
     backgroundColor: "white",
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
-    borderRadius: 5,
+    borderRadius: 10,
     color: "black",
-    width: "98%",
+    width: "97%",
   },
   inputContainer: {
     flexDirection: "row",
@@ -288,9 +287,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderColor: "white",
     backgroundColor: "white",
-    borderRadius: 5,
+    borderRadius: 10,
     paddingHorizontal: 10,
     height: 40,
+    borderWidth: 1,
+    borderColor: "#ddd",
   },
   errorMessage: {
     color: "red",
@@ -305,19 +306,21 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderColor: "white",
     backgroundColor: "white",
-    borderRadius: 5,
+    borderRadius: 10,
     paddingHorizontal: 10,
     height: 40,
+    borderRadius: 10,
+    color: "black",
+    borderWidth: 1,
+    borderColor: "#ddd",
   },
   passwordInput: {
     flex: 1,
-    height: 40,
+    height: 35,
     borderColor: "white",
     backgroundColor: "white",
     borderWidth: 1,
     paddingHorizontal: 10,
-    borderRadius: 5,
-    color: "black",
   },
   toggleButton: {
     position: "absolute",
@@ -330,8 +333,10 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderWidth: 1,
     marginBottom: 10,
-    borderRadius: 5,
+    borderRadius: 10,
     overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "#ddd",
   },
   picker: {
     height: 40,
@@ -358,14 +363,14 @@ const styles = StyleSheet.create({
   text: {
     color: "grey",
   },
-  loginButton: {
+  registerButton: {
     backgroundColor: "#F9A826",
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 10,
     alignItems: "center",
     marginBottom: 10,
   },
-  loginContainer: {
+  registerButtonContainer: {
     flexDirection: "row",
     marginTop: 10,
     justifyContent: "center",
