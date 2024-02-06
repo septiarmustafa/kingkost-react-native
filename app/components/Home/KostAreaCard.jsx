@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   centeredTextContainer: {
     position: 'absolute',
     top: "27.8%",
-    left: width / 8.5,
+    left: width / 8.25,
     transform: [{ translateX: -50 }, { translateY: -50 }],
     backgroundColor: Colors.PRIMARY_COLOR,
     paddingHorizontal: 10,

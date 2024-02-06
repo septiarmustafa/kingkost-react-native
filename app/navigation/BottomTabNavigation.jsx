@@ -9,6 +9,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
+import TransactionScreen from "../screens/TransactionScreen/TransactionScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -39,7 +40,7 @@ export default function BottomTabNavigation() {
       />
        <Tab.Screen
         name="Transaction"
-        component={DetailKostScreen}
+        component={TransactionScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="shopping-cart"  size={size} color={color} />

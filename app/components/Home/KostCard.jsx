@@ -12,16 +12,19 @@ export default KostCard = ({ kost, navigation }) => {
     >
       <View style={styles.card}>
         <Image source={kost.image} style={styles.cardImage} />
-        <View style={{ marginTop: 10 }}>
+        <View >
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 10 }}>
             <Text style={{ fontSize: 16, fontWeight: "bold" }}>{kost.title}</Text>
             <Text style={{ fontWeight: "bold", color: Colors.GREEN, fontSize: 16 }}>
               Rp 1.500.000 / Bulan
             </Text>
           </View>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 5 }}>
           <Text style={{ color: Colors.GREY, fontSize: 14, marginTop: 5 }}>
             {kost.location}
-          </Text>
+          </Text>            
+          <Image style={{ marginTop:5, width: 25, height:25}} source={kost.gender == "male" ? require("../../../assets/icons/male.jpg") : require("../../../assets/icons/female.jpg")}/>
+          </View>
           <View style={{ marginTop: 10, flexDirection: "row" }}>
             <View style={styles.facility}>
               <Fontisto name="wifi-logo" size={20} color="black" />

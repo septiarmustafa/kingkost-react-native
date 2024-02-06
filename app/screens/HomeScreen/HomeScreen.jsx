@@ -23,6 +23,7 @@ export default HomeScreen = ({ navigation }) => {
       image: require('../../../assets/images/jakarta.jpg'),
       location: 'Dramaga, Kota Bogor',
       city: 'Jakarta',
+      gender : 'female',
       interiors : [
         require('../../../assets/images/jakarta.jpg'),
         require('../../../assets/images/banner1.jpg'),
@@ -35,6 +36,7 @@ export default HomeScreen = ({ navigation }) => {
       image: require('../../../assets/images/jakarta.jpg'),
       location: 'Pasar Minggu, Jakarta Selatan',
       city: 'Bandung',
+      gender : 'male',
       interiors : [
         require('../../../assets/images/jakarta.jpg'),
         require('../../../assets/images/jakarta.jpg'),
@@ -47,6 +49,7 @@ export default HomeScreen = ({ navigation }) => {
       image: require('../../../assets/images/jakarta.jpg'),
       location: 'Ciracas, Jakarta Timur',
       city: 'Tangerang',
+      gender : 'male',
       interiors : [
         require('../../../assets/images/jakarta.jpg'),
         require('../../../assets/images/jakarta.jpg'),

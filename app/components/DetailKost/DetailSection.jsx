@@ -1,15 +1,19 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { Fontisto, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import Colors from '../../utils/Colors';
 
-export default DetailsSection = ({ title, availability, roomCount, city, province, wifi, parking, airConditioner, description }) => {
+export default DetailsSection = ({ title, availability, roomCount, city, province, wifi, parking, airConditioner, description , gender}) => {
   return (
     <View style={style.detailsContainer}>
       <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
         <View>
         <Text style={{ fontSize: 20, fontWeight: "bold" }}>{title}</Text>
         {city !== null && <Text style={{ fontSize: 16, color: Colors.GREY }}>{city}, {province}</Text>}
+        <View style={{ flexDirection: "row" }}>
+        <Text style={{  fontSize: 16, color: Colors.GREY }}>Gender type: </Text>
+        <Image style={{ width: 20, height:20}} source={gender}/>
+        </View>
         </View>
         <View>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -37,6 +41,7 @@ export default DetailsSection = ({ title, availability, roomCount, city, provinc
           </View>
         )}
       </View>
+      
         </View>
       </View>   
       <Text style={{ marginTop: 20, color: Colors.GREY }}>{description}</Text>
