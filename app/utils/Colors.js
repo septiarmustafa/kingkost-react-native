@@ -1,6 +1,7 @@
 export default {
   BLACK: "#000000",
   WHITE: "#FFFFFF",
+  WEAK_COLOR : "#ededed",
   LIGHT: "#F5F5F5",
   DARK: "#14141F",
   PRIMARY_COLOR: "#FFD700",

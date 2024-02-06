@@ -9,7 +9,7 @@ export default ListOptions = () => {
   ];
 
   return (
-    <View style={{ flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 20 }}>
+    <View style={{ flexDirection: "row", justifyContent: "space-evenly", paddingHorizontal: 20 }}>
       {optionsList.map((option, index) => (
         <OptionsCard key={index} title={option.title} img={option.img} />
       ))}

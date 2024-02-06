@@ -3,12 +3,11 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Colors from "../utils/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomeScreen from "../screens/HomeScreen/HomeScreen";
-import DetailKostScreen from "../screens/DetailKostScreen/DetailKostScreen";
 import ProfileScreen from "../screens/ProfileScreen/ProfileScreen";
-import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
+import TransactionScreen from "../screens/TransactionScreen/TransactionScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -37,16 +36,16 @@ export default function BottomTabNavigation() {
           ),
         }}
       />
-       <Tab.Screen
+      <Tab.Screen
         name="Transaction"
-        component={DetailKostScreen}
+        component={TransactionScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="shopping-cart"  size={size} color={color} />
+            <FontAwesome name="shopping-cart" size={size} color={color} />
           ),
         }}
       />
-       <Tab.Screen
+      <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
