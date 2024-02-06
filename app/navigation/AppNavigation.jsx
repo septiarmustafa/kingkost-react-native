@@ -5,6 +5,10 @@ import BottomTabNavigation from "./BottomTabNavigation";
 import LoginScreen from "../screens/LoginScreen/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen/RegisterScreen";
 import DetailKostScreen from "../screens/DetailKostScreen/DetailKostScreen";
+import InfoProfilScreen from "../screens/InfoProfileScreen/InfoProfilScreen";
+import HelpCenterScreen from "../screens/HelpCenterScreen/HelpCenterScreen";
+import PrivacyAndPolicyScreen from "../screens/PrivacyAndPolicyScreen/PrivacyAndPolicyScreen";
+import EditProfileScreen from "../screens/EditProfileScreen/EditProfileScreen";
 
 const Stack = createStackNavigator();
 
@@ -50,6 +54,26 @@ export const AppNavigation = () => {
           <Stack.Screen
             name="DetailKostScreen"
             component={DetailKostScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="InfoProfile"
+            component={InfoProfilScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="HelpCenter"
+            component={HelpCenterScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PrivacyAndPolicy"
+            component={PrivacyAndPolicyScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="EditProfile"
+            component={EditProfileScreen}
             options={{ headerShown: false }}
           />
         </>

@@ -4,9 +4,9 @@ import Colors from "../utils/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import HomeScreen from "../screens/HomeScreen/HomeScreen";
 import ProfileScreen from "../screens/ProfileScreen/ProfileScreen";
-import { FontAwesome } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
+import { FontAwesome } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
+import { Entypo } from "@expo/vector-icons";
 import TransactionScreen from "../screens/TransactionScreen/TransactionScreen";
 
 const Tab = createBottomTabNavigator();

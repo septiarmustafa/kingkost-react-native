@@ -62,9 +62,9 @@ export default HomeScreen = ({ navigation }) => {
   ];
 
   const carouselImages = [
-    require('../../../assets/images/banner1.jpg'),
-    require('../../../assets/images/banner2.jpg'),
-    require('../../../assets/images/banner3.jpg'),
+    require("../../../assets/images/banner1.jpg"),
+    require("../../../assets/images/banner2.jpg"),
+    require("../../../assets/images/banner3.jpg"),
   ];
 
   return (
@@ -77,7 +77,6 @@ export default HomeScreen = ({ navigation }) => {
       <Header />
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={{ marginBottom: 20 }}>
-
           <CustomTitle title="Pilih Preferensi Kost" />
         </View>
         <ListOptions />
@@ -88,7 +87,9 @@ export default HomeScreen = ({ navigation }) => {
           contentContainerStyle={{ paddingLeft: 20, paddingVertical: 20 }}
           horizontal
           data={dummyData}
-          renderItem={({ item }) => <KostAreaCard kostArea={item} navigation={navigation} />}
+          renderItem={({ item }) => (
+            <KostAreaCard kostArea={item} navigation={navigation} />
+          )}
         />
         <CustomTitle title="Kost" subTitle="Lihat Semua" />
         <FlatList
@@ -97,7 +98,9 @@ export default HomeScreen = ({ navigation }) => {
           contentContainerStyle={{ paddingLeft: 20, paddingVertical: 20 }}
           horizontal
           data={dummyData}
-          renderItem={({ item }) => <KostCard kost={item} navigation={navigation} />}
+          renderItem={({ item }) => (
+            <KostCard kost={item} navigation={navigation} />
+          )}
         />
       </ScrollView>
     </SafeAreaView>

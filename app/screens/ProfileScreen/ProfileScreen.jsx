@@ -1,198 +1,202 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
-  ImageBackground,
-  SafeAreaView,
   View,
   Text,
   StyleSheet,
   Image,
-  Dimensions,
   ScrollView,
+  FlatList,
+  TouchableOpacity,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { FontAwesome } from "@expo/vector-icons";
 
-import Icon from "react-native-vector-icons/MaterialIcons";
-import Colors from "../../utils/Colors";
-import { Fontisto } from '@expo/vector-icons';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-const { width } = Dimensions.get("screen");
-export default DetailKostScreen = ({ navigation, route }) => {
-  const kost = route.params;
+export default ProfileScreen = ({ navigation }) => {
+  const [username, setUsername] = useState("");
+  const [role, setRole] = useState("");
 
-  const InteriorCard = ({ interior }) => {
-    return <Image source={interior} style={style.interiorImage} />;
+  useEffect(() => {
+    AsyncStorage.getItem("username")
+      .then((uname) => {
+        setUsername(uname);
+      })
+      .catch((err) => console.log(err));
+    AsyncStorage.getItem("role")
+      .then((role) => {
+        setRole(role);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  const handleProfilePress = () => {
+    navigation.navigate("InfoProfile");
+  };
+  const handleHelpCenterPress = () => {
+    navigation.navigate("HelpCenter");
+  };
+  const handlePrivacyAndPolicyPress = () => {
+    navigation.navigate("PrivacyAndPolicy");
+  };
+
+  const handleLogout = async () => {
+    await AsyncStorage.removeItem("token");
+    await AsyncStorage.removeItem("username");
+    await AsyncStorage.removeItem("role");
+    navigation.navigate("Login");
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: Colors.WHITE }}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* kost image */}
+    <ScrollView style={styles.container}>
+      <View style={styles.header}>
+        <Image
+          source={require("../../../assets/images/default-profile.jpg")}
+          style={styles.profileImage}
+        />
+        <Text style={styles.userName}>Muhammad Ibrahim</Text>
+        <Text style={styles.userRole}>0814*****908</Text>
+      </View>
 
-        <View style={style.backgroundImageContainer}>
-          <ImageBackground
-            style={style.backgroundImage}
-            source={require("../../../assets/favicon.png")}
-          >
-            <View style={style.header}>
-              <View style={style.headerBtn}>
-                <Icon
-                  name="arrow-back-ios"
-                  size={20}
-                  onPress={navigation.goBack}
-                />
-              </View>
-              <View style={style.headerBtn}>
-                <Icon name="favorite" size={20} color={Colors.RED} />
-              </View>
-            </View>
-          </ImageBackground>
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Settings</Text>
 
-          {/* Virtual Tag View */}
-          {/* <View style={style.virtualTag}>
-            <Text style={{ color: Colors.WHITE }}>Virtual tour</Text>
-          </View> */}
-        </View>
-
-        <View style={style.detailsContainer}>
-          {/* Name and rating view container */}
-          <View
-            style={{ flexDirection: "row", justifyContent: "space-between" }}
-          >
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>Title</Text>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <View style={style.availableTag}>
-                <Text style={{ color: Colors.WHITE }}>Available</Text>
-              </View>
-              <Text style={{ fontSize: 13, marginLeft: 5 }}>10 room</Text>
-            </View>
+        <TouchableOpacity
+          style={styles.settingsItem}
+          onPress={handleProfilePress}
+        >
+          <FontAwesome name="user" size={24} color={"#333"} />
+          <View style={styles.settingsTextContainer}>
+            <Text style={styles.settingsTitle}>Profile</Text>
+            <Text style={styles.settingsValue}>Settings</Text>
           </View>
+        </TouchableOpacity>
 
-          {/* Location text */}
-          <Text style={{ fontSize: 16, color: Colors.GREY }}>Bogor</Text>
-
-          {/* Facilities container */}
-          <View style={{ marginTop: 10, flexDirection: "row" }}>
-            <View style={style.facility}>
-              <Fontisto name="wifi-logo" size={20} color="black" />
-            </View>
-            <View style={style.facility}>
-              <FontAwesome5 name="parking" size={20} color="black" />
-            </View>
-            <View style={style.facility}>
-              <MaterialCommunityIcons name="air-conditioner" size={20} color="black" />
-            </View>
+        <TouchableOpacity style={styles.settingsItem}>
+          <FontAwesome name="bell" size={24} color={"#333"} />
+          <View style={styles.settingsTextContainer}>
+            <Text style={styles.settingsTitle}>Notification</Text>
+            <Text style={styles.settingsValue}>On</Text>
           </View>
-          <Text style={{ marginTop: 20, color: Colors.GREY }}>Detail</Text>
+        </TouchableOpacity>
 
-          {/* Interior list */}
-          {/* <FlatList
-            contentContainerStyle={{ marginTop: 20 }}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(_, key) => key.toString()}
-            data={kost.interiors}
-            renderItem={({ item }) => <InteriorCard interior={item} />}
-          /> */}
-
-          {/* footer container */}
-          <View style={style.footer}>
-            <View>
-              <Text
-                style={{
-                  color: Colors.GREEN,
-                  fontWeight: "bold",
-                  fontSize: 18,
-                }}
-              >
-                Rp 1.500.000
-              </Text>
-              <Text
-                style={{ fontSize: 12, color: Colors.GREY, fontWeight: "bold" }}
-              >
-                Total Price
-              </Text>
-            </View>
-            <View style={style.bookNowBtn}>
-              <Text style={{ color: Colors.WHITE }}>Book Now</Text>
-            </View>
+        <TouchableOpacity style={styles.settingsItem}>
+          <FontAwesome name="language" size={24} color={"#333"} />
+          <View style={styles.settingsTextContainer}>
+            <Text style={styles.settingsTitle}>Language</Text>
+            <Text style={styles.settingsValue}>English</Text>
           </View>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.settingsItem}>
+          <FontAwesome name="lightbulb-o" size={24} color={"#333"} />
+          <View style={styles.settingsTextContainer}>
+            <Text style={styles.settingsTitle}>Theme</Text>
+            <Text style={styles.settingsValue}>Light</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.settingsItem}
+          onPress={handleHelpCenterPress}
+        >
+          <FontAwesome name="question" size={24} color={"#333"} />
+          <View style={styles.settingsTextContainer}>
+            <Text style={styles.settingsTitle}>Help Center</Text>
+            <Text style={styles.settingsValue}>Ask...</Text>
+          </View>
+        </TouchableOpacity>
+        
+        <TouchableOpacity
+          style={styles.settingsItem}
+          onPress={handlePrivacyAndPolicyPress}
+        >
+          <FontAwesome name="font-awesome" size={24} color={"#333"} />
+          <View style={styles.settingsTextContainer}>
+            <Text style={styles.settingsTitle}>Privacy and Policy</Text>
+            <Text style={styles.settingsValue}>Read...</Text>
+          </View>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+          <FontAwesome name="sign-out" size={24} color={"white"} />
+          <View style={styles.settingsTextContainer}>
+            <Text style={{ ...styles.settingsTitle, color: "white" }}>
+              Logout
+            </Text>
+            <Text style={{ ...styles.settingsValue, color: "white" }}>
+              Bye:(
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
-const style = StyleSheet.create({
-  backgroundImageContainer: {
-    elevation: 20,
-    marginHorizontal: 20,
-    marginTop: 20,
-    alignItems: "center",
-    height: 350,
-  },
-  backgroundImage: {
-    height: "100%",
-    width: "100%",
-    borderRadius: 20,
-    overflow: "hidden",
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
   },
   header: {
-    paddingVertical: 20,
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "#F9A826",
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  userName: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginTop: 10,
+    color: "white",
+  },
+  userRole: {
+    fontSize: 16,
+    color: "white",
+    marginTop: 5,
+  },
+  section: {
+    padding: 20,
+    borderBottomColor: "#ccc",
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#333",
+  },
+  settingsItem: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 10,
-  },
-  headerBtn: {
-    height: 50,
-    width: 50,
-    backgroundColor: Colors.WHITE,
-    borderRadius: 10,
-    justifyContent: "center",
     alignItems: "center",
+    marginBottom: 10,
+    padding: 15,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    borderRadius: 8,
+    backgroundColor: "#fff",
   },
-  availableTag: {
-    height: 30,
-    width: 70,
-    backgroundColor: Colors.GREEN,
-    borderRadius: 5,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  virtualTag: {
-    top: -20,
-    width: 120,
-    borderRadius: 10,
-    height: 40,
-    paddingHorizontal: 20,
-    backgroundColor: Colors.BLACK,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  interiorImage: {
-    width: width / 3 - 20,
-    height: 80,
-    marginRight: 10,
-    borderRadius: 10,
-  },
-  footer: {
-    height: 70,
-    backgroundColor: Colors.WHITE,
-    borderRadius: 10,
-    paddingHorizontal: 20,
-    alignItems: "center",
+  logoutButton: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 10,
-  },
-  bookNowBtn: {
-    height: 50,
-    justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.BLACK,
-    borderRadius: 10,
-    paddingHorizontal: 20,
+    justifyContent: "center",
+    marginBottom: 10,
+    padding: 15,
+    borderRadius: 8,
+    backgroundColor: "#F9A826",
   },
-  detailsContainer: { flex: 1, paddingHorizontal: 20, marginTop: 40 },
-  facility: { flexDirection: "row", marginRight: 15 },
-  facilityText: { marginLeft: 5, color: Colors.GREY },
+  settingsTextContainer: {
+    marginLeft: 10,
+  },
+  settingsTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  settingsValue: {
+    fontSize: 14,
+    color: "#555",
+  },
 });
