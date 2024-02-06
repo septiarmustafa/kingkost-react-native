@@ -2,26 +2,30 @@ import React from "react";
 import { Pressable, Text, Image, StyleSheet, View, Dimensions } from "react-native";
 import Colors from "../../utils/Colors";
 import { Fontisto, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import formatCurrencyIDR from "../../utils/formatCurrencyIDR";
 const { width } = Dimensions.get("screen");
 
 export default KostCard = ({ kost, navigation }) => {
   return (
     <Pressable
       activeOpacity={0.8}
-      onPress={() => navigation.navigate("DetailsScreen", kost)}
+      onPress={() => navigation.navigate("DetailKostScreen", kost)}
     >
       <View style={styles.card}>
         <Image source={kost.image} style={styles.cardImage} />
-        <View style={{ marginTop: 10 }}>
+        <View >
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 10 }}>
             <Text style={{ fontSize: 16, fontWeight: "bold" }}>{kost.title}</Text>
             <Text style={{ fontWeight: "bold", color: Colors.GREEN, fontSize: 16 }}>
-              Rp 1.500.000
+              {formatCurrencyIDR(kost.price)} / Bulan
             </Text>
           </View>
-          <Text style={{ color: Colors.GREY, fontSize: 14, marginTop: 5 }}>
-            {kost.location}
-          </Text>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 5 }}>
+            <Text style={{ color: Colors.GREY, fontSize: 14, marginTop: 5 }}>
+              {kost.location}
+            </Text>
+            <Image style={{ marginTop: 5, width: 25, height: 25 }} source={kost.gender == "male" ? require("../../../assets/icons/male.jpg") : require("../../../assets/icons/female.jpg")} />
+          </View>
           <View style={{ marginTop: 10, flexDirection: "row" }}>
             <View style={styles.facility}>
               <Fontisto name="wifi-logo" size={20} color="black" />

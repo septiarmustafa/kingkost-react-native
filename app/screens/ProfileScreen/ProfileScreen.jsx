@@ -104,7 +104,7 @@ export default ProfileScreen = ({ navigation }) => {
             <Text style={styles.settingsValue}>Ask...</Text>
           </View>
         </TouchableOpacity>
-
+        
         <TouchableOpacity
           style={styles.settingsItem}
           onPress={handlePrivacyAndPolicyPress}

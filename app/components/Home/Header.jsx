@@ -6,31 +6,31 @@ export default Header = () => {
   return (
     <View style={styles.container}>
 
-    <View style={styles.header}>
-          <View>
-            <Text style={{ color: Colors.DARK }}>Welcome,</Text>
-            <Text style={{ color: Colors.DARK, fontSize: 20, fontWeight: "bold" }}>
-              Septiar
-            </Text>
-          </View>
-          <View style={styles.imageContainer} >
+      <View style={styles.header}>
+        <View>
+          <Text style={{ color: Colors.DARK }}>Welcome,</Text>
+          <Text style={{ color: Colors.DARK, fontSize: 20, fontWeight: "bold" }}>
+            Septiar
+          </Text>
+        </View>
+        <View style={styles.imageContainer} >
           <Image
             style={styles.profileImage}
             source={require("../../../assets/images/default-profile.jpg")}
-            />
-          </View>
+          />
+        </View>
+      </View>
     </View>
-    </View>
-    
-   
+
+
   );
 };
 
 const styles = StyleSheet.create({
-  container : {
+  container: {
     backgroundColor: Colors.WHITE,
-    borderBottomLeftRadius : 30,
-    borderBottomRightRadius : 30
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30
   },
   header: {
     backgroundColor: Colors.TRANSPARENT,
@@ -44,9 +44,9 @@ const styles = StyleSheet.create({
     width: 50,
     borderRadius: 25,
   },
-  imageContainer : {
+  imageContainer: {
     borderColor: Colors.GREY,
     borderWidth: 1,
-    borderRadius : 50
+    borderRadius: 50
   }
 });

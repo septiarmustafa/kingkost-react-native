@@ -18,25 +18,46 @@ const { width } = Dimensions.get("screen");
 export default HomeScreen = ({ navigation }) => {
   const dummyData = [
     {
-      id: "1",
-      title: "Kost Martini",
-      image: require("../../../assets/images/jakarta.jpg"),
-      location: "Dramaga, Kota Bogor",
-      city: "Jakarta",
+      id: '1',
+      title: 'Kost Martini',
+      image: require('../../../assets/images/jakarta.jpg'),
+      location: 'Dramaga, Kota Bogor',
+      city: 'Jakarta',
+      gender: 'female',
+      price: 800000,
+      interiors: [
+        require('../../../assets/images/jakarta.jpg'),
+        require('../../../assets/images/banner1.jpg'),
+        require('../../../assets/images/banner2.jpg'),
+      ]
     },
     {
-      id: "2",
-      title: "Green Kost",
-      image: require("../../../assets/images/jakarta.jpg"),
-      location: "Pasar Minggu, Jakarta Selatan",
-      city: "Bandung",
+      id: '2',
+      title: 'Green Kost',
+      image: require('../../../assets/images/jakarta.jpg'),
+      location: 'Pasar Minggu, Jakarta Selatan',
+      city: 'Bandung',
+      gender: 'male',
+      price: 600000,
+      interiors: [
+        require('../../../assets/images/jakarta.jpg'),
+        require('../../../assets/images/jakarta.jpg'),
+        require('../../../assets/images/jakarta.jpg'),
+      ]
     },
     {
-      id: "3",
-      title: "Kost Bu Haji",
-      image: require("../../../assets/images/jakarta.jpg"),
-      location: "Ciracas, Jakarta Timur",
-      city: "Tangerang",
+      id: '3',
+      title: 'Kost Bu Haji',
+      image: require('../../../assets/images/jakarta.jpg'),
+      location: 'Ciracas, Jakarta Timur',
+      city: 'Tangerang',
+      gender: 'male',
+      price: 1500000,
+      interiors: [
+        require('../../../assets/images/jakarta.jpg'),
+        require('../../../assets/images/jakarta.jpg'),
+        require('../../../assets/images/jakarta.jpg'),
+      ]
     },
   ];
 
