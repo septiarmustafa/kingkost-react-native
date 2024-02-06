@@ -24,6 +24,7 @@ export default HomeScreen = ({ navigation }) => {
       location: 'Dramaga, Kota Bogor',
       city: 'Jakarta',
       gender : 'female',
+      price : 800000,
       interiors : [
         require('../../../assets/images/jakarta.jpg'),
         require('../../../assets/images/banner1.jpg'),
@@ -37,6 +38,7 @@ export default HomeScreen = ({ navigation }) => {
       location: 'Pasar Minggu, Jakarta Selatan',
       city: 'Bandung',
       gender : 'male',
+      price : 600000,
       interiors : [
         require('../../../assets/images/jakarta.jpg'),
         require('../../../assets/images/jakarta.jpg'),
@@ -50,6 +52,7 @@ export default HomeScreen = ({ navigation }) => {
       location: 'Ciracas, Jakarta Timur',
       city: 'Tangerang',
       gender : 'male',
+      price : 1500000,
       interiors : [
         require('../../../assets/images/jakarta.jpg'),
         require('../../../assets/images/jakarta.jpg'),
