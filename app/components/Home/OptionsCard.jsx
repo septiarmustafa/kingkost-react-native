@@ -15,8 +15,8 @@ export default OptionsCard = ({ title, img }) => {
 
 const styles = StyleSheet.create({
   optionsCard: {
-    height: 210,
-    width: "48%",
+    height: 140,
+    width: "30%",
     elevation: 15,
     alignItems: "center",
     backgroundColor: Colors.WHITE,
@@ -26,8 +26,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   optionsCardImage: {
-    height: 150,
+    height: 80,
     borderRadius: 10,
-    width: "100%",
+    width: "70%",
   },
 });

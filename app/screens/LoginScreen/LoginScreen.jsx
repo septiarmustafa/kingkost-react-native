@@ -162,7 +162,7 @@ export default function LoginScreen() {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.socialButton}
-              onPress={() => navigation.navigate("DetailKostScreen")}
+              onPress={() => navigation.navigate("BottomTabNavigation")}
             >
               <AntDesign name="apple1" size={40} color="grey" />
             </TouchableOpacity>

@@ -22,21 +22,36 @@ export default HomeScreen = ({ navigation }) => {
       title: 'Kost Martini',
       image: require('../../../assets/images/jakarta.jpg'),
       location: 'Dramaga, Kota Bogor',
-      city: 'Jakarta'
+      city: 'Jakarta',
+      interiors : [
+        require('../../../assets/images/jakarta.jpg'),
+        require('../../../assets/images/banner1.jpg'),
+        require('../../../assets/images/banner2.jpg'),
+      ]
     },
     {
       id: '2',
       title: 'Green Kost',
       image: require('../../../assets/images/jakarta.jpg'),
       location: 'Pasar Minggu, Jakarta Selatan',
-      city: 'Bandung'
+      city: 'Bandung',
+      interiors : [
+        require('../../../assets/images/jakarta.jpg'),
+        require('../../../assets/images/jakarta.jpg'),
+        require('../../../assets/images/jakarta.jpg'),
+      ]
     },
     {
       id: '3',
       title: 'Kost Bu Haji',
       image: require('../../../assets/images/jakarta.jpg'),
       location: 'Ciracas, Jakarta Timur',
-      city: 'Tangerang'
+      city: 'Tangerang',
+      interiors : [
+        require('../../../assets/images/jakarta.jpg'),
+        require('../../../assets/images/jakarta.jpg'),
+        require('../../../assets/images/jakarta.jpg'),
+      ]
     },
   ];
 

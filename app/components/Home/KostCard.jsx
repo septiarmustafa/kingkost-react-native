@@ -8,7 +8,7 @@ export default KostCard = ({ kost, navigation }) => {
   return (
     <Pressable
       activeOpacity={0.8}
-      onPress={() => navigation.navigate("DetailsScreen", kost)}
+      onPress={() => navigation.navigate("DetailKostScreen", kost)}
     >
       <View style={styles.card}>
         <Image source={kost.image} style={styles.cardImage} />

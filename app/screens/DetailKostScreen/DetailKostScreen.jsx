@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   ImageBackground,
   SafeAreaView,
@@ -8,6 +8,8 @@ import {
   Image,
   Dimensions,
   ScrollView,
+  Modal,
+  TouchableOpacity,
 } from "react-native";
 
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -15,23 +17,42 @@ import Colors from "../../utils/Colors";
 import { Fontisto } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { FlatList } from "react-native-gesture-handler";
+import { AntDesign } from '@expo/vector-icons';
 const { width } = Dimensions.get("screen");
+
 export default DetailKostScreen = ({ navigation, route }) => {
   const kost = route.params;
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
-  const InteriorCard = ({ interior }) => {
-    return <Image source={interior} style={style.interiorImage} />;
+
+  const InteriorCard = ({ interior, index, onPress }) => {
+    return (
+      <TouchableOpacity onPress={() => onPress(index)}>
+        <Image source={interior} style={style.interiorImage} />
+      </TouchableOpacity>
+    );
+  };
+
+  const openModal = (index) => {
+    setSelectedImageIndex(index);
+    setModalVisible(true);
+  };
+  
+  const closeModal = () => {
+    setModalVisible(false);
+    setSelectedImageIndex(null);
+
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.WHITE }}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* kost image */}
-
         <View style={style.backgroundImageContainer}>
           <ImageBackground
             style={style.backgroundImage}
-            source={require("../../../assets/favicon.png")}
+            source={require("../../../assets/images/jakarta.jpg")}
           >
             <View style={style.header}>
               <View style={style.headerBtn}>
@@ -41,20 +62,33 @@ export default DetailKostScreen = ({ navigation, route }) => {
                   onPress={navigation.goBack}
                 />
               </View>
-              <View style={style.headerBtn}>
-                <Icon name="favorite" size={20} color={Colors.RED} />
-              </View>
             </View>
           </ImageBackground>
-
-          {/* Virtual Tag View */}
-          {/* <View style={style.virtualTag}>
-            <Text style={{ color: Colors.WHITE }}>Virtual tour</Text>
-          </View> */}
         </View>
 
+        <View style={style.flatlistContainer}>
+        <FlatList
+          contentContainerStyle={{ marginTop: 20 }}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          keyExtractor={(_, key) => key.toString()}
+          data={kost.interiors}
+          renderItem={({ item, index }) => (
+            <InteriorCard interior={item} index={index} onPress={openModal} />
+          )}
+        />
+        </View>
+
+          <Modal visible={isModalVisible} transparent>
+            <View style={style.modalContainer}>
+              <Image source={kost.interiors[selectedImageIndex]} style={style.modalImageLarge} />
+              <TouchableOpacity onPress={closeModal} style={style.closeButton}>
+              <AntDesign name="closecircle" size={35} color={Colors.PRIMARY_COLOR} />
+              </TouchableOpacity>
+            </View>
+          </Modal>
+
         <View style={style.detailsContainer}>
-          {/* Name and rating view container */}
           <View
             style={{ flexDirection: "row", justifyContent: "space-between" }}
           >
@@ -67,10 +101,8 @@ export default DetailKostScreen = ({ navigation, route }) => {
             </View>
           </View>
 
-          {/* Location text */}
           <Text style={{ fontSize: 16, color: Colors.GREY }}>Bogor</Text>
 
-          {/* Facilities container */}
           <View style={{ marginTop: 10, flexDirection: "row" }}>
               <View style={style.facility}>
               <Fontisto name="wifi-logo" size={20} color="black" />
@@ -84,17 +116,6 @@ export default DetailKostScreen = ({ navigation, route }) => {
             </View>
           <Text style={{ marginTop: 20, color: Colors.GREY }}>Detail</Text>
 
-          {/* Interior list */}
-          {/* <FlatList
-            contentContainerStyle={{ marginTop: 20 }}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(_, key) => key.toString()}
-            data={kost.interiors}
-            renderItem={({ item }) => <InteriorCard interior={item} />}
-          /> */}
-
-          {/* footer container */}
           <View style={style.footer}>
             <View>
               <Text
@@ -113,7 +134,7 @@ export default DetailKostScreen = ({ navigation, route }) => {
               </Text>
             </View>
             <View style={style.bookNowBtn}>
-              <Text style={{ color: Colors.WHITE }}>Book Now</Text>
+              <Text style={{ color: Colors.BLACK , fontWeight: "bold"}}>Book Now</Text>
             </View>
           </View>
         </View>
@@ -137,7 +158,7 @@ const style = StyleSheet.create({
     overflow: "hidden",
   },
   header: {
-    paddingVertical: 20,
+    paddingVertical: 10,
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 10,
@@ -149,6 +170,7 @@ const style = StyleSheet.create({
     borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
+    paddingLeft: 7
   },
   availableTag: {
     height: 30,
@@ -178,7 +200,6 @@ const style = StyleSheet.create({
     height: 70,
     backgroundColor: Colors.WHITE,
     borderRadius: 10,
-    paddingHorizontal: 20,
     alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -188,11 +209,29 @@ const style = StyleSheet.create({
     height: 50,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.BLACK,
+    backgroundColor: Colors.PRIMARY_COLOR,
     borderRadius: 10,
     paddingHorizontal: 20,
   },
-  detailsContainer: { flex: 1, paddingHorizontal: 20, marginTop: 40 },
-  facility: { flexDirection: "row", marginRight: 15 },
-  facilityText: { marginLeft: 5, color: Colors.GREY },
+  detailsContainer: { flex: 1, paddingHorizontal: 20, marginTop: 40, },
+  facility: { flexDirection: "row", marginRight: 15, },
+  facilityText: { marginLeft: 5, color: Colors.GREY, },
+  modalContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  flatlistContainer : {
+    paddingHorizontal: 20,
+
+  },
+  modalImageLarge: {
+    width: '80%',
+    height: '80%', 
+    borderRadius: 10,
+  },
+  closeButton: {
+    position: 'absolute',
+    top: 70,
+    right: 45,
+  },
 });
