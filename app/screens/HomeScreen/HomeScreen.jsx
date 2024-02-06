@@ -23,9 +23,9 @@ export default HomeScreen = ({ navigation }) => {
       image: require('../../../assets/images/jakarta.jpg'),
       location: 'Dramaga, Kota Bogor',
       city: 'Jakarta',
-      gender : 'female',
-      price : 800000,
-      interiors : [
+      gender: 'female',
+      price: 800000,
+      interiors: [
         require('../../../assets/images/jakarta.jpg'),
         require('../../../assets/images/banner1.jpg'),
         require('../../../assets/images/banner2.jpg'),
@@ -37,9 +37,9 @@ export default HomeScreen = ({ navigation }) => {
       image: require('../../../assets/images/jakarta.jpg'),
       location: 'Pasar Minggu, Jakarta Selatan',
       city: 'Bandung',
-      gender : 'male',
-      price : 600000,
-      interiors : [
+      gender: 'male',
+      price: 600000,
+      interiors: [
         require('../../../assets/images/jakarta.jpg'),
         require('../../../assets/images/jakarta.jpg'),
         require('../../../assets/images/jakarta.jpg'),
@@ -51,9 +51,9 @@ export default HomeScreen = ({ navigation }) => {
       image: require('../../../assets/images/jakarta.jpg'),
       location: 'Ciracas, Jakarta Timur',
       city: 'Tangerang',
-      gender : 'male',
-      price : 1500000,
-      interiors : [
+      gender: 'male',
+      price: 1500000,
+      interiors: [
         require('../../../assets/images/jakarta.jpg'),
         require('../../../assets/images/jakarta.jpg'),
         require('../../../assets/images/jakarta.jpg'),
@@ -76,9 +76,9 @@ export default HomeScreen = ({ navigation }) => {
       />
       <Header />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={{ marginBottom:20 }}>
-       
-        <CustomTitle title="Pilih Preferensi Kost" />
+        <View style={{ marginBottom: 20 }}>
+
+          <CustomTitle title="Pilih Preferensi Kost" />
         </View>
         <ListOptions />
         <CustomTitle title="Area Kost Terpopuler" />

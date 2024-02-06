@@ -26,25 +26,25 @@ export default SearchBar = ({ onSearchChange, onSortPress }) => {
   );
 };
 
-const style = StyleSheet.create ({
-    searchInputContainer: {
-        height: 50,
-        backgroundColor: Colors.WHITE,
-        flex: 1,
-        flexDirection: "row",
-        alignItems: "center",
-        paddingHorizontal: 20,
-        borderRadius: 12,
-      },
-      sortBtn: {
-        backgroundColor: Colors.BLACK,
-        height: 50,
-        width: 50,
-        borderRadius: 12,
-        justifyContent: "center",
-        alignItems: "center",
-        marginLeft: 10,
-      },
+const style = StyleSheet.create({
+  searchInputContainer: {
+    height: 50,
+    backgroundColor: Colors.WHITE,
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 20,
+    borderRadius: 12,
+  },
+  sortBtn: {
+    backgroundColor: Colors.BLACK,
+    height: 50,
+    width: 50,
+    borderRadius: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 10,
+  },
 })
 
 {/* <SearchSortBar

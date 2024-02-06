@@ -72,16 +72,16 @@ export default DetailKostScreen = ({ navigation, route }) => {
 
           {/* Facilities container */}
           <View style={{ marginTop: 10, flexDirection: "row" }}>
-              <View style={style.facility}>
+            <View style={style.facility}>
               <Fontisto name="wifi-logo" size={20} color="black" />
-              </View>
-              <View style={style.facility}>
-              <FontAwesome5 name="parking" size={20} color="black" />
-              </View>
-              <View style={style.facility}>
-              <MaterialCommunityIcons name="air-conditioner" size={20} color="black" />
-              </View>
             </View>
+            <View style={style.facility}>
+              <FontAwesome5 name="parking" size={20} color="black" />
+            </View>
+            <View style={style.facility}>
+              <MaterialCommunityIcons name="air-conditioner" size={20} color="black" />
+            </View>
+          </View>
           <Text style={{ marginTop: 20, color: Colors.GREY }}>Detail</Text>
 
           {/* Interior list */}

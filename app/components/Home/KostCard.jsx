@@ -17,14 +17,14 @@ export default KostCard = ({ kost, navigation }) => {
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 10 }}>
             <Text style={{ fontSize: 16, fontWeight: "bold" }}>{kost.title}</Text>
             <Text style={{ fontWeight: "bold", color: Colors.GREEN, fontSize: 16 }}>
-            {formatCurrencyIDR(kost.price)} / Bulan
+              {formatCurrencyIDR(kost.price)} / Bulan
             </Text>
           </View>
           <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 5 }}>
-          <Text style={{ color: Colors.GREY, fontSize: 14, marginTop: 5 }}>
-            {kost.location}
-          </Text>            
-          <Image style={{ marginTop:5, width: 25, height:25}} source={kost.gender == "male" ? require("../../../assets/icons/male.jpg") : require("../../../assets/icons/female.jpg")}/>
+            <Text style={{ color: Colors.GREY, fontSize: 14, marginTop: 5 }}>
+              {kost.location}
+            </Text>
+            <Image style={{ marginTop: 5, width: 25, height: 25 }} source={kost.gender == "male" ? require("../../../assets/icons/male.jpg") : require("../../../assets/icons/female.jpg")} />
           </View>
           <View style={{ marginTop: 10, flexDirection: "row" }}>
             <View style={styles.facility}>

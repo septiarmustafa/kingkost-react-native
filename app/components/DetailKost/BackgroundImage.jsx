@@ -4,9 +4,9 @@ import BackButton from './BackButton';
 
 export default BackgroundImage = ({ source, onPress }) => (
   <View style={styles.backgroundImageContainer}>
-  <ImageBackground style={styles.backgroundImage} source={source}>
-  <BackButton onPress={onPress} />
-  </ImageBackground>
+    <ImageBackground style={styles.backgroundImage} source={source}>
+      <BackButton onPress={onPress} />
+    </ImageBackground>
   </View>
 );
 
