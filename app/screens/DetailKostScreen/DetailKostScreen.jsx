@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  SafeAreaView,
-  View,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { SafeAreaView, View, StyleSheet, ScrollView } from "react-native";
 
 import Colors from "../../utils/Colors";
 import { FlatList } from "react-native-gesture-handler";
@@ -24,7 +19,6 @@ export default DetailKostScreen = ({ navigation, route }) => {
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [selectedMonths, setSelectedMonths] = useState(1);
 
-
   const openModal = (index) => {
     setSelectedImageIndex(index);
     setModalVisible(true);
@@ -33,7 +27,6 @@ export default DetailKostScreen = ({ navigation, route }) => {
   const closeModal = () => {
     setModalVisible(false);
     setSelectedImageIndex(null);
-
   };
   const calculateTotalPrice = () => {
     const monthlyPrice = kost.price;
@@ -49,7 +42,10 @@ export default DetailKostScreen = ({ navigation, route }) => {
         barStyle="dark-content"
       />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <BackgroundImage source={require('../../../assets/images/jakarta.jpg')} onPress={navigation.goBack} />
+        <BackgroundImage
+          source={require("../../../assets/images/jakarta.jpg")}
+          onPress={navigation.goBack}
+        />
         <View style={styles.flatListContainer}>
           <FlatList
             contentContainerStyle={{ marginTop: 20 }}
@@ -58,7 +54,11 @@ export default DetailKostScreen = ({ navigation, route }) => {
             keyExtractor={(_, key) => key.toString()}
             data={kost.interiors}
             renderItem={({ item, index }) => (
-              <ImageCardList interior={item} index={index} onPress={openModal} />
+              <ImageCardList
+                interior={item}
+                index={index}
+                onPress={openModal}
+              />
             )}
           />
         </View>
@@ -81,8 +81,15 @@ export default DetailKostScreen = ({ navigation, route }) => {
           gender={require("../../../assets/icons/male.jpg")}
         />
 
-        <SellerInfo seller={kost.seller} phone={kost.phone} image={require('../../../assets/images/default-profile.jpg')} />
-        <ChoosePeriod selectedMonths={selectedMonths} setSelectedMonths={setSelectedMonths} />
+        <SellerInfo
+          seller={kost.seller}
+          phone={kost.phone}
+          image={require("../../../assets/images/default-profile.jpg")}
+        />
+        <ChoosePeriod
+          selectedMonths={selectedMonths}
+          setSelectedMonths={setSelectedMonths}
+        />
         <TotalPrice calculateTotalPrice={calculateTotalPrice} />
       </ScrollView>
     </SafeAreaView>
@@ -91,6 +98,6 @@ export default DetailKostScreen = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   flatListContainer: {
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
 });

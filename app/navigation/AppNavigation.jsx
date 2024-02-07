@@ -8,7 +8,8 @@ import DetailKostScreen from "../screens/DetailKostScreen/DetailKostScreen";
 import InfoProfilScreen from "../screens/InfoProfileScreen/InfoProfilScreen";
 import HelpCenterScreen from "../screens/HelpCenterScreen/HelpCenterScreen";
 import PrivacyAndPolicyScreen from "../screens/PrivacyAndPolicyScreen/PrivacyAndPolicyScreen";
-import EditProfileScreen from "../screens/EditProfileScreen/EditProfileScreen";
+import MaleKostListScreen from "../screens/MaleKostListScreen/MaleKostListScreen";
+import FemaleKostListScreen from "../screens/FemaleKostListScreen/FemaleKostListScreen";
 import PopularKostAreaScreen from "../screens/PopularKostAreaScreen/PopularKostAreaScreen";
 
 const Stack = createStackNavigator();
@@ -83,8 +84,13 @@ export const AppNavigation = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="EditProfile"
-            component={EditProfileScreen}
+            name="MaleKostListScreen"
+            component={MaleKostListScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="FemaleKostListScreen"
+            component={FemaleKostListScreen}
             options={{ headerShown: false }}
           />
         </>

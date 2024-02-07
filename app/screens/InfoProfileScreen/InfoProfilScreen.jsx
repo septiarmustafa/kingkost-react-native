@@ -7,15 +7,15 @@ import {
   TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import {
   FontAwesome,
   MaterialCommunityIcons,
   FontAwesome5,
 } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
+import BackButton from "../../components/DetailKost/BackButton";
 
-export default function InfoProfileScreen() {
+export default function InfoProfileScreen({ navigation }) {
   const [username, setusername] = useState("");
   const [password, setPassword] = useState("");
   const [hidePassword, setHidePassword] = useState(true);
@@ -24,7 +24,6 @@ export default function InfoProfileScreen() {
     username: "",
     password: "",
   });
-  const navigation = useNavigation();
 
   const handleUsername = (text) => {
     setusername(text);
@@ -34,9 +33,6 @@ export default function InfoProfileScreen() {
     setPassword(text);
     setErrorMessages({ ...errorMessages, password: "" });
   };
-  const handleEditProfilePress = () => {
-    navigation.navigate("EditProfile");
-  };
 
   return (
     <ScrollView>
@@ -45,9 +41,11 @@ export default function InfoProfileScreen() {
           style={styles.loginImage}
           source={require("../../../assets/images/infoprofil.png")}
         />
+        <View style={{ position: "absolute", top: 10, left: "4%" }}>
+          <BackButton onPress={navigation.goBack} />
+        </View>
         <View style={styles.infoProfilContainer}>
           <Text style={styles.title}>Info Profile</Text>
-
           <View style={styles.inputContainer}>
             <FontAwesome name="user" size={24} color="grey" />
             <TextInput style={styles.input} value="bamz666" />

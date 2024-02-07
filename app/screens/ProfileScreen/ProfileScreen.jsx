@@ -5,7 +5,6 @@ import {
   StyleSheet,
   Image,
   ScrollView,
-  FlatList,
   TouchableOpacity,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -52,10 +51,9 @@ export default ProfileScreen = ({ navigation }) => {
           source={require("../../../assets/images/default-profile.jpg")}
           style={styles.profileImage}
         />
-        <Text style={styles.userName}>Muhammad Ibrahim</Text>
+        <Text style={styles.userName}>{username}</Text>
         <Text style={styles.userRole}>0814*****908</Text>
       </View>
-
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Settings</Text>
 
@@ -104,7 +102,7 @@ export default ProfileScreen = ({ navigation }) => {
             <Text style={styles.settingsValue}>Ask...</Text>
           </View>
         </TouchableOpacity>
-        
+
         <TouchableOpacity
           style={styles.settingsItem}
           onPress={handlePrivacyAndPolicyPress}

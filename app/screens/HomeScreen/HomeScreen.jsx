@@ -19,46 +19,46 @@ export default HomeScreen = ({ navigation }) => {
 
   const listKost = [
     {
-      id: '1',
-      title: 'Kost Martini',
-      image: require('../../../assets/images/jakarta.jpg'),
-      location: 'Dramaga, Kota Bogor',
-      city: 'Jakarta',
-      gender: 'female',
+      id: "1",
+      title: "Kost Martini",
+      image: require("../../../assets/images/jakarta.jpg"),
+      location: "Dramaga, Kota Bogor",
+      city: "Jakarta",
+      gender: "female",
       price: 800000,
       interiors: [
-        require('../../../assets/images/jakarta.jpg'),
-        require('../../../assets/images/banner1.jpg'),
-        require('../../../assets/images/banner2.jpg'),
-      ]
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/banner1.jpg"),
+        require("../../../assets/images/banner2.jpg"),
+      ],
     },
     {
-      id: '2',
-      title: 'Green Kost',
-      image: require('../../../assets/images/jakarta.jpg'),
-      location: 'Pasar Minggu, Jakarta Selatan',
-      city: 'Bandung',
-      gender: 'male',
+      id: "2",
+      title: "Green Kost",
+      image: require("../../../assets/images/jakarta.jpg"),
+      location: "Pasar Minggu, Jakarta Selatan",
+      city: "Bandung",
+      gender: "male",
       price: 600000,
       interiors: [
-        require('../../../assets/images/jakarta.jpg'),
-        require('../../../assets/images/jakarta.jpg'),
-        require('../../../assets/images/jakarta.jpg'),
-      ]
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+      ],
     },
     {
-      id: '3',
-      title: 'Kost Bu Haji',
-      image: require('../../../assets/images/jakarta.jpg'),
-      location: 'Ciracas, Jakarta Timur',
-      city: 'Tangerang',
-      gender: 'male',
+      id: "3",
+      title: "Kost Bu Haji",
+      image: require("../../../assets/images/jakarta.jpg"),
+      location: "Ciracas, Jakarta Timur",
+      city: "Tangerang",
+      gender: "male",
       price: 1500000,
       interiors: [
-        require('../../../assets/images/jakarta.jpg'),
-        require('../../../assets/images/jakarta.jpg'),
-        require('../../../assets/images/jakarta.jpg'),
-      ]
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+      ],
     },
   ];
 
@@ -223,7 +223,7 @@ export default HomeScreen = ({ navigation }) => {
         <View style={{ marginBottom: 20 }}>
           <CustomTitle title="Pilih Preferensi Kost" />
         </View>
-        <ListOptions />
+        <ListOptions navigation={navigation} />
         <CustomTitle title="Area Kost Terpopuler" />
         <FlatList
           snapToInterval={width - 20}
