@@ -10,11 +10,12 @@ import HelpCenterScreen from "../screens/HelpCenterScreen/HelpCenterScreen";
 import PrivacyAndPolicyScreen from "../screens/PrivacyAndPolicyScreen/PrivacyAndPolicyScreen";
 import MaleKostListScreen from "../screens/MaleKostListScreen/MaleKostListScreen";
 import FemaleKostListScreen from "../screens/FemaleKostListScreen/FemaleKostListScreen";
+import PopularKostAreaScreen from "../screens/PopularKostAreaScreen/PopularKostAreaScreen";
 
 const Stack = createStackNavigator();
 
 export const AppNavigation = () => {
-  const [signedIn, setSignedIn] = React.useState(false);
+  const [signedIn, setSignedIn] = React.useState(true);
 
   const getIsSignedIn = async () => {
     let isSignedIn = await AsyncStorage.getItem("token");
@@ -32,6 +33,11 @@ export const AppNavigation = () => {
           <Stack.Screen
             name="BottomTabNavigation"
             component={BottomTabNavigation}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="DetailKostScreen"
+            component={DetailKostScreen}
             options={{ headerShown: false }}
           />
         </>
@@ -55,6 +61,11 @@ export const AppNavigation = () => {
           <Stack.Screen
             name="DetailKostScreen"
             component={DetailKostScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PopularKostArea"
+            component={PopularKostAreaScreen}
             options={{ headerShown: false }}
           />
           <Stack.Screen

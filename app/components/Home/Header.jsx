@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet, ImageBackground } from "react-native";
 import Colors from "../../utils/Colors";
-
+import profile from "../../../assets/images/default-profile.jpg"
 export default Header = () => {
   return (
     <View style={styles.container}>
@@ -16,7 +16,7 @@ export default Header = () => {
         <View style={styles.imageContainer} >
           <Image
             style={styles.profileImage}
-            source={require("../../../assets/images/default-profile.jpg")}
+            source={profile}
           />
         </View>
       </View>
