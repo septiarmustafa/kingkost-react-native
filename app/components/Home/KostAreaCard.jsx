@@ -4,11 +4,11 @@ import Colors from "../../utils/Colors";
 const { width } = Dimensions.get("screen");
 
 
-export default KostAreaCard = ({ kostArea, navigation }) => {
+export default KostAreaCard = ({ listKostArea, kostArea, navigation }) => {
   return (
     <Pressable
       activeOpacity={0.8}
-      onPress={() => navigation.navigate("DetailsScreen", kostArea)}
+      onPress={() => navigation.navigate("PopularKostArea", listKostArea)}
     >
       <View style={styles.cardKostArea}>
         <Image source={kostArea.image} style={styles.cardImageKostArea} />
