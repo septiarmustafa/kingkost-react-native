@@ -16,7 +16,8 @@ import CustomTitle from "../../components/Home/CustomTitle";
 
 const { width } = Dimensions.get("screen");
 export default HomeScreen = ({ navigation }) => {
-  const dummyData = [
+
+  const listKost = [
     {
       id: '1',
       title: 'Kost Martini',
@@ -61,10 +62,153 @@ export default HomeScreen = ({ navigation }) => {
     },
   ];
 
-  const carouselImages = [
-    require("../../../assets/images/banner1.jpg"),
-    require("../../../assets/images/banner2.jpg"),
-    require("../../../assets/images/banner3.jpg"),
+  const listKostByArea = [
+    {
+      id: '1',
+      image: require('../../../assets/images/jakarta.jpg'),
+      city: 'Jakarta'
+    },
+    {
+      id: '2',
+      image: require('../../../assets/images/jakarta.jpg'),
+      city: 'Bandung'
+    },
+    {
+      id: '3',
+      image: require('../../../assets/images/jakarta.jpg'),
+      city: 'Bogor'
+    },
+  ];
+
+  const kostJakarta = [
+    {
+      id: "1",
+      title: "Blue Kost",
+      image: require("../../../assets/images/jakarta.jpg"),
+      district: "Ragunan",
+      city: "Jakarta",
+      province: "DKI Jakarta",
+      gender: "male",
+      price: 550000,
+      interiors: [
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+      ],
+    },
+    {
+      id: "2",
+      title: "Green Kost",
+      image: require("../../../assets/images/jakarta.jpg"),
+      district: "Ciracas",
+      city: "Jakarta",
+      province: "DKI Jakarta",
+      gender: "male",
+      price: 600000,
+      interiors: [
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+      ],
+    },
+    {
+      id: "3",
+      title: "Blue Kost",
+      image: require("../../../assets/images/jakarta.jpg"),
+      district: "Ragunan",
+      city: "Jakarta",
+      province: "DKI Jakarta",
+      gender: "male",
+      price: 550000,
+      interiors: [
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+      ],
+    },
+    {
+      id: "4",
+      title: "Green Kost",
+      image: require("../../../assets/images/jakarta.jpg"),
+      district: "Ciracas",
+      city: "Jakarta",
+      province: "DKI Jakarta",
+      gender: "male",
+      price: 600000,
+      interiors: [
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+      ],
+    },
+  ];
+
+  const kostBandung = [
+    {
+      id: "100",
+      title: "Blue Kost",
+      image: require("../../../assets/images/jakarta.jpg"),
+      district: "Soreang",
+      city: "Bandung",
+      province: "Jawa Barat",
+      gender: "male",
+      price: 550000,
+      interiors: [
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+
+      ],
+    },
+    {
+      id: "201",
+      title: "Green Kost",
+      image: require("../../../assets/images/jakarta.jpg"),
+      district: "Batu tulis",
+      city: "Bandung",
+      province: "Jawa Barat",
+      gender: "male",
+      price: 600000,
+      interiors: [
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+      ],
+    },
+  ];
+
+  const kostBogor = [
+    {
+      id: "100",
+      title: "Blue Kost",
+      image: require("../../../assets/images/jakarta.jpg"),
+      district: "Tanah Sereal",
+      city: "Bogor",
+      province: "Jawa Barat",
+      gender: "male",
+      price: 550000,
+      interiors: [
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+
+      ],
+    },
+    {
+      id: "201",
+      title: "Green Kost",
+      image: require("../../../assets/images/jakarta.jpg"),
+      district: "Dramaga",
+      city: "Bogor",
+      province: "Jawa Barat",
+      gender: "male",
+      price: 600000,
+      interiors: [
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+      ],
+    },
   ];
 
   return (
@@ -86,9 +230,13 @@ export default HomeScreen = ({ navigation }) => {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingLeft: 20, paddingVertical: 20 }}
           horizontal
-          data={dummyData}
+          data={listKostByArea}
           renderItem={({ item }) => (
-            <KostAreaCard kostArea={item} navigation={navigation} />
+            <KostAreaCard
+              listKostArea={item.city === "Jakarta" ? kostJakarta : item.city === "Bogor" ? kostBogor : item.city === "Bandung" ? kostBandung : []}
+              kostArea={item}
+              navigation={navigation}
+            />
           )}
         />
         <CustomTitle title="Kost" subTitle="Lihat Semua" />
@@ -97,7 +245,7 @@ export default HomeScreen = ({ navigation }) => {
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={{ paddingLeft: 20, paddingVertical: 20 }}
           horizontal
-          data={dummyData}
+          data={listKost}
           renderItem={({ item }) => (
             <KostCard kost={item} navigation={navigation} />
           )}

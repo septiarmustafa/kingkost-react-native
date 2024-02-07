@@ -16,6 +16,7 @@ import formatCurrencyIDR from "../../utils/formatCurrencyIDR";
 import SellerInfo from "../../components/DetailKost/SellerInfo";
 import ChoosePeriod from "../../components/DetailKost/ChoosePeriod";
 import TotalPrice from "../../components/DetailKost/TotalPrice";
+import { StatusBar } from "expo-status-bar";
 
 export default DetailKostScreen = ({ navigation, route }) => {
   const kost = route.params;
@@ -42,6 +43,11 @@ export default DetailKostScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.WHITE }}>
+      <StatusBar
+        translucent={false}
+        backgroundColor={Colors.WHITE}
+        barStyle="dark-content"
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <BackgroundImage source={require('../../../assets/images/jakarta.jpg')} onPress={navigation.goBack} />
         <View style={styles.flatListContainer}>
