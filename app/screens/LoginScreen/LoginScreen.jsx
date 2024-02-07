@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -7,7 +8,6 @@ import {
   Alert,
   Image,
 } from "react-native";
-import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -16,8 +16,8 @@ import { Entypo, AntDesign, FontAwesome } from "@expo/vector-icons";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { ScrollView } from "react-native-gesture-handler";
 
-export default function LoginScreen() {
-  const [username, setusername] = useState("");
+export default function LoginScreen({ navigation }) {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [hidePassword, setHidePassword] = useState(true);
   const [err, setErr] = useState("");
@@ -25,27 +25,44 @@ export default function LoginScreen() {
     username: "",
     password: "",
   });
-  const navigation = useNavigation();
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      // Reset input fields when the screen is focused (e.g., after logout)
+      setUsername("");
+      setPassword("");
+    });
+
+    return unsubscribe;
+  }, [navigation]);
 
   const handleUsername = (text) => {
-    setusername(text);
+    setUsername(text);
     setErrorMessages({ ...errorMessages, username: "" });
   };
+
   const handlePassword = (text) => {
     setPassword(text);
     setErrorMessages({ ...errorMessages, password: "" });
   };
+
   const togglePasswordVisibility = () => {
     setHidePassword(!hidePassword);
   };
 
   const handleLogin = async () => {
     if (!username) {
-      setErrorMessages({ ...errorMessages, username: "Username is required." });
+      setErrorMessages({
+        ...errorMessages,
+        username: "Username is required.",
+      });
       return;
     }
     if (!password) {
-      setErrorMessages({ ...errorMessages, password: "Password is required." });
+      setErrorMessages({
+        ...errorMessages,
+        password: "Password is required.",
+      });
       return;
     }
 
@@ -56,19 +73,20 @@ export default function LoginScreen() {
       });
 
       if (response.status === 200) {
-        await AsyncStorage.setItem("token", response.data.data.token);
-        await AsyncStorage.setItem("role", response.data.data.role);
-        await AsyncStorage.setItem("username", response.data.data.username);
+        const { token, role, username } = response.data;
+        await AsyncStorage.setItem("token", token);
+        await AsyncStorage.setItem("role", role);
+        await AsyncStorage.setItem("username", username);
 
         console.log("Token and role saved to AsyncStorage");
-        console.log(response.data.data.token);
-        console.log(response.data.data.role);
+        console.log(token);
+        console.log(role);
 
         Alert.alert("Success", "Login successful!", [
           {
             text: "OK",
             onPress: () => {
-              navigation.navigate("Tab");
+              navigation.navigate("BottomTabNavigation");
             },
           },
         ]);

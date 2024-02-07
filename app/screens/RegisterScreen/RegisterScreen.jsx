@@ -6,9 +6,10 @@ import {
   TextInput,
   Image,
   ScrollView,
+  Alert,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import { BASE_HOST } from "../../config/BaseUrl";
@@ -24,21 +25,36 @@ export default function RegisterScreen() {
   const [registrationData, setRegistrationData] = useState({
     username: "",
     password: "",
-    name: "",
+    fullName: "",
     address: "",
-    mobilePhone: "",
+    phoneNumber: "",
     email: "",
+    genderTypeId: "",
   });
   const [errorMessages, setErrorMessages] = useState({
     username: "",
     password: "",
-    name: "",
+    fullName: "",
     address: "",
-    mobilePhone: "",
+    phoneNumber: "",
     email: "",
-    gender: "",
+    genderTypeId: "",
   });
+  const [genders, setGenders] = useState([]);
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const fetchGenders = async () => {
+      try {
+        const response = await axios.get(`${BASE_HOST}/gender/v1`);
+        setGenders(response.data);
+      } catch (error) {
+        console.error("Error fetching genders:", error);
+      }
+    };
+
+    fetchGenders();
+  }, []);
 
   const handleFieldChange = (field, text) => {
     setRegistrationData({
@@ -51,17 +67,24 @@ export default function RegisterScreen() {
   };
 
   const handleRegister = async () => {
-    const { username, password, name, address, mobilePhone, email, gender } =
-      registrationData;
+    const {
+      username,
+      password,
+      fullName,
+      address,
+      phoneNumber,
+      email,
+      genderTypeId,
+    } = registrationData;
 
     const errors = {};
     if (!username) errors.username = "Username is required.";
     if (!password) errors.password = "Password is required.";
-    if (!name) errors.name = "Name is required.";
+    if (!fullName) errors.fullName = "Name is required.";
     if (!address) errors.address = "Address is required.";
-    if (!mobilePhone) errors.mobilePhone = "Mobile Phone is required.";
+    if (!phoneNumber) errors.phoneNumber = "Mobile Phone is required.";
     if (!email) errors.email = "Email is required.";
-    if (!gender) errors.gender = "Gender is required.";
+    if (!genderTypeId) errors.genderTypeId = "genderTypeId is required.";
 
     setErrorMessages(errors);
 
@@ -71,16 +94,23 @@ export default function RegisterScreen() {
 
     try {
       const response = await axios.post(
-        `${BASE_HOST}/api/auth/customer/register`,
+        `${BASE_HOST}/api/auth/register/customer`,
         registrationData
       );
-
-      if (response.status === 201) {
-        console.log("Registration successful!");
-        navigation.navigate("Login");
-      } else {
-        console.error("Registration failed");
-        console.error(response.data.message);
+      console.log(response.status, "status");
+      if (response.status === 200) {
+        Alert.alert(
+          "Registration Success",
+          "You can now login",
+          [
+            {
+              onPress: () => {
+                navigation.navigate("Login");
+              },
+            },
+          ],
+          { cancelable: false }
+        );
       }
     } catch (error) {
       console.error("Error during registration:", error);
@@ -158,8 +188,8 @@ export default function RegisterScreen() {
                 style={{ ...styles.input, marginTop: 10 }}
                 placeholder="Name"
                 placeholderTextColor="grey"
-                value={registrationData.name}
-                onChangeText={(text) => handleFieldChange("name", text)}
+                value={registrationData.fullName}
+                onChangeText={(text) => handleFieldChange("fullName", text)}
               />
             </View>
             {errorMessages.name ? (
@@ -180,19 +210,30 @@ export default function RegisterScreen() {
             ) : null}
             <View style={styles.pickerContainer}>
               <Picker
-                selectedValue={registrationData.gender}
+                selectedValue={registrationData.genderTypeId}
                 onValueChange={(itemValue, itemIndex) =>
-                  handleFieldChange("gender", itemValue)
+                  handleFieldChange("genderTypeId", itemValue)
                 }
-                style={styles.picker}
+                style={{ marginTop: -8 }}
               >
-                <Picker.Item label="Select Gender" value="" />
-                <Picker.Item label="Laki-laki" value="male" />
-                <Picker.Item label="Perempuan" value="female" />
+                <Picker.Item
+                  label="Select Gender"
+                  style={{ color: "grey" }}
+                  value=""
+                />
+                {genders.map((gender) => (
+                  <Picker.Item
+                    key={gender.id}
+                    label={gender.name}
+                    value={gender.id}
+                  />
+                ))}
               </Picker>
             </View>
-            {errorMessages.gender ? (
-              <Text style={styles.errorMessage}>{errorMessages.gender}</Text>
+            {errorMessages.genderTypeId ? (
+              <Text style={styles.errorMessage}>
+                {errorMessages.genderTypeId}
+              </Text>
             ) : null}
             <View style={styles.inputContainer}>
               <MaterialCommunityIcons
@@ -204,7 +245,6 @@ export default function RegisterScreen() {
                 style={{ ...styles.input, marginTop: 10 }}
                 placeholder="Email"
                 placeholderTextColor="grey"
-                keyboardType="email-address"
                 value={registrationData.email}
                 onChangeText={(text) => handleFieldChange("email", text)}
               />
@@ -219,13 +259,13 @@ export default function RegisterScreen() {
                 placeholder="Mobile Phone"
                 placeholderTextColor="grey"
                 keyboardType="phone-pad"
-                value={registrationData.mobilePhone}
-                onChangeText={(text) => handleFieldChange("mobilePhone", text)}
+                value={registrationData.phoneNumber}
+                onChangeText={(text) => handleFieldChange("phoneNumber", text)}
               />
             </View>
-            {errorMessages.mobilePhone ? (
+            {errorMessages.phoneNumber ? (
               <Text style={styles.errorMessage}>
-                {errorMessages.mobilePhone}
+                {errorMessages.phoneNumber}
               </Text>
             ) : null}
             <TouchableOpacity
@@ -337,12 +377,6 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderWidth: 1,
     borderColor: "#ddd",
-  },
-  picker: {
-    height: 40,
-    color: "grey",
-    marginLeft: -8,
-    marginTop: -8,
   },
   button: {
     padding: 10,

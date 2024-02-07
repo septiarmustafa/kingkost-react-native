@@ -1,22 +1,31 @@
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Touchable,
+  TouchableOpacity,
+  Pressable,
+} from "react-native";
 import Colors from "../../utils/Colors";
 
-export default OptionsCard = ({ title, img }) => {
+export default OptionsCard = ({ title, img, onPress }) => {
   return (
-    <View style={styles.optionsCard}>
-      <Image source={img} style={styles.optionsCardImage} />
-      <Text style={{ marginTop: 10, fontSize: 18, fontWeight: "bold" }}>
-        {title}
-      </Text>
-    </View>
+    <Pressable onPress={onPress}>
+      <View style={styles.optionsCard}>
+        <Image source={img} style={styles.optionsCardImage} />
+        <Text style={{ marginTop: 10, fontSize: 18, fontWeight: "bold" }}>
+          {title}
+        </Text>
+      </View>
+    </Pressable>
   );
 };
 
 const styles = StyleSheet.create({
   optionsCard: {
     height: 140,
-    width: "30%",
     elevation: 15,
     alignItems: "center",
     backgroundColor: Colors.WHITE,
