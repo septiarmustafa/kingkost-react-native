@@ -1,11 +1,10 @@
 import React from "react";
-import { View, Text, Image, StyleSheet, ImageBackground } from "react-native";
+import { View, Text, Image, StyleSheet } from "react-native";
 import Colors from "../../utils/Colors";
 import profile from "../../../assets/images/default-profile.jpg"
 export default Header = () => {
   return (
     <View style={styles.container}>
-
       <View style={styles.header}>
         <View>
           <Text style={{ color: Colors.DARK }}>Welcome,</Text>

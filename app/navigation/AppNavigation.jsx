@@ -10,6 +10,7 @@ import HelpCenterScreen from "../screens/HelpCenterScreen/HelpCenterScreen";
 import PrivacyAndPolicyScreen from "../screens/PrivacyAndPolicyScreen/PrivacyAndPolicyScreen";
 import EditProfileScreen from "../screens/EditProfileScreen/EditProfileScreen";
 import PopularKostAreaScreen from "../screens/PopularKostAreaScreen/PopularKostAreaScreen";
+import ListAllKostScreen from "../screens/ListAllKostScreen/ListAllKostScreen";
 
 const Stack = createStackNavigator();
 
@@ -65,6 +66,11 @@ export const AppNavigation = () => {
           <Stack.Screen
             name="PopularKostArea"
             component={PopularKostAreaScreen}
+            options={{ headerShown: false }}
+          />
+            <Stack.Screen
+            name="ListAllKostScreen"
+            component={ListAllKostScreen}
             options={{ headerShown: false }}
           />
           <Stack.Screen
