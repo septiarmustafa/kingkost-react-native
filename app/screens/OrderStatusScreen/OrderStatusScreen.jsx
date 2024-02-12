@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import http from '../../config/HttpConfig'
 import LoadingComponent from '../../components/LoadingComponent';
 import Colors from '../../utils/Colors';
