@@ -90,7 +90,7 @@ export default DetailKostScreen = ({ navigation, route }) => {
           selectedMonths={selectedMonths}
           setSelectedMonths={setSelectedMonths}
         />
-        <TotalPrice calculateTotalPrice={calculateTotalPrice} />
+        <TotalPrice onPress={()=>navigation.navigate("CreateOrderScreen")} calculateTotalPrice={calculateTotalPrice} />
       </ScrollView>
     </SafeAreaView>
   );
