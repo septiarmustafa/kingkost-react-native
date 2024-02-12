@@ -213,7 +213,7 @@ export default HomeScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={{ backgroundColor: Colors.WHITE, flex: 1 }}>
-      <StatusBar
+        <StatusBar
         translucent={false}
         backgroundColor={Colors.WHITE}
         barStyle="dark-content"
@@ -239,7 +239,7 @@ export default HomeScreen = ({ navigation }) => {
             />
           )}
         />
-        <CustomTitle title="Kost" subTitle="Lihat Semua" />
+        <CustomTitle onPress={() => navigation.navigate("ListAllKostScreen", listKost)} title="Kost" subTitle="Lihat Semua" />
         <FlatList
           snapToInterval={width - 20}
           showsHorizontalScrollIndicator={false}
