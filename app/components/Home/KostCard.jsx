@@ -1,7 +1,18 @@
 import React from "react";
-import { Pressable, Text, Image, StyleSheet, View, Dimensions } from "react-native";
+import {
+  Pressable,
+  Text,
+  Image,
+  StyleSheet,
+  View,
+  Dimensions,
+} from "react-native";
 import Colors from "../../utils/Colors";
-import { Fontisto, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
+import {
+  Fontisto,
+  FontAwesome5,
+  MaterialCommunityIcons,
+} from "@expo/vector-icons";
 import formatCurrencyIDR from "../../utils/formatCurrencyIDR";
 const { width } = Dimensions.get("screen");
 
@@ -13,18 +24,41 @@ export default KostCard = ({ kost, navigation }) => {
     >
       <View style={styles.card}>
         <Image source={kost.image} style={styles.cardImage} />
-        <View >
-          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 10 }}>
-            <Text style={{ fontSize: 16, fontWeight: "bold" }}>{kost.title}</Text>
-            <Text style={{ fontWeight: "bold", color: Colors.GREEN, fontSize: 16 }}>
+        <View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginTop: 10,
+            }}
+          >
+            <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+              {kost.title}
+            </Text>
+            <Text
+              style={{ fontWeight: "bold", color: Colors.GREEN, fontSize: 16 }}
+            >
               {formatCurrencyIDR(kost.price)} / Bulan
             </Text>
           </View>
-          <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 5 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginTop: 5,
+            }}
+          >
             <Text style={{ color: Colors.GREY, fontSize: 14, marginTop: 5 }}>
               {kost.location}
             </Text>
-            <Image style={{ marginTop: 5, width: 25, height: 25 }} source={kost.gender == "male" ? require("../../../assets/icons/male.jpg") : require("../../../assets/icons/female.jpg")} />
+            <Image
+              style={{ marginTop: 5, width: 25, height: 25 }}
+              source={
+                kost.gender == "male"
+                  ? require("../../../assets/icons/male.jpg")
+                  : require("../../../assets/icons/female.jpg")
+              }
+            />
           </View>
           <View style={{ marginTop: 10, flexDirection: "row" }}>
             <View style={styles.facility}>
@@ -34,7 +68,11 @@ export default KostCard = ({ kost, navigation }) => {
               <FontAwesome5 name="parking" size={20} color="black" />
             </View>
             <View style={styles.facility}>
-              <MaterialCommunityIcons name="air-conditioner" size={20} color="black" />
+              <MaterialCommunityIcons
+                name="air-conditioner"
+                size={20}
+                color="black"
+              />
             </View>
           </View>
         </View>
@@ -60,4 +98,3 @@ const styles = StyleSheet.create({
   },
   facility: { flexDirection: "row", marginRight: 15 },
 });
-

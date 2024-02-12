@@ -1,22 +1,19 @@
-import React from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import React from "react";
+import { View, TextInput, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import Colors from '../utils/Colors';
+import Colors from "../utils/Colors";
 export default SearchBar = ({ onSearchChange, onSortPress }) => {
   return (
     <View
       style={{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
+        flexDirection: "row",
+        justifyContent: "space-between",
         paddingHorizontal: 20,
       }}
     >
       <View style={style.searchInputContainer}>
         <Icon name="search" color={Colors.GREY} size={25} />
-        <TextInput
-          placeholder="Cari nama kost"
-          onChangeText={onSearchChange}
-        />
+        <TextInput placeholder="Cari nama kost" onChangeText={onSearchChange} />
       </View>
 
       <View style={style.sortBtn} onPress={onSortPress}>
@@ -45,9 +42,11 @@ const style = StyleSheet.create({
     alignItems: "center",
     marginLeft: 10,
   },
-})
+});
 
-{/* <SearchSortBar
+{
+  /* <SearchSortBar
 onSearchChange={handleSearchChange}
 onSortPress={handleSortPress}
-/> */}
+/> */
+}

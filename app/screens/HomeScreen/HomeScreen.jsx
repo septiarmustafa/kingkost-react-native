@@ -16,7 +16,6 @@ import CustomTitle from "../../components/Home/CustomTitle";
 
 const { width } = Dimensions.get("screen");
 export default HomeScreen = ({ navigation }) => {
-
   const listKost = [
     {
       id: "1",
@@ -64,19 +63,19 @@ export default HomeScreen = ({ navigation }) => {
 
   const listKostByArea = [
     {
-      id: '1',
-      image: require('../../../assets/images/jakarta.jpg'),
-      city: 'Jakarta'
+      id: "1",
+      image: require("../../../assets/images/jakarta.jpg"),
+      city: "Jakarta",
     },
     {
-      id: '2',
-      image: require('../../../assets/images/jakarta.jpg'),
-      city: 'Bandung'
+      id: "2",
+      image: require("../../../assets/images/jakarta.jpg"),
+      city: "Bandung",
     },
     {
-      id: '3',
-      image: require('../../../assets/images/jakarta.jpg'),
-      city: 'Bogor'
+      id: "3",
+      image: require("../../../assets/images/jakarta.jpg"),
+      city: "Bogor",
     },
   ];
 
@@ -88,7 +87,7 @@ export default HomeScreen = ({ navigation }) => {
       district: "Ragunan",
       city: "Jakarta",
       province: "DKI Jakarta",
-      gender: "male",
+      gender: "female",
       price: 550000,
       interiors: [
         require("../../../assets/images/jakarta.jpg"),
@@ -157,7 +156,6 @@ export default HomeScreen = ({ navigation }) => {
         require("../../../assets/images/jakarta.jpg"),
         require("../../../assets/images/jakarta.jpg"),
         require("../../../assets/images/jakarta.jpg"),
-
       ],
     },
     {
@@ -191,7 +189,6 @@ export default HomeScreen = ({ navigation }) => {
         require("../../../assets/images/jakarta.jpg"),
         require("../../../assets/images/jakarta.jpg"),
         require("../../../assets/images/jakarta.jpg"),
-
       ],
     },
     {
@@ -211,6 +208,9 @@ export default HomeScreen = ({ navigation }) => {
     },
   ];
 
+  const maleKostData = listKost.filter((item) => item.gender === "male");
+  const femaleKostData = listKost.filter((item) => item.gender === "female");
+
   return (
     <SafeAreaView style={{ backgroundColor: Colors.WHITE, flex: 1 }}>
         <StatusBar
@@ -223,7 +223,11 @@ export default HomeScreen = ({ navigation }) => {
         <View style={{ marginBottom: 20 }}>
           <CustomTitle title="Pilih Preferensi Kost" />
         </View>
-        <ListOptions navigation={navigation} />
+        <ListOptions
+          navigation={navigation}
+          maleKostData={maleKostData}
+          femaleKostData={femaleKostData}
+        />
         <CustomTitle title="Area Kost Terpopuler" />
         <FlatList
           snapToInterval={width - 20}
@@ -233,7 +237,15 @@ export default HomeScreen = ({ navigation }) => {
           data={listKostByArea}
           renderItem={({ item }) => (
             <KostAreaCard
-              listKostArea={item.city === "Jakarta" ? kostJakarta : item.city === "Bogor" ? kostBogor : item.city === "Bandung" ? kostBandung : []}
+              listKostArea={
+                item.city === "Jakarta"
+                  ? kostJakarta
+                  : item.city === "Bogor"
+                  ? kostBogor
+                  : item.city === "Bandung"
+                  ? kostBandung
+                  : []
+              }
               kostArea={item}
               navigation={navigation}
             />
