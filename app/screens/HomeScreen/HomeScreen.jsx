@@ -13,6 +13,7 @@ import ListOptions from "../../components/Home/ListOptions";
 import KostAreaCard from "../../components/Home/KostAreaCard";
 import KostCard from "../../components/Home/KostCard";
 import CustomTitle from "../../components/Home/CustomTitle";
+import CarouselBanner from "../../components/Home/CarouselBanner";
 
 const { width } = Dimensions.get("screen");
 export default HomeScreen = ({ navigation }) => {
@@ -220,6 +221,7 @@ export default HomeScreen = ({ navigation }) => {
       />
       <Header />
       <ScrollView showsVerticalScrollIndicator={false}>
+        <CarouselBanner/>
         <View style={{ marginBottom: 20 }}>
           <CustomTitle title="Pilih Preferensi Kost" />
         </View>
