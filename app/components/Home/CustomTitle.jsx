@@ -8,12 +8,11 @@ export default CustomTitle = ({ title, subTitle }) => {
       <View>
         <Text style={styles.title}>{title}</Text>
       </View>
-      {subTitle ?
+      {subTitle ? (
         <View style={styles.container}>
           <Text style={styles.subTitle}>{subTitle}</Text>
-        </View> : null
-      }
-
+        </View>
+      ) : null}
     </View>
   );
 };
@@ -32,15 +31,13 @@ const styles = StyleSheet.create({
   },
   container: {
     backgroundColor: Colors.PRIMARY_COLOR,
-    borderRadius: 10
+    borderRadius: 10,
   },
   subTitle: {
     color: Colors.BLACK,
     fontSize: 15,
     fontWeight: "normal",
     marginHorizontal: 8,
-    marginVertical: 5
-
+    marginVertical: 5,
   },
 });
-
