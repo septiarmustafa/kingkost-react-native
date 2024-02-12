@@ -90,7 +90,7 @@ export default function InfoProfileScreen({ navigation }) {
                         <FontAwesome5 name="phone-square-alt" size={21} color="grey" />
                         <TextInput style={styles.input} value="" />
                     </View>
-                    <TouchableOpacity style={styles.loginButton} onPress>
+                    <TouchableOpacity style={styles.loginButton} onPress={()=> navigation.navigate('OrderStatusScreen')}>
                         <Text style={styles.buttonText}>Submit</Text>
                     </TouchableOpacity>
                 </View>
