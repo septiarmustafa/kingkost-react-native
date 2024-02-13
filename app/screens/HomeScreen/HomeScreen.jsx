@@ -13,6 +13,7 @@ import ListOptions from "../../components/Home/ListOptions";
 import KostAreaCard from "../../components/Home/KostAreaCard";
 import KostCard from "../../components/Home/KostCard";
 import CustomTitle from "../../components/Home/CustomTitle";
+import CarouselBanner from "../../components/Home/CarouselBanner";
 
 const { width } = Dimensions.get("screen");
 export default HomeScreen = ({ navigation }) => {
@@ -47,6 +48,76 @@ export default HomeScreen = ({ navigation }) => {
     },
     {
       id: "3",
+      title: "Kost Bu Haji",
+      image: require("../../../assets/images/jakarta.jpg"),
+      location: "Ciracas, Jakarta Timur",
+      city: "Tangerang",
+      gender: "male",
+      price: 1500000,
+      interiors: [
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+      ],
+    },
+    {
+      id: "4",
+      title: "Kost Bu Haji",
+      image: require("../../../assets/images/jakarta.jpg"),
+      location: "Ciracas, Jakarta Timur",
+      city: "Tangerang",
+      gender: "male",
+      price: 1500000,
+      interiors: [
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+      ],
+    },
+    {
+      id: "5",
+      title: "Kost Bu Haji",
+      image: require("../../../assets/images/jakarta.jpg"),
+      location: "Ciracas, Jakarta Timur",
+      city: "Tangerang",
+      gender: "male",
+      price: 1500000,
+      interiors: [
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+      ],
+    },
+    {
+      id: "6",
+      title: "Kost Bu Haji",
+      image: require("../../../assets/images/jakarta.jpg"),
+      location: "Ciracas, Jakarta Timur",
+      city: "Tangerang",
+      gender: "male",
+      price: 1500000,
+      interiors: [
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+      ],
+    },
+    {
+      id: "7",
+      title: "Kost Bu bu",
+      image: require("../../../assets/images/jakarta.jpg"),
+      location: "Ciracas, Jakarta Timur",
+      city: "Tangerang",
+      gender: "male",
+      price: 1500000,
+      interiors: [
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+        require("../../../assets/images/jakarta.jpg"),
+      ],
+    },
+    {
+      id: "8",
       title: "Kost Bu Haji",
       image: require("../../../assets/images/jakarta.jpg"),
       location: "Ciracas, Jakarta Timur",
@@ -220,6 +291,7 @@ export default HomeScreen = ({ navigation }) => {
       />
       <Header />
       <ScrollView showsVerticalScrollIndicator={false}>
+        <CarouselBanner/>
         <View style={{ marginBottom: 20 }}>
           <CustomTitle title="Pilih Preferensi Kost" />
         </View>
