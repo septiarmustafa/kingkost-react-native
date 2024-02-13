@@ -7,6 +7,7 @@ import {
     FlatList,
     TouchableOpacity,
     Modal,
+    ActivityIndicator,
 } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import Colors from "../../utils/Colors";
@@ -18,6 +19,7 @@ import { Picker } from "@react-native-picker/picker";
 import { AntDesign } from '@expo/vector-icons';
 import http from "../../config/HttpConfig"
 import { BASE_HOST } from "../../config/BaseUrl";
+import LoadingComponent from "../../components/LoadingComponent";
 
 export default ListAllKostScreen = ({ navigation, route }) => {
     const kost = route.params;
@@ -32,6 +34,9 @@ export default ListAllKostScreen = ({ navigation, route }) => {
     const [totalPage, setTotalPage] = useState(1);
     const [kostData, setKostData] = useState([]);
     const [showFilterModal, setShowFilterModal] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+
 
     // const fetchProvinces = async () => {
     //     try {
@@ -65,14 +70,15 @@ export default ListAllKostScreen = ({ navigation, route }) => {
 
     //     fetchProvinces();
     // }, []);
-   
+
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true);
+
             try {
                 const response = await http.get(`/kost?page=${currentPage}`);
-                const newData = response.data.data;
-                const paggingResponse = response.data.paggingResponse
-                const kostData = newData.map((item) => ({
+                const { data, paggingResponse } = response.data;
+                const newData = data.map((item) => ({
                     id: item.id,
                     title: item.name,
                     image: item.images[0].fileName,
@@ -89,24 +95,16 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                     isAc: item.isAc,
                     isParking: item.isParking,
                     images: item.images.map((image) => ({
-                      uri: `${BASE_HOST}/${image.fileName}`,
+                        uri: `${BASE_HOST}/${image.fileName}`,
                     })),
-                  }));
-                setKostData((prevData) => {
-                    if (kostData.length > 0) {
-                        if (currentPage === 0) {
-                            return kostData;
-                        } else {
-                            return [...prevData, ...kostData];
-                        }
-                    } else {
-                        return prevData;
-                    }
-                });
+                }));
+                setKostData(newData);
                 setTotalPage(paggingResponse.totalPage);
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
+            setLoading(false);
+
         };
 
         fetchData();
@@ -124,12 +122,6 @@ export default ListAllKostScreen = ({ navigation, route }) => {
         setKostData(filteredData);
     };
 
-    const handleLoadMore = () => {
-        if (currentPage < totalPage) {
-            setCurrentPage(currentPage + 1);
-        }
-    };
-
     const handleNextPage = () => {
         if (currentPage < totalPage) {
             setCurrentPage(currentPage + 1);
@@ -137,7 +129,7 @@ export default ListAllKostScreen = ({ navigation, route }) => {
     };
 
     const handlePreviousPage = () => {
-        if (currentPage > 1) {
+        if (currentPage > 0) {
             setCurrentPage(currentPage - 1);
         }
     };
@@ -173,28 +165,34 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                 <SearchBar onSearch={handleSearch} />
             </View>
             <View style={styles.listCard}>
-                <FlatList
-                    data={kostData}
-                    renderItem={({ item }) => (
-                        <KostItem
-                            item={item}
-                            onPress={() => navigation.navigate("DetailKostScreen", item)}
-                        />
-                    )}
-                    keyExtractor={(item) => item.id}
-                    onEndReached={handleLoadMore}
-                    onEndReachedThreshold={0.1}
-                    showsVerticalScrollIndicator={false}
-                    extraData={kostData} 
-                />
+                {loading ? (
+                    <LoadingComponent/>
+                ) : (
+                    <FlatList
+                        data={kostData}
+                        renderItem={({ item }) => (
+                            <KostItem
+                                item={item}
+                                onPress={() => navigation.navigate("DetailKostScreen", item)}
+                            />
+                        )}
+                        keyExtractor={(item) => item.id}
+                        showsVerticalScrollIndicator={false}
+                        extraData={kostData}
+                    />
+                )}
             </View>
             <View style={styles.pagination}>
-                <TouchableOpacity onPress={handlePreviousPage} disabled={currentPage === 1}>
-                    <Text style={[styles.paginationText, { color: currentPage === 1 ? 'gray' : 'black' }]}>Previous</Text>
+                <TouchableOpacity onPress={handlePreviousPage} disabled={currentPage === 0}>
+                    <View style={styles.paginationButton}>
+                        <Text style={[styles.paginationText, { color: currentPage === 0 ? 'gray' : 'black' }]}>Previous</Text>
+                    </View>
                 </TouchableOpacity>
-                <Text style={styles.paginationText}>{currentPage}/{totalPage}</Text>
-                <TouchableOpacity onPress={handleNextPage} disabled={currentPage === totalPage}>
-                    <Text style={[styles.paginationText, { color: currentPage === totalPage ? 'gray' : 'black' }]}>Next</Text>
+                <Text style={styles.paginationText}>{currentPage + 1}/{totalPage}</Text>
+                <TouchableOpacity onPress={handleNextPage} disabled={currentPage === totalPage -1}>
+                    <View style={styles.paginationButton}>
+                        <Text style={[styles.paginationText, { color: currentPage === totalPage -1 ? 'gray' : 'black' }]}>Next</Text>
+                    </View>
                 </TouchableOpacity>
             </View>
             <Modal
@@ -344,10 +342,20 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        alignContent: 'center',
         paddingHorizontal: 20,
-        marginTop: 10,
     },
     paginationText: {
         fontSize: 16,
+        textAlign: "center",
+        alignContent : "center"
     },
+    paginationButton: {
+        height: 30,
+        width: 80,
+        marginVertical: 10,
+        borderRadius: 5,
+        paddingTop : 3,
+        backgroundColor: Colors.PRIMARY_COLOR
+    }
 });
