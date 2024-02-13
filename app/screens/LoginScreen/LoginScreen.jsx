@@ -8,7 +8,6 @@ import {
   Alert,
   Image,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { BASE_HOST } from "../../config/BaseUrl";
@@ -28,7 +27,6 @@ export default function LoginScreen({ navigation }) {
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      // Reset input fields when the screen is focused (e.g., after logout)
       setUsername("");
       setPassword("");
     });
@@ -67,18 +65,21 @@ export default function LoginScreen({ navigation }) {
     }
 
     try {
-      const response = await axios.post(`${BASE_HOST}/api/auth/login`, {
-        username,
-        password,
-      });
+      const response = await axios.post(
+        `${BASE_HOST}/api/auth/login/customer`,
+        {
+          username,
+          password,
+        }
+      );
 
       if (response.status === 200) {
-        const { token, role, username } = response.data;
+        const { userId, token, role, username } = response.data.data;
+        await AsyncStorage.setItem("userId", userId);
         await AsyncStorage.setItem("token", token);
         await AsyncStorage.setItem("role", role);
-        await AsyncStorage.setItem("username", username);
 
-        console.log("Token and role saved to AsyncStorage");
+        console.log("user id: " + userId);
         console.log(token);
         console.log(role);
 
@@ -178,10 +179,7 @@ export default function LoginScreen({ navigation }) {
             <TouchableOpacity style={styles.socialButton}>
               <FontAwesome5 name="google" size={40} color="grey" />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.socialButton}
-              onPress={() => navigation.navigate("BottomTabNavigation")}
-            >
+            <TouchableOpacity style={styles.socialButton}>
               <AntDesign name="apple1" size={40} color="grey" />
             </TouchableOpacity>
           </View>
