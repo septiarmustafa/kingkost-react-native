@@ -348,8 +348,8 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                         />
                     )}
                     keyExtractor={(item) => item.id}
-                    contentContainerStyle={styles.flatListContainer}
                     onEndReached={handleLoadMore}
+                    showsVerticalScrollIndicator={false}
                     onEndReachedThreshold={0.1}
                 />
             </View>
@@ -459,7 +459,8 @@ const styles = StyleSheet.create({
     },
     listCard: {
         marginHorizontal: 20,
-        marginTop: 20
+        marginTop: 20,
+        flex: 1
     },
     modalContainer: {
         flex: 1,
