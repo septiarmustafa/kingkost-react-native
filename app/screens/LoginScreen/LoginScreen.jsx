@@ -14,6 +14,7 @@ import { BASE_HOST } from "../../config/BaseUrl";
 import { Entypo, AntDesign, FontAwesome } from "@expo/vector-icons";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { ScrollView } from "react-native-gesture-handler";
+import http from "../../config/HttpConfig";
 
 export default function LoginScreen({ navigation }) {
   const [username, setUsername] = useState("");
@@ -65,23 +66,22 @@ export default function LoginScreen({ navigation }) {
     }
 
     try {
-      const response = await axios.post(
-        `${BASE_HOST}/api/auth/login`,
-        {
-          username,
-          password,
-        }
-      );
+      const response = await http.post(`/api/auth/login`, {
+        username,
+        password,
+      });
 
       if (response.status === 200) {
         const { userId, token, role, username } = response.data;
         await AsyncStorage.setItem("userId", userId);
         await AsyncStorage.setItem("token", token);
         await AsyncStorage.setItem("role", role);
+        await AsyncStorage.setItem("password", password);
 
         console.log("user id: " + userId);
         console.log(token);
         console.log(role);
+        console.log(password);
 
         Alert.alert("Success", "Login successful!", [
           {

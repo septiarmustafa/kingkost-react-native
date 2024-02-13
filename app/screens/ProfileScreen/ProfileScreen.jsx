@@ -16,25 +16,29 @@ export default ProfileScreen = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [userId, setUserId] = useState(null);
 
+  const fetchUserData = async (userId) => {
+    try {
+      console.log("Fetching user data...");
+      const response = await fetch(`${BASE_HOST}/customer/user/${userId}`);
+      const data = await response.json();
+      setFullName(data.data.fullName);
+      setPhoneNumber(data.data.phoneNumber);
+      console.log("User data fetched:", data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {
-    // Mengambil userId dari AsyncStorage
     AsyncStorage.getItem("userId")
       .then((userId) => {
-        setUserId(userId); // Menyimpan userId ke dalam state
-        fetch(`${BASE_HOST}/customer/v1/${userId}`)
-          .then((response) => response.json())
-          .then((data) => {
-            setFullName(data.fullName);
-            setPhoneNumber(data.phoneNumber);
-          })
-          .catch((error) => {
-            console.error("Error fetching data:", error);
-          });
+        setUserId(userId);
+        fetchUserData(userId);
       })
       .catch((error) => {
         console.error("Error retrieving userId from AsyncStorage:", error);
       });
-  }, []);
+  }, [navigation]);
 
   const handleProfilePress = () => {
     navigation.navigate("InfoProfile", { userId: userId });
@@ -48,7 +52,7 @@ export default ProfileScreen = ({ navigation }) => {
 
   const handleLogout = async () => {
     try {
-      await AsyncStorage.multiRemove(["userId", "token", "role"]);
+      await AsyncStorage.multiRemove(["userId", "token", "role", "password"]);
       navigation.replace("Login");
     } catch (error) {
       console.error("Error logging out:", error);
@@ -111,7 +115,7 @@ export default ProfileScreen = ({ navigation }) => {
           <FontAwesome name="question" size={24} color={"#333"} />
           <View style={styles.settingsTextContainer}>
             <Text style={styles.settingsTitle}>Help Center</Text>
-            <Text style={styles.settingsValue}>Ask...</Text>
+            <Text style={styles.settingsValue}>Ask</Text>
           </View>
         </TouchableOpacity>
 
@@ -122,7 +126,7 @@ export default ProfileScreen = ({ navigation }) => {
           <FontAwesome name="font-awesome" size={24} color={"#333"} />
           <View style={styles.settingsTextContainer}>
             <Text style={styles.settingsTitle}>Privacy and Policy</Text>
-            <Text style={styles.settingsValue}>Read...</Text>
+            <Text style={styles.settingsValue}>Read More</Text>
           </View>
         </TouchableOpacity>
 
@@ -131,9 +135,6 @@ export default ProfileScreen = ({ navigation }) => {
           <View style={styles.settingsTextContainer}>
             <Text style={{ ...styles.settingsTitle, color: "white" }}>
               Logout
-            </Text>
-            <Text style={{ ...styles.settingsValue, color: "white" }}>
-              Bye:(
             </Text>
           </View>
         </TouchableOpacity>

@@ -11,8 +11,9 @@ import {
 import { FontAwesome, FontAwesome5 } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 import BackButton from "../../components/DetailKost/BackButton";
-import { BASE_HOST } from "../../config/BaseUrl";
 import http from "../../config/HttpConfig";
+import { Picker } from "@react-native-picker/picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function InfoProfileScreen({ navigation, route }) {
   const [userData, setUserData] = useState({
@@ -26,20 +27,46 @@ export default function InfoProfileScreen({ navigation, route }) {
     password: "",
   });
 
+  const [genders, setGenders] = useState([]);
+
+  useEffect(() => {
+    const fetchGenders = async () => {
+      try {
+        const response = await http.get(`/gender/v1`);
+        setGenders(response.data);
+      } catch (error) {
+        console.error("Error fetching genders:", error);
+      }
+    };
+    fetchGenders();
+  }, []);
+
   useEffect(() => {
     const { userId } = route.params;
     fetchUserData(userId);
   }, []);
 
+  useEffect(() => {
+    AsyncStorage.getItem("password")
+      .then((pw) => {
+        handleChange("password", pw);
+      })
+      .catch((err) => console.log(err));
+  }, [userData.password]);
+
   const fetchUserData = async (userId) => {
     try {
-      const response = await http.get(`/customer/v1/${userId}`);
-      if (!response.data.code === 200 || !response.data.code === 201) {
+      const response = await http.get(`/customer/user/${userId}`);
+      if (
+        !response.data.data.code === 200 ||
+        !response.data.data.code === 201
+      ) {
         throw new Error("Failed to fetch user data");
       }
-      const userData = await response.data;
+      const userData = await response.data.data;
       setUserData(userData);
-      console.log(userData);
+
+      handleChange("genderTypeId", userData.genderTypeId.id);
     } catch (error) {
       console.error("Error fetching user data:", error);
     }
@@ -47,27 +74,15 @@ export default function InfoProfileScreen({ navigation, route }) {
 
   const handleUpdateProfile = async () => {
     try {
-      const response = await http.put(`/customer/v1`, {
-        id: userData.id,
-        fullName: userData.fullName,
-        email: userData.email,
-        genderTypeId: userData.genderTypeId.id,
-        address: userData.address,
-        phoneNumber: userData.phoneNumber,
-        username: userData.username,
-        password: userData.password,
-      });
+      const response = await http.put(`/customer/v1`, userData);
 
       if (!response.data.code === 201 || !response.data.code === 200) {
         throw new Error("Failed to update user data");
       }
 
       Alert.alert("Success", "Profile updated successfully");
-      console.log(userData.username);
       navigation.goBack();
     } catch (error) {
-      console.log(userData.username);
-      console.log(userData.genderTypeId.id);
       console.error("Error updating user data:", error);
       Alert.alert("Error", "Failed to update user data. Please try again.");
     }
@@ -92,14 +107,7 @@ export default function InfoProfileScreen({ navigation, route }) {
         </View>
         <View style={styles.infoProfilContainer}>
           <Text style={styles.title}>Info Profile</Text>
-          <View style={styles.inputContainer}>
-            <FontAwesome name="user" size={24} color="grey" />
-            <TextInput
-              style={styles.input}
-              value={userData.username}
-              onChangeText={(text) => handleChange("username", text)}
-            />
-          </View>
+          <Text style={styles.inputTitle}>Name</Text>
           <View style={styles.inputContainer}>
             <FontAwesome name="user" size={24} color="grey" />
             <TextInput
@@ -108,22 +116,32 @@ export default function InfoProfileScreen({ navigation, route }) {
               onChangeText={(text) => handleChange("fullName", text)}
             />
           </View>
-          <View style={styles.inputContainer}>
-            <FontAwesome name="user" size={24} color="grey" />
-            <TextInput
-              style={styles.input}
-              value={userData.id}
-              onChangeText={(text) => handleChange("id", text)}
-            />
+          <Text style={styles.inputTitle}>Gender</Text>
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={userData.genderTypeId}
+              onValueChange={(itemValue, itemIndex) =>
+                handleChange("genderTypeId", itemValue)
+              }
+              style={{ marginTop: -8 }}
+            >
+              <Picker.Item
+                label="Select Gender"
+                style={{ color: "grey" }}
+                value=""
+              />
+              {genders &&
+                genders.map((gender) => (
+                  <Picker.Item
+                    key={gender.id}
+                    label={gender.name}
+                    value={gender.id}
+                  />
+                ))}
+            </Picker>
           </View>
-          <View style={styles.inputContainer}>
-            <FontAwesome name="user" size={24} color="grey" />
-            <TextInput
-              style={styles.input}
-              value={userData.genderTypeId.name}
-              onChangeText={(text) => handleChange("fullName", text)}
-            />
-          </View>
+
+          <Text style={styles.inputTitle}>Email</Text>
           <View style={styles.inputContainer}>
             <FontAwesome name="envelope" size={24} color="grey" />
             <TextInput
@@ -132,6 +150,7 @@ export default function InfoProfileScreen({ navigation, route }) {
               onChangeText={(text) => handleChange("email", text)}
             />
           </View>
+          <Text style={styles.inputTitle}>Address</Text>
           <View style={styles.inputContainer}>
             <FontAwesome name="home" size={24} color="grey" />
             <TextInput
@@ -140,20 +159,13 @@ export default function InfoProfileScreen({ navigation, route }) {
               onChangeText={(text) => handleChange("address", text)}
             />
           </View>
+          <Text style={styles.inputTitle}>Phone</Text>
           <View style={styles.inputContainer}>
             <FontAwesome5 name="phone" size={24} color="grey" />
             <TextInput
               style={styles.input}
               value={userData.phoneNumber}
               onChangeText={(text) => handleChange("phoneNumber", text)}
-            />
-          </View>
-          <View style={styles.inputContainer}>
-            <FontAwesome5 name="phone" size={24} color="grey" />
-            <TextInput
-              style={styles.input}
-              value={userData.password}
-              onChangeText={(text) => handleChange("password", text)}
             />
           </View>
           <TouchableOpacity
@@ -229,5 +241,20 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontWeight: "bold",
+  },
+  inputTitle: {
+    paddingLeft: 8,
+    fontWeight: "bold",
+  },
+  pickerContainer: {
+    height: 40,
+    borderColor: "white",
+    backgroundColor: "white",
+    borderWidth: 1,
+    marginBottom: 10,
+    borderRadius: 10,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "#ddd",
   },
 });
