@@ -6,17 +6,17 @@ export default Facility = ({ wifi, parking, airConditioner }) => {
     return (
         <View style={styles.container}>
             <View style={styles.facilityContainer}>
-                {wifi !== null && (
+                {wifi !== false && (
                     <View style={styles.facility}>
                         <Fontisto name="wifi-logo" size={20} color="black" />
                     </View>
                 )}
-                {parking !== null && (
+                {parking !== false && (
                     <View style={styles.facility}>
                         <FontAwesome5 name="parking" size={20} color="black" />
                     </View>
                 )}
-                {airConditioner !== null && (
+                {airConditioner !== false && (
                     <View style={styles.facility}>
                         <MaterialCommunityIcons name="air-conditioner" size={20} color="black" />
                     </View>

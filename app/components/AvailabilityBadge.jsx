@@ -6,11 +6,16 @@ export default AvailabilityBadge = ({ availability, roomCount }) => {
     return (
         <View style={style.container}>
             {availability !== null && (
-                <View style={style.availableTag}>
+                <View style={{  height: 30,
+                    width:  roomCount!== 0 ? 70 : 100,
+                    backgroundColor: roomCount!== 0 ? Colors.GREEN : Colors.RED,
+                    borderRadius: 5,
+                    justifyContent: "center",
+                    alignItems: "center", }}>
                     <Text style={{ color: Colors.WHITE }}>{availability}</Text>
                 </View>
             )}
-            {roomCount !== null && <Text style={{ fontSize: 13, }}>{roomCount} room</Text>}
+            {roomCount !== 0 && <Text style={{ fontSize: 13, }}>{roomCount} room</Text>}
         </View>
     );
 };

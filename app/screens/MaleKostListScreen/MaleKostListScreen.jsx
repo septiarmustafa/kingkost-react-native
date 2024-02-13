@@ -47,23 +47,28 @@ export default MaleKostListScreen = ({ navigation, route }) => {
         <SearchBar onSearch={handleSearch} />
       </View>
       <View style={styles.listCard}>
-        <FlatList
-          data={kostData}
-          renderItem={({ item }) => (
-            <KostItem
-              item={item}
-              onPress={() => navigation.navigate("DetailKostScreen", item)}
-            />
-          )}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.flatListContainer}
-          onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.1}
-        />
+        {kostData.length === 0 ? (
+          <Text style={styles.emptyText}>No male kosts available</Text>
+        ) : (
+          <FlatList
+            data={kostData}
+            renderItem={({ item }) => (
+              <KostItem
+                item={item}
+                onPress={() => navigation.navigate("DetailKostScreen", item)}
+              />
+            )}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.flatListContainer}
+            onEndReached={handleLoadMore}
+            onEndReachedThreshold={0.1}
+          />
+        )}
       </View>
     </SafeAreaView>
   );
 };
+
 const styles = StyleSheet.create({
   appBar: {
     backgroundColor: Colors.WHITE,
@@ -83,5 +88,11 @@ const styles = StyleSheet.create({
   listCard: {
     marginHorizontal: 20,
     marginTop: 20,
+  },
+  emptyText: {
+    textAlign: "center",
+    marginTop: 20,
+    fontSize: 16,
+    color: Colors.GREY,
   },
 });
