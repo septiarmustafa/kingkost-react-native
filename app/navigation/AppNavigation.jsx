@@ -13,6 +13,8 @@ import MaleKostListScreen from "../screens/MaleKostListScreen/MaleKostListScreen
 import FemaleKostListScreen from "../screens/FemaleKostListScreen/FemaleKostListScreen";
 import PopularKostAreaScreen from "../screens/PopularKostAreaScreen/PopularKostAreaScreen";
 import ListAllKostScreen from "../screens/ListAllKostScreen/ListAllKostScreen";
+import CreateOrderScreen from "../screens/CreateOrderScreen/CreateOrderScreen";
+import OrderStatusScreen from "../screens/OrderStatusScreen/OrderStatusScreen";
 
 const Stack = createStackNavigator();
 
@@ -150,6 +152,18 @@ export const AppNavigation = () => {
             component={FemaleKostListScreen}
             options={{ headerShown: false }}
           />
+           <Stack.Screen
+            name="CreateOrderScreen"
+            component={CreateOrderScreen}
+            options={{ headerShown: false }}
+          />
+            <Stack.Screen
+            name="OrderStatusScreen"
+            component={OrderStatusScreen}
+            options={{ headerShown: false }}
+          />
+          
+          
         </>
       )}
     </Stack.Navigator>

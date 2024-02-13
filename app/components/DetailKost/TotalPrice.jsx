@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import Colors from '../../utils/Colors';
 
-export default TotalPrice = ({ calculateTotalPrice }) => {
+export default TotalPrice = ({ calculateTotalPrice, onPress }) => {
     return (
         <View style={styles.container}>
             <View>
@@ -10,7 +10,7 @@ export default TotalPrice = ({ calculateTotalPrice }) => {
                 <Text style={styles.totalPriceValue}>{calculateTotalPrice()}</Text>
             </View>
             <View style={styles.bookNowContainer}>
-                <TouchableOpacity style={styles.bookNowButton}>
+                <TouchableOpacity style={styles.bookNowButton} onPress={onPress}>
                     <Text style={{ color: Colors.BLACK, fontWeight: "bold" }}>Book Now</Text>
                 </TouchableOpacity>
             </View>
