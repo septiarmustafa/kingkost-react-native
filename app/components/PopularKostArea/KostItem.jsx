@@ -20,10 +20,15 @@ export default KostItem = ({ item, onPress }) => {
                             <Text style={styles.location}>{item.city}, {item.province}</Text>
                             <Text style={styles.price}>{formatCurrencyIDR(item.price)}  / Bulan</Text>
                         </View>
-                        <AvailabilityAndGender
+                        {item.availableRoom == 0 ? <AvailabilityAndGender
+                            availability="Not Available"
+                            roomCount={item.availableRoom}
+                        /> : <AvailabilityAndGender
                             availability="Available"
-                            roomCount={5}
+                            roomCount={item.availableRoom}
                         />
+                        }
+
                     </View>
                     <View style={styles.facilityContainer}>
                         <Facility
