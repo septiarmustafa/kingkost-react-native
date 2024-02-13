@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import { useNavigation } from "@react-navigation/native"; // Perubahan disini
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import BottomTabNavigation from "./BottomTabNavigation";
 import LoginScreen from "../screens/LoginScreen/LoginScreen";
@@ -18,16 +19,26 @@ import OrderStatusScreen from "../screens/OrderStatusScreen/OrderStatusScreen";
 const Stack = createStackNavigator();
 
 export const AppNavigation = () => {
+  const navigation = useNavigation(); // Mengambil objek navigasi
+
   const [signedIn, setSignedIn] = React.useState(true);
 
-  const getIsSignedIn = async () => {
-    let isSignedIn = await AsyncStorage.getItem("token");
-    setSignedIn(isSignedIn ? true : false);
-  };
-
-  React.useEffect(() => {
+  useEffect(() => {
+    const getIsSignedIn = async () => {
+      let isSignedIn = await AsyncStorage.getItem("token");
+      setSignedIn(isSignedIn ? true : false);
+    };
     getIsSignedIn();
   }, []);
+
+  useEffect(() => {
+    if (signedIn) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "BottomTabNavigation" }],
+      });
+    }
+  }, [signedIn, navigation]); // Menambahkan navigation sebagai dependency
 
   return (
     <Stack.Navigator>
@@ -41,6 +52,46 @@ export const AppNavigation = () => {
           <Stack.Screen
             name="DetailKostScreen"
             component={DetailKostScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PopularKostArea"
+            component={PopularKostAreaScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ListAllKostScreen"
+            component={ListAllKostScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="InfoProfile"
+            component={InfoProfilScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="HelpCenter"
+            component={HelpCenterScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="PrivacyAndPolicy"
+            component={PrivacyAndPolicyScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="MaleKostListScreen"
+            component={MaleKostListScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="FemaleKostListScreen"
+            component={FemaleKostListScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
             options={{ headerShown: false }}
           />
         </>
@@ -71,7 +122,7 @@ export const AppNavigation = () => {
             component={PopularKostAreaScreen}
             options={{ headerShown: false }}
           />
-            <Stack.Screen
+          <Stack.Screen
             name="ListAllKostScreen"
             component={ListAllKostScreen}
             options={{ headerShown: false }}

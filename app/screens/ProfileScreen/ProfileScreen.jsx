@@ -9,26 +9,35 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from "@expo/vector-icons";
+import { BASE_HOST } from "../../config/BaseUrl";
 
 export default ProfileScreen = ({ navigation }) => {
-  const [username, setUsername] = useState("");
-  const [role, setRole] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    AsyncStorage.getItem("username")
-      .then((uname) => {
-        setUsername(uname);
+    // Mengambil userId dari AsyncStorage
+    AsyncStorage.getItem("userId")
+      .then((userId) => {
+        setUserId(userId); // Menyimpan userId ke dalam state
+        fetch(`${BASE_HOST}/customer/v1/${userId}`)
+          .then((response) => response.json())
+          .then((data) => {
+            setFullName(data.fullName);
+            setPhoneNumber(data.phoneNumber);
+          })
+          .catch((error) => {
+            console.error("Error fetching data:", error);
+          });
       })
-      .catch((err) => console.log(err));
-    AsyncStorage.getItem("role")
-      .then((role) => {
-        setRole(role);
-      })
-      .catch((err) => console.log(err));
+      .catch((error) => {
+        console.error("Error retrieving userId from AsyncStorage:", error);
+      });
   }, []);
 
   const handleProfilePress = () => {
-    navigation.navigate("InfoProfile");
+    navigation.navigate("InfoProfile", { userId: userId });
   };
   const handleHelpCenterPress = () => {
     navigation.navigate("HelpCenter");
@@ -38,10 +47,13 @@ export default ProfileScreen = ({ navigation }) => {
   };
 
   const handleLogout = async () => {
-    await AsyncStorage.removeItem("token");
-    await AsyncStorage.removeItem("username");
-    await AsyncStorage.removeItem("role");
-    navigation.navigate("Login");
+    try {
+      await AsyncStorage.multiRemove(["userId", "token", "role"]);
+      navigation.replace("Login");
+    } catch (error) {
+      console.error("Error logging out:", error);
+      Alert.alert("Error", "An error occurred while logging out.");
+    }
   };
 
   return (
@@ -51,8 +63,8 @@ export default ProfileScreen = ({ navigation }) => {
           source={require("../../../assets/images/default-profile.jpg")}
           style={styles.profileImage}
         />
-        <Text style={styles.userName}>{username}</Text>
-        <Text style={styles.userRole}>0814*****908</Text>
+        <Text style={styles.userName}>{fullName}</Text>
+        <Text style={styles.userRole}>{phoneNumber}</Text>
       </View>
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Settings</Text>
