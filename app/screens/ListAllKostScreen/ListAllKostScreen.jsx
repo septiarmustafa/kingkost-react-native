@@ -17,6 +17,7 @@ import KostItem from "../../components/PopularKostArea/KostItem";
 import { Picker } from "@react-native-picker/picker";
 import { AntDesign } from '@expo/vector-icons';
 import http from "../../config/HttpConfig"
+import { BASE_HOST } from "../../config/BaseUrl";
 
 export default ListAllKostScreen = ({ navigation, route }) => {
     const kost = route.params;
@@ -27,7 +28,8 @@ export default ListAllKostScreen = ({ navigation, route }) => {
     const [selectedProvince, setSelectedProvince] = useState("");
     const [selectedDistrict, setSelectedDistrict] = useState("");
     const [searchQuery, setSearchQuery] = useState("");
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPage, setTotalPage] = useState(1);
     const [kostData, setKostData] = useState([]);
     const [showFilterModal, setShowFilterModal] = useState(false);
 
@@ -63,235 +65,52 @@ export default ListAllKostScreen = ({ navigation, route }) => {
 
     //     fetchProvinces();
     // }, []);
+   
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await http.get(`/kost?page=${currentPage}`);
+                const newData = response.data.data;
+                const paggingResponse = response.data.paggingResponse
+                const kostData = newData.map((item) => ({
+                    id: item.id,
+                    title: item.name,
+                    image: item.images[0].fileName,
+                    subdistrict: item.subdistrict.name,
+                    city: item.city.name,
+                    description: item.description,
+                    province: item.city.province.name,
+                    gender: item.genderType.name.toLowerCase(),
+                    price: item.kostPrice.price,
+                    sellerName: item.seller.fullName,
+                    sellerPhone: item.seller.phoneNumber,
+                    availableRoom: item.availableRoom,
+                    isWifi: item.isWifi,
+                    isAc: item.isAc,
+                    isParking: item.isParking,
+                    images: item.images.map((image) => ({
+                      uri: `${BASE_HOST}/${image.fileName}`,
+                    })),
+                  }));
+                setKostData((prevData) => {
+                    if (kostData.length > 0) {
+                        if (currentPage === 0) {
+                            return kostData;
+                        } else {
+                            return [...prevData, ...kostData];
+                        }
+                    } else {
+                        return prevData;
+                    }
+                });
+                setTotalPage(paggingResponse.totalPage);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };
 
-
-
-    const provinces = [
-        {
-            "id": "11",
-            "name": "ACEH",
-            "createdAt": "2024-02-12T10:08:19.316985",
-            "updatedAt": null
-        },
-        {
-            "id": "12",
-            "name": "SUMATERA UTARA",
-            "createdAt": "2024-02-12T10:08:19.419126",
-            "updatedAt": null
-        },
-        {
-            "id": "13",
-            "name": "SUMATERA BARAT",
-            "createdAt": "2024-02-12T10:08:19.42753",
-            "updatedAt": null
-        },
-        {
-            "id": "14",
-            "name": "RIAU",
-            "createdAt": "2024-02-12T10:08:19.434164",
-            "updatedAt": null
-        },
-        {
-            "id": "15",
-            "name": "JAMBI",
-            "createdAt": "2024-02-12T10:08:19.442181",
-            "updatedAt": null
-        },
-        {
-            "id": "16",
-            "name": "SUMATERA SELATAN",
-            "createdAt": "2024-02-12T10:08:19.454746",
-            "updatedAt": null
-        },
-        {
-            "id": "17",
-            "name": "BENGKULU",
-            "createdAt": "2024-02-12T10:08:19.465008",
-            "updatedAt": null
-        },
-        {
-            "id": "18",
-            "name": "LAMPUNG",
-            "createdAt": "2024-02-12T10:08:19.4741",
-            "updatedAt": null
-        },
-        {
-            "id": "19",
-            "name": "KEPULAUAN BANGKA BELITUNG",
-            "createdAt": "2024-02-12T10:08:19.487743",
-            "updatedAt": null
-        },
-        {
-            "id": "21",
-            "name": "KEPULAUAN RIAU",
-            "createdAt": "2024-02-12T10:08:19.501299",
-            "updatedAt": null
-        },
-        {
-            "id": "31",
-            "name": "DKI JAKARTA",
-            "createdAt": "2024-02-12T10:08:19.507872",
-            "updatedAt": null
-        },
-        {
-            "id": "32",
-            "name": "JAWA BARAT",
-            "createdAt": "2024-02-12T10:08:19.517394",
-            "updatedAt": null
-        },
-        {
-            "id": "33",
-            "name": "JAWA TENGAH",
-            "createdAt": "2024-02-12T10:08:19.527685",
-            "updatedAt": null
-        },
-        {
-            "id": "34",
-            "name": "DAERAH ISTIMEWA YOGYAKARTA",
-            "createdAt": "2024-02-12T10:08:19.53595",
-            "updatedAt": null
-        },
-        {
-            "id": "35",
-            "name": "JAWA TIMUR",
-            "createdAt": "2024-02-12T10:08:19.542468",
-            "updatedAt": null
-        },
-        {
-            "id": "36",
-            "name": "BANTEN",
-            "createdAt": "2024-02-12T10:08:19.549022",
-            "updatedAt": null
-        },
-        {
-            "id": "51",
-            "name": "BALI",
-            "createdAt": "2024-02-12T10:08:19.55459",
-            "updatedAt": null
-        },
-        {
-            "id": "52",
-            "name": "NUSA TENGGARA BARAT",
-            "createdAt": "2024-02-12T10:08:19.562146",
-            "updatedAt": null
-        },
-        {
-            "id": "53",
-            "name": "NUSA TENGGARA TIMUR",
-            "createdAt": "2024-02-12T10:08:19.569678",
-            "updatedAt": null
-        },
-        {
-            "id": "61",
-            "name": "KALIMANTAN BARAT",
-            "createdAt": "2024-02-12T10:08:19.578096",
-            "updatedAt": null
-        },
-        {
-            "id": "62",
-            "name": "KALIMANTAN TENGAH",
-            "createdAt": "2024-02-12T10:08:19.585895",
-            "updatedAt": null
-        },
-        {
-            "id": "63",
-            "name": "KALIMANTAN SELATAN",
-            "createdAt": "2024-02-12T10:08:19.595418",
-            "updatedAt": null
-        },
-        {
-            "id": "64",
-            "name": "KALIMANTAN TIMUR",
-            "createdAt": "2024-02-12T10:08:19.602591",
-            "updatedAt": null
-        },
-        {
-            "id": "65",
-            "name": "KALIMANTAN UTARA",
-            "createdAt": "2024-02-12T10:08:19.6111",
-            "updatedAt": null
-        },
-        {
-            "id": "71",
-            "name": "SULAWESI UTARA",
-            "createdAt": "2024-02-12T10:08:19.618145",
-            "updatedAt": null
-        },
-        {
-            "id": "72",
-            "name": "SULAWESI TENGAH",
-            "createdAt": "2024-02-12T10:08:19.626321",
-            "updatedAt": null
-        },
-        {
-            "id": "73",
-            "name": "SULAWESI SELATAN",
-            "createdAt": "2024-02-12T10:08:19.633874",
-            "updatedAt": null
-        },
-        {
-            "id": "74",
-            "name": "SULAWESI TENGGARA",
-            "createdAt": "2024-02-12T10:08:19.640282",
-            "updatedAt": null
-        },
-        {
-            "id": "75",
-            "name": "GORONTALO",
-            "createdAt": "2024-02-12T10:08:19.646788",
-            "updatedAt": null
-        },
-        {
-            "id": "76",
-            "name": "SULAWESI BARAT",
-            "createdAt": "2024-02-12T10:08:19.653817",
-            "updatedAt": null
-        },
-        {
-            "id": "81",
-            "name": "MALUKU",
-            "createdAt": "2024-02-12T10:08:19.661001",
-            "updatedAt": null
-        },
-        {
-            "id": "82",
-            "name": "MALUKU UTARA",
-            "createdAt": "2024-02-12T10:08:19.668045",
-            "updatedAt": null
-        },
-        {
-            "id": "91",
-            "name": "PAPUA",
-            "createdAt": "2024-02-12T10:08:19.676552",
-            "updatedAt": null
-        },
-        {
-            "id": "92",
-            "name": "PAPUA BARAT",
-            "createdAt": "2024-02-12T10:08:19.682112",
-            "updatedAt": null
-        },
-        {
-            "id": "93",
-            "name": "PAPUA SELATAN",
-            "createdAt": "2024-02-12T10:08:19.687111",
-            "updatedAt": null
-        },
-        {
-            "id": "94",
-            "name": "PAPUA TENGAH",
-            "createdAt": "2024-02-12T10:08:19.690551",
-            "updatedAt": null
-        },
-        {
-            "id": "95",
-            "name": "PAPUA PEGUNUNGAN",
-            "createdAt": "2024-02-12T10:08:19.695552",
-            "updatedAt": null
-        }
-    ]
-
-
+        fetchData();
+    }, [currentPage]);
 
     useEffect(() => {
         setKostData(kost);
@@ -306,8 +125,23 @@ export default ListAllKostScreen = ({ navigation, route }) => {
     };
 
     const handleLoadMore = () => {
-        setCurrentPage(currentPage + 1);
+        if (currentPage < totalPage) {
+            setCurrentPage(currentPage + 1);
+        }
     };
+
+    const handleNextPage = () => {
+        if (currentPage < totalPage) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
 
     const handleFilterIconPress = () => {
         setShowFilterModal(true);
@@ -349,9 +183,19 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                     )}
                     keyExtractor={(item) => item.id}
                     onEndReached={handleLoadMore}
-                    showsVerticalScrollIndicator={false}
                     onEndReachedThreshold={0.1}
+                    showsVerticalScrollIndicator={false}
+                    extraData={kostData} 
                 />
+            </View>
+            <View style={styles.pagination}>
+                <TouchableOpacity onPress={handlePreviousPage} disabled={currentPage === 1}>
+                    <Text style={[styles.paginationText, { color: currentPage === 1 ? 'gray' : 'black' }]}>Previous</Text>
+                </TouchableOpacity>
+                <Text style={styles.paginationText}>{currentPage}/{totalPage}</Text>
+                <TouchableOpacity onPress={handleNextPage} disabled={currentPage === totalPage}>
+                    <Text style={[styles.paginationText, { color: currentPage === totalPage ? 'gray' : 'black' }]}>Next</Text>
+                </TouchableOpacity>
             </View>
             <Modal
                 visible={showFilterModal}
@@ -363,7 +207,7 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                     <View style={styles.modalContent}>
                         <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                             <Text style={styles.modalTitle}>Filter By</Text>
-                            <TouchableOpacity onPress={()=> setShowFilterModal(false)}>
+                            <TouchableOpacity onPress={() => setShowFilterModal(false)}>
                                 <AntDesign name="closecircle" size={24} color={Colors.BLACK} />
                             </TouchableOpacity>
                         </View>
@@ -376,9 +220,9 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                                         setSelectedProvince(itemValue);
                                         // fetchCities(itemValue);
                                     }}>
-                                    {provinces.map((province) => (
+                                    {/* {provinces.map((province) => (
                                         <Picker.Item key={province.id} label={province.name} value={province.id} />
-                                    ))}
+                                    ))} */}
                                 </Picker>
                             </View>
                             {/* <View style={styles.pickerContainer}>
@@ -495,5 +339,15 @@ const styles = StyleSheet.create({
     },
     pickerContainer: {
         marginHorizontal: 10,
+    },
+    pagination: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        marginTop: 10,
+    },
+    paginationText: {
+        fontSize: 16,
     },
 });
