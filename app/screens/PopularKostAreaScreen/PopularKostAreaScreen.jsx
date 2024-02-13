@@ -40,12 +40,17 @@ export default PopularKostArea = ({ navigation, route }) => {
         <View style={styles.header}>
           <BackButton onPress={navigation.goBack} />
           <Text style={styles.title}>
-            List Kost Area {kost[0]["city"] ?? ""}
+            List Kost Area
           </Text>
         </View>
         <SearchBar onSearch={handleSearch} />
       </View>
       <View style={styles.listCard}>
+      {kostData.length === 0 ? (
+        <View style={styles.noDataContainer}>
+          <Text style={styles.noDataText}>Tidak ada data kost yang tersedia.</Text>
+        </View>
+      ) : (
         <FlatList
           data={kostData}
           renderItem={({ item }) => (
@@ -59,7 +64,8 @@ export default PopularKostArea = ({ navigation, route }) => {
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0.1}
         />
-      </View>
+      )}
+    </View>
     </SafeAreaView>
   );
 };
@@ -82,5 +88,13 @@ const styles = StyleSheet.create({
   listCard: {
     marginHorizontal: 20,
     marginTop: 20,
+  },
+  noDataContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noDataText: {
+    fontSize: 16,
+    color: Colors.BLACK,
   },
 });

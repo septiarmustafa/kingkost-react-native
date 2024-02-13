@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
   View,
@@ -6,6 +6,7 @@ import {
   FlatList,
   Dimensions,
   ScrollView,
+  Text,
 } from "react-native";
 import Colors from "../../utils/Colors";
 import Header from "../../components/Home/Header";
@@ -14,123 +15,65 @@ import KostAreaCard from "../../components/Home/KostAreaCard";
 import KostCard from "../../components/Home/KostCard";
 import CustomTitle from "../../components/Home/CustomTitle";
 import CarouselBanner from "../../components/Home/CarouselBanner";
+import http from "../../config/HttpConfig"
+import { BASE_HOST } from "../../config/BaseUrl";
+import LoadingComponent from "../../components/LoadingComponent";
 
 const { width } = Dimensions.get("screen");
 export default HomeScreen = ({ navigation }) => {
-  const listKost = [
-    {
-      id: "1",
-      title: "Kost Martini",
-      image: require("../../../assets/images/jakarta.jpg"),
-      location: "Dramaga, Kota Bogor",
-      city: "Jakarta",
-      gender: "female",
-      price: 800000,
-      interiors: [
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/banner1.jpg"),
-        require("../../../assets/images/banner2.jpg"),
-      ],
-    },
-    {
-      id: "2",
-      title: "Green Kost",
-      image: require("../../../assets/images/jakarta.jpg"),
-      location: "Pasar Minggu, Jakarta Selatan",
-      city: "Bandung",
-      gender: "male",
-      price: 600000,
-      interiors: [
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-      ],
-    },
-    {
-      id: "3",
-      title: "Kost Bu Haji",
-      image: require("../../../assets/images/jakarta.jpg"),
-      location: "Ciracas, Jakarta Timur",
-      city: "Tangerang",
-      gender: "male",
-      price: 1500000,
-      interiors: [
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-      ],
-    },
-    {
-      id: "4",
-      title: "Kost Bu Haji",
-      image: require("../../../assets/images/jakarta.jpg"),
-      location: "Ciracas, Jakarta Timur",
-      city: "Tangerang",
-      gender: "male",
-      price: 1500000,
-      interiors: [
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-      ],
-    },
-    {
-      id: "5",
-      title: "Kost Bu Haji",
-      image: require("../../../assets/images/jakarta.jpg"),
-      location: "Ciracas, Jakarta Timur",
-      city: "Tangerang",
-      gender: "male",
-      price: 1500000,
-      interiors: [
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-      ],
-    },
-    {
-      id: "6",
-      title: "Kost Bu Haji",
-      image: require("../../../assets/images/jakarta.jpg"),
-      location: "Ciracas, Jakarta Timur",
-      city: "Tangerang",
-      gender: "male",
-      price: 1500000,
-      interiors: [
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-      ],
-    },
-    {
-      id: "7",
-      title: "Kost Bu bu",
-      image: require("../../../assets/images/jakarta.jpg"),
-      location: "Ciracas, Jakarta Timur",
-      city: "Tangerang",
-      gender: "male",
-      price: 1500000,
-      interiors: [
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-      ],
-    },
-    {
-      id: "8",
-      title: "Kost Bu Haji",
-      image: require("../../../assets/images/jakarta.jpg"),
-      location: "Ciracas, Jakarta Timur",
-      city: "Tangerang",
-      gender: "male",
-      price: 1500000,
-      interiors: [
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-      ],
-    },
-  ];
+  const [listKost, setListKost] = useState([]);
+  const [femaleKostData, setFemaleKostData] = useState([]);
+  const [maleKostData, setMaleKostData] = useState([]);
+  const [kostJakarta, setKostJakarta] = useState([]);
+  const [kostBogor, setKostBogor] = useState([]);
+  const [kostBandung, setKostBandung] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => {
+    fetchKostData();
+  }, [listKost], [kostJakarta], [kostBogor], [kostBandung], );
+  const fetchKostData = async () => {
+    try {
+      const response = await http.get('/kost?page=0');
+      const data = response.data;
+      const kostData = data.data.map((item) => ({
+        id: item.id,
+        title: item.name,
+        image: item.images[0].fileName,
+        subdistrict: item.subdistrict.name,
+        city: item.city.name,
+        description: item.description,
+        province: item.city.province.name,
+        gender: item.genderType.name.toLowerCase(),
+        price: item.kostPrice.price,
+        sellerName: item.seller.fullName,
+        sellerPhone: item.seller.phoneNumber,
+        availableRoom: item.availableRoom,
+        isWifi: item.isWifi,
+        isAc: item.isAc,
+        isParking: item.isParking,
+        images: item.images.map((image) => ({
+          uri: `${BASE_HOST}/${image.fileName}`,
+        })),
+      }));
+      const kostJakarta = kostData.filter((item) => item.city.toLowerCase().includes("jakarta"));
+      const kostBandung = kostData.filter((item) => item.city.toLowerCase().includes("bandung"));
+      const kostBogor = kostData.filter((item) => item.city.toLowerCase().includes("bogor"));
+
+      const maleKostData = listKost.filter((item) => item.gender === "male");
+      const femaleKostData = listKost.filter((item) => item.gender === "female");
+    
+      setKostBandung(kostBandung)
+      setKostBogor(kostBogor)
+      setKostJakarta(kostJakarta)
+      setListKost(kostData);
+      setMaleKostData(maleKostData)
+      setFemaleKostData(femaleKostData)
+      setIsLoading(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
 
   const listKostByArea = [
     {
@@ -149,149 +92,20 @@ export default HomeScreen = ({ navigation }) => {
       city: "Bogor",
     },
   ];
-
-  const kostJakarta = [
-    {
-      id: "1",
-      title: "Blue Kost",
-      image: require("../../../assets/images/jakarta.jpg"),
-      district: "Ragunan",
-      city: "Jakarta",
-      province: "DKI Jakarta",
-      gender: "female",
-      price: 550000,
-      interiors: [
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-      ],
-    },
-    {
-      id: "2",
-      title: "Green Kost",
-      image: require("../../../assets/images/jakarta.jpg"),
-      district: "Ciracas",
-      city: "Jakarta",
-      province: "DKI Jakarta",
-      gender: "male",
-      price: 600000,
-      interiors: [
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-      ],
-    },
-    {
-      id: "3",
-      title: "Blue Kost",
-      image: require("../../../assets/images/jakarta.jpg"),
-      district: "Ragunan",
-      city: "Jakarta",
-      province: "DKI Jakarta",
-      gender: "male",
-      price: 550000,
-      interiors: [
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-      ],
-    },
-    {
-      id: "4",
-      title: "Green Kost",
-      image: require("../../../assets/images/jakarta.jpg"),
-      district: "Ciracas",
-      city: "Jakarta",
-      province: "DKI Jakarta",
-      gender: "male",
-      price: 600000,
-      interiors: [
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-      ],
-    },
-  ];
-
-  const kostBandung = [
-    {
-      id: "100",
-      title: "Blue Kost",
-      image: require("../../../assets/images/jakarta.jpg"),
-      district: "Soreang",
-      city: "Bandung",
-      province: "Jawa Barat",
-      gender: "male",
-      price: 550000,
-      interiors: [
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-      ],
-    },
-    {
-      id: "201",
-      title: "Green Kost",
-      image: require("../../../assets/images/jakarta.jpg"),
-      district: "Batu tulis",
-      city: "Bandung",
-      province: "Jawa Barat",
-      gender: "male",
-      price: 600000,
-      interiors: [
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-      ],
-    },
-  ];
-
-  const kostBogor = [
-    {
-      id: "100",
-      title: "Blue Kost",
-      image: require("../../../assets/images/jakarta.jpg"),
-      district: "Tanah Sereal",
-      city: "Bogor",
-      province: "Jawa Barat",
-      gender: "male",
-      price: 550000,
-      interiors: [
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-      ],
-    },
-    {
-      id: "201",
-      title: "Green Kost",
-      image: require("../../../assets/images/jakarta.jpg"),
-      district: "Dramaga",
-      city: "Bogor",
-      province: "Jawa Barat",
-      gender: "male",
-      price: 600000,
-      interiors: [
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-        require("../../../assets/images/jakarta.jpg"),
-      ],
-    },
-  ];
-
-  const maleKostData = listKost.filter((item) => item.gender === "male");
-  const femaleKostData = listKost.filter((item) => item.gender === "female");
+  if (isLoading) {
+    return <LoadingComponent />;
+  }
 
   return (
     <SafeAreaView style={{ backgroundColor: Colors.WHITE, flex: 1 }}>
-        <StatusBar
+      <StatusBar
         translucent={false}
         backgroundColor={Colors.WHITE}
         barStyle="dark-content"
       />
       <Header />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <CarouselBanner/>
+        <CarouselBanner />
         <View style={{ marginBottom: 20 }}>
           <CustomTitle title="Pilih Preferensi Kost" />
         </View>
@@ -313,10 +127,10 @@ export default HomeScreen = ({ navigation }) => {
                 item.city === "Jakarta"
                   ? kostJakarta
                   : item.city === "Bogor"
-                  ? kostBogor
-                  : item.city === "Bandung"
-                  ? kostBandung
-                  : []
+                    ? kostBogor
+                    : item.city === "Bandung"
+                      ? kostBandung
+                      : []
               }
               kostArea={item}
               navigation={navigation}
@@ -324,16 +138,22 @@ export default HomeScreen = ({ navigation }) => {
           )}
         />
         <CustomTitle onPress={() => navigation.navigate("ListAllKostScreen", listKost)} title="Kost" subTitle="Lihat Semua" />
-        <FlatList
-          snapToInterval={width - 20}
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={{ paddingLeft: 20, paddingVertical: 20 }}
-          horizontal
-          data={listKost}
-          renderItem={({ item }) => (
-            <KostCard kost={item} navigation={navigation} />
-          )}
-        />
+        {listKost.length === 0 ? (
+          <View style={{ alignItems: 'center', marginTop: 20 }}>
+            <Text>No kosts available</Text>
+          </View>
+        ) : (
+          <FlatList
+            snapToInterval={width - 20}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingLeft: 20, paddingVertical: 20 }}
+            horizontal
+            data={listKost}
+            renderItem={({ item }) => (
+              <KostCard kost={item} navigation={navigation} />
+            )}
+          />
+        )}
       </ScrollView>
     </SafeAreaView>
   );

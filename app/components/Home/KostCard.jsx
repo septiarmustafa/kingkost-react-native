@@ -32,13 +32,13 @@ export default KostCard = ({ kost, navigation }) => {
               marginTop: 10,
             }}
           >
-            <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+            <Text style={{ fontSize: 16, fontWeight: "bold"}} numberOfLines={1} ellipsizeMode="tail">
               {kost.title}
             </Text>
             <Text
-              style={{ fontWeight: "bold", color: Colors.GREEN, fontSize: 16 }}
+              style={{ fontWeight: "bold", color: Colors.GREEN, fontSize: 16 }} 
             >
-              {formatCurrencyIDR(kost.price)} / Bulan
+              {formatCurrencyIDR(kost.price)}
             </Text>
           </View>
           <View
@@ -49,7 +49,7 @@ export default KostCard = ({ kost, navigation }) => {
             }}
           >
             <Text style={{ color: Colors.GREY, fontSize: 14, marginTop: 5 }}>
-              {kost.location}
+              {kost.city}
             </Text>
             <Image
               style={{ marginTop: 5, width: 25, height: 25 }}
@@ -61,19 +61,19 @@ export default KostCard = ({ kost, navigation }) => {
             />
           </View>
           <View style={{ marginTop: 10, flexDirection: "row" }}>
-            <View style={styles.facility}>
+            {kost.isWifi ? <View style={styles.facility}>
               <Fontisto name="wifi-logo" size={20} color="black" />
-            </View>
-            <View style={styles.facility}>
+            </View> : null}
+           {kost.isParking ? <View style={styles.facility}>
               <FontAwesome5 name="parking" size={20} color="black" />
-            </View>
-            <View style={styles.facility}>
+            </View> : null}
+           {kost.isAc ?  <View style={styles.facility}>
               <MaterialCommunityIcons
                 name="air-conditioner"
                 size={20}
                 color="black"
               />
-            </View>
+            </View> : null}
           </View>
         </View>
       </View>

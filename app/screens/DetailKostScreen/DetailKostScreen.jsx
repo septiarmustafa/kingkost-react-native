@@ -52,7 +52,7 @@ export default DetailKostScreen = ({ navigation, route }) => {
             horizontal
             showsHorizontalScrollIndicator={false}
             keyExtractor={(_, key) => key.toString()}
-            data={kost.interiors}
+            data={kost.images}
             renderItem={({ item, index }) => (
               <ImageCardList
                 interior={item}
@@ -65,25 +65,26 @@ export default DetailKostScreen = ({ navigation, route }) => {
         <ImageModal
           visible={isModalVisible}
           closeModal={closeModal}
-          imageSource={kost.interiors[selectedImageIndex]}
+          imageSource={kost.images[selectedImageIndex]}
         />
 
         <DetailSection
           title={kost.title}
-          availability={kost.available ?? "Available"}
-          roomCount={10}
+          availability={kost.availableRoom != 0 ? "Available" : "Not Available"}
+          roomCount={kost.availableRoom}
           city={kost.city}
-          province={kost.province ?? "Jawa Barat"}
-          wifi="wifi"
-          parking={null}
-          airConditioner="air conditioner"
-          description="Kostan murah, lokasi strategis, dekat dengan stasiun"
-          gender={require("../../../assets/icons/male.jpg")}
+          subdistrict = {kost.subdistrict}
+          province={kost.province}
+          wifi={kost.isWifi}
+          parking={kost.isParking}
+          airConditioner= {kost.isAc }
+          description={kost.description}
+          gender={kost.gender === "male" ? require("../../../assets/icons/male.jpg") : require("../../../assets/icons/female.jpg")}
         />
 
         <SellerInfo
-          seller={kost.seller}
-          phone={kost.phone}
+          seller={kost.sellerName}
+          phone={kost.sellerPhone}
           image={require("../../../assets/images/default-profile.jpg")}
         />
         <ChoosePeriod

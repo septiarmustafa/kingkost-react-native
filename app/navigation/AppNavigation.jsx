@@ -94,6 +94,16 @@ export const AppNavigation = () => {
             component={LoginScreen}
             options={{ headerShown: false }}
           />
+            <Stack.Screen
+            name="CreateOrderScreen"
+            component={CreateOrderScreen}
+            options={{ headerShown: false }}
+          />
+            <Stack.Screen
+            name="OrderStatusScreen"
+            component={OrderStatusScreen}
+            options={{ headerShown: false }}
+          />
         </>
       ) : (
         <>

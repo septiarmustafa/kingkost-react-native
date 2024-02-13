@@ -66,7 +66,7 @@ export default function LoginScreen({ navigation }) {
 
     try {
       const response = await axios.post(
-        `${BASE_HOST}/api/auth/login/customer`,
+        `${BASE_HOST}/api/auth/login`,
         {
           username,
           password,
@@ -74,7 +74,7 @@ export default function LoginScreen({ navigation }) {
       );
 
       if (response.status === 200) {
-        const { userId, token, role, username } = response.data.data;
+        const { userId, token, role, username } = response.data;
         await AsyncStorage.setItem("userId", userId);
         await AsyncStorage.setItem("token", token);
         await AsyncStorage.setItem("role", role);

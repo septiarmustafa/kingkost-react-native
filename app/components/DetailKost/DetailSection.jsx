@@ -3,13 +3,15 @@ import { View, Text, StyleSheet, Image } from 'react-native';
 import { Fontisto, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import Colors from '../../utils/Colors';
 
-export default DetailsSection = ({ title, availability, roomCount, city, province, wifi, parking, airConditioner, description, gender }) => {
+export default DetailsSection = ({ title, availability, roomCount, city, subdistrict, province, wifi, parking, airConditioner, description, gender }) => {
     return (
         <View style={style.detailsContainer}>
             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
                 <View>
-                    <Text style={{ fontSize: 20, fontWeight: "bold" }}>{title}</Text>
-                    {city !== null && <Text style={{ fontSize: 16, color: Colors.GREY }}>{city}, {province}</Text>}
+                    <Text style={{ fontSize: 20, fontWeight: "bold" }} ellipsizeMode="tail">{title}</Text>
+                    {city !== null && <Text style={{ fontSize: 16, color: Colors.GREY }} ellipsizeMode="tail" numberOfLines={1}>{subdistrict}</Text>}
+                    {city !== null && <Text style={{ fontSize: 16, color: Colors.GREY }} ellipsizeMode="tail" numberOfLines={1}>{city}</Text>}
+                    {city !== null && <Text style={{ fontSize: 16, color: Colors.GREY }} ellipsizeMode="tail" numberOfLines={1}>{province}</Text>}
                     <View style={{ flexDirection: "row" }}>
                         <Text style={{ fontSize: 16, color: Colors.GREY }}>Gender type: </Text>
                         <Image style={{ width: 20, height: 20 }} source={gender} />
@@ -17,25 +19,37 @@ export default DetailsSection = ({ title, availability, roomCount, city, provinc
                 </View>
                 <View>
                     <View style={{ flexDirection: "row", alignItems: "center" }}>
-                        {availability !== null && (
-                            <View style={style.availableTag}>
+                        {roomCount !== 0 ? (
+                            <View style={{  height: 30,
+                                width: 70,
+                                backgroundColor:  Colors.GREEN,
+                                borderRadius: 5,
+                                justifyContent: "center",
+                                alignItems: "center", }}>
                                 <Text style={{ color: Colors.WHITE }}>{availability}</Text>
                             </View>
-                        )}
-                        {roomCount !== null && <Text style={{ fontSize: 13, marginLeft: 5 }}>{roomCount} room</Text>}
+                        ) : <View style={{  height: 30,
+                            width: 110 ,
+                            backgroundColor:  Colors.RED ,
+                            borderRadius: 5,
+                            justifyContent: "center",
+                            alignItems: "center", }}>
+                            <Text style={{ color: Colors.WHITE }}>{availability}</Text>
+                        </View> }
+                        {roomCount !== 0 && <Text style={{ fontSize: 13, marginLeft: 5 }}>{roomCount} room</Text>}
                     </View>
                     <View style={{ marginTop: 10, flexDirection: "row" }}>
-                        {wifi !== null && (
+                        {wifi !== false && (
                             <View style={style.facility}>
                                 <Fontisto name="wifi-logo" size={20} color="black" />
                             </View>
                         )}
-                        {parking !== null && (
+                        {parking !== false && (
                             <View style={style.facility}>
                                 <FontAwesome5 name="parking" size={20} color="black" />
                             </View>
                         )}
-                        {airConditioner !== null && (
+                        {airConditioner !== false && (
                             <View style={style.facility}>
                                 <MaterialCommunityIcons name="air-conditioner" size={20} color="black" />
                             </View>
@@ -52,14 +66,6 @@ const style = StyleSheet.create({
     detailsContainer: {
         paddingHorizontal: 20,
         marginTop: 20,
-    },
-    availableTag: {
-        height: 30,
-        width: 70,
-        backgroundColor: Colors.GREEN,
-        borderRadius: 5,
-        justifyContent: "center",
-        alignItems: "center",
     },
     facility: {
         flexDirection: "row",
