@@ -7,7 +7,6 @@ import {
     FlatList,
     TouchableOpacity,
     Modal,
-    ActivityIndicator,
 } from "react-native";
 import { Feather } from '@expo/vector-icons';
 import Colors from "../../utils/Colors";
@@ -23,21 +22,19 @@ import LoadingComponent from "../../components/LoadingComponent";
 import NoDataFound from "../../components/NoDataFound";
 
 export default ListAllKostScreen = ({ navigation, route }) => {
-    const kost = route.params;
-    // const [provinces, setProvinces] = useState([]);
-    // const [cities, setCities] = useState([]);
-    // const [districts, setDistricts] = useState([]);
-    const [selectedCity, setSelectedCity] = useState("");
-    const [selectedProvince, setSelectedProvince] = useState("");
-    const [selectedDistrict, setSelectedDistrict] = useState("");
+    const kost = route.params;    
     const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPage, setTotalPage] = useState(1);
     const [kostData, setKostData] = useState([]);
     const [showFilterModal, setShowFilterModal] = useState(false);
     const [loading, setLoading] = useState(false);
-
-
+    const [selectedCity, setSelectedCity] = useState("");
+    const [selectedProvince, setSelectedProvince] = useState("");
+    const [selectedDistrict, setSelectedDistrict] = useState("");
+    // const [provinces, setProvinces] = useState([]);
+    // const [cities, setCities] = useState([]);
+    // const [districts, setDistricts] = useState([]);
 
     // const fetchProvinces = async () => {
     //     try {
@@ -75,7 +72,6 @@ export default ListAllKostScreen = ({ navigation, route }) => {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
-
             try {
                 const response = await http.get(`/kost?page=${currentPage}`);
                 const { data, paggingResponse } = response.data;
@@ -105,7 +101,6 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                 console.error("Error fetching data:", error);
             }
             setLoading(false);
-
         };
 
         fetchData();

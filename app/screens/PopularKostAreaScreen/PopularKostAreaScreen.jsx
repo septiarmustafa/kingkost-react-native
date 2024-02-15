@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, StyleSheet, View, Text, FlatList } from "react-native";
+import { SafeAreaView, StyleSheet, View, Text, FlatList, TouchableOpacity } from "react-native";
 
 import Colors from "../../utils/Colors";
 import { StatusBar } from "expo-status-bar";
@@ -11,8 +11,9 @@ import NoDataFound from "../../components/NoDataFound";
 export default PopularKostArea = ({ navigation, route }) => {
   const kost = route.params;
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
   const [kostData, setKostData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPage, setTotalPage] = useState(1);
 
   useEffect(() => {
     setKostData(kost);
@@ -26,9 +27,17 @@ export default PopularKostArea = ({ navigation, route }) => {
     setKostData(filteredData);
   };
 
-  const handleLoadMore = () => {
-    setCurrentPage(currentPage + 1);
-  };
+  const handleNextPage = () => {
+    if (currentPage < totalPage) {
+        setCurrentPage(currentPage + 1);
+    }
+};
+
+const handlePreviousPage = () => {
+    if (currentPage > 0) {
+        setCurrentPage(currentPage - 1);
+    }
+};
 
   return (
     <SafeAreaView style={styles.container}>
@@ -47,24 +56,35 @@ export default PopularKostArea = ({ navigation, route }) => {
         <SearchBar onSearch={handleSearch} />
       </View>
       <View style={styles.listCard}>
-      {kostData.length === 0 ? (
-        <NoDataFound/>
-      ) : (
-        <FlatList
-          data={kostData}
-          renderItem={({ item }) => (
-            <KostItem
-              item={item}
-              onPress={() => navigation.navigate("DetailKostScreen", item)}
-            />
-          )}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.flatListContainer}
-          onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.1}
-        />
-      )}
-    </View>
+        {kostData.length === 0 ? (
+          <NoDataFound />
+        ) : (
+          <FlatList
+            data={kostData}
+            renderItem={({ item }) => (
+              <KostItem
+                item={item}
+                onPress={() => navigation.navigate("DetailKostScreen", item)}
+              />
+            )}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.flatListContainer}
+          />
+        )}
+      </View>
+      <View style={styles.pagination}>
+        <TouchableOpacity onPress={handlePreviousPage} disabled={currentPage === 0}>
+          <View style={styles.paginationButton}>
+            <Text style={[styles.paginationText, { color: currentPage === 0 ? 'gray' : 'black' }]}>Previous</Text>
+          </View>
+        </TouchableOpacity>
+        <Text style={styles.paginationText}>{currentPage + 1}/{totalPage}</Text>
+        <TouchableOpacity onPress={handleNextPage} disabled={currentPage === totalPage - 1}>
+          <View style={styles.paginationButton}>
+            <Text style={[styles.paginationText, { color: currentPage === totalPage - 1 ? 'gray' : 'black' }]}>Next</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 };
@@ -96,4 +116,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: Colors.BLACK,
   },
+  pagination: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    alignContent: 'center',
+    paddingHorizontal: 20,
+},
+paginationText: {
+    fontSize: 16,
+    textAlign: "center",
+    alignContent : "center"
+},
+paginationButton: {
+    height: 30,
+    width: 80,
+    marginVertical: 10,
+    borderRadius: 5,
+    paddingTop : 3,
+    backgroundColor: Colors.PRIMARY_COLOR
+}
 });
