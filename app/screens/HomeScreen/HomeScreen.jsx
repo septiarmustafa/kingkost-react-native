@@ -95,7 +95,7 @@ export default HomeScreen = ({ navigation }) => {
       <Header />
       <ScrollView showsVerticalScrollIndicator={false}>
         <CarouselBanner />
-        <CustomTitle title="Area Kost Terpopuler" />
+        <CustomTitle title="Popular Area" />
         <FlatList
           snapToInterval={width - 20}
           showsHorizontalScrollIndicator={false}
@@ -109,7 +109,7 @@ export default HomeScreen = ({ navigation }) => {
           />
           )}
         />
-        <CustomTitle onPress={() => navigation.navigate("ListAllKostScreen", listKost)} title="Kost" subTitle="Lihat Semua" />
+        <CustomTitle onPress={() => navigation.navigate("ListAllKostScreen", listKost)} title="Kost" subTitle="See All" />
         {listKost.length === 0 ? (
         <NoDataFound/>
         ) : (

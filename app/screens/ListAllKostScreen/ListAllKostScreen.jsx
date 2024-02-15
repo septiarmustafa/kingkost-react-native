@@ -105,14 +105,6 @@ export default ListAllKostScreen = ({ navigation, route }) => {
         fetchData();
     }, [currentPage]);
 
-    // const handleSearch = (text) => {
-    //     setSearchQuery(text);
-    //     const filteredData = kost.filter((item) =>
-    //         item.title.toLowerCase().includes(text.toLowerCase())
-    //     );
-    //     setKostData(filteredData);
-    // };
-
     const handleSearch = async (text) => {
         setSearchQuery(text);
         try {

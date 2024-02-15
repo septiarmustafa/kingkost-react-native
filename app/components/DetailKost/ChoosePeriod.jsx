@@ -15,7 +15,7 @@ export default ChoosePeriod = ({ selectedMonths, setSelectedMonths }) => {
                         onValueChange={(itemValue) => setSelectedMonths(itemValue)}
                     >
                         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month) => (
-                            <Picker.Item key={month} label={`${month} Bulan`} value={month} />
+                            <Picker.Item key={month} label={`${month} Month`} value={month} />
                         ))}
                     </Picker>
                 </View>
