@@ -4,8 +4,6 @@ import {
   Text,
   Image,
   StyleSheet,
-  Touchable,
-  TouchableOpacity,
   Pressable,
 } from "react-native";
 import Colors from "../../utils/Colors";

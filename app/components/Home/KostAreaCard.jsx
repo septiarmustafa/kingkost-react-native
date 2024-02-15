@@ -10,11 +10,11 @@ import {
 import Colors from "../../utils/Colors";
 const { width } = Dimensions.get("screen");
 
-export default KostAreaCard = ({ listKostArea, kostArea, navigation }) => {
+export default KostAreaCard = ({ onPress, kostArea }) => {
   return (
     <Pressable
       activeOpacity={0.8}
-      onPress={() => navigation.navigate("PopularKostArea", listKostArea)}
+      onPress={() => onPress(kostArea.provinceId, kostArea.cityId)}
     >
       <View style={styles.cardKostArea}>
         <Image source={kostArea.image} style={styles.cardImageKostArea} />

@@ -16,7 +16,7 @@ export default MaleKostListScreen = ({ navigation, route }) => {
   useEffect(() => {
     const maleKostData = kost.filter((item) => item.gender === "male");
     setKostData(maleKostData);
-  }, [kost]);
+  }, []);
 
   const handleSearch = (text) => {
     setSearchQuery(text);
