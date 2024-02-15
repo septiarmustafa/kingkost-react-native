@@ -6,6 +6,7 @@ import { StatusBar } from "expo-status-bar";
 import BackButton from "../../components/DetailKost/BackButton";
 import SearchBar from "../../components/PopularKostArea/SearchBar";
 import KostItem from "../../components/PopularKostArea/KostItem";
+import NoDataFound from "../../components/NoDataFound";
 
 export default PopularKostArea = ({ navigation, route }) => {
   const kost = route.params;
@@ -47,9 +48,7 @@ export default PopularKostArea = ({ navigation, route }) => {
       </View>
       <View style={styles.listCard}>
       {kostData.length === 0 ? (
-        <View style={styles.noDataContainer}>
-          <Text style={styles.noDataText}>Tidak ada data kost yang tersedia.</Text>
-        </View>
+        <NoDataFound/>
       ) : (
         <FlatList
           data={kostData}

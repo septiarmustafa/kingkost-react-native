@@ -20,6 +20,7 @@ import { AntDesign } from '@expo/vector-icons';
 import http from "../../config/HttpConfig"
 import { BASE_HOST } from "../../config/BaseUrl";
 import LoadingComponent from "../../components/LoadingComponent";
+import NoDataFound from "../../components/NoDataFound";
 
 export default ListAllKostScreen = ({ navigation, route }) => {
     const kost = route.params;
@@ -167,7 +168,7 @@ export default ListAllKostScreen = ({ navigation, route }) => {
             <View style={styles.listCard}>
                 {loading ? (
                     <LoadingComponent/>
-                ) : (
+                ) : kostData.length === 0 ? <NoDataFound/> : (
                     <FlatList
                         data={kostData}
                         renderItem={({ item }) => (

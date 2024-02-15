@@ -23,7 +23,7 @@ export default KostCard = ({ kost, navigation }) => {
       onPress={() => navigation.navigate("DetailKostScreen", kost)}
     >
       <View style={styles.card}>
-        <Image source={kost.image} style={styles.cardImage} />
+        {kost.image !== null ? (<Image source={kost.image} style={styles.cardImage} />) : (<Image source={ require("../../../assets/images/default-image.png")} style={styles.cardImage} />)}
         <View>
           <View
             style={{
@@ -32,11 +32,11 @@ export default KostCard = ({ kost, navigation }) => {
               marginTop: 10,
             }}
           >
-            <Text style={{ fontSize: 16, fontWeight: "bold"}} numberOfLines={1} ellipsizeMode="tail">
+            <Text style={{ fontSize: 16, fontWeight: "bold" }} numberOfLines={1} ellipsizeMode="tail">
               {kost.title}
             </Text>
             <Text
-              style={{ fontWeight: "bold", color: Colors.GREEN, fontSize: 16 }} 
+              style={{ fontWeight: "bold", color: Colors.GREEN, fontSize: 16 }}
             >
               {formatCurrencyIDR(kost.price)}
             </Text>
@@ -64,10 +64,10 @@ export default KostCard = ({ kost, navigation }) => {
             {kost.isWifi ? <View style={styles.facility}>
               <Fontisto name="wifi-logo" size={20} color="black" />
             </View> : null}
-           {kost.isParking ? <View style={styles.facility}>
+            {kost.isParking ? <View style={styles.facility}>
               <FontAwesome5 name="parking" size={20} color="black" />
             </View> : null}
-           {kost.isAc ?  <View style={styles.facility}>
+            {kost.isAc ? <View style={styles.facility}>
               <MaterialCommunityIcons
                 name="air-conditioner"
                 size={20}
