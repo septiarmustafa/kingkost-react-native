@@ -12,7 +12,7 @@ export default KostItem = ({ item, onPress }) => {
             onPress={onPress}
         >
             <View style={styles.card}>
-                <Image source={item.image == null ? require("../../../assets/images/default-image.png") : item.image} style={styles.image} />
+                <Image source={item.image == null || item.image === "" ? require("../../../assets/images/default-image.png") : {uri : item.image}} style={styles.image} />
                 <View style={styles.infoContainer}>
                     <View style={styles.titleLocationPriceContainer}>
                         <View style={styles.textContainer}>

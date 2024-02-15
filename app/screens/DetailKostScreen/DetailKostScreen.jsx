@@ -45,7 +45,7 @@ export default DetailKostScreen = ({ navigation, route }) => {
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <BackgroundImage
-          source= {kost.image != null || kost.image != "" ? kost.image : require("../../../assets/images/default-image.png")}
+          source= {kost.image != null || kost.image != "" ?{ uri : kost.image} : require("../../../assets/images/default-image.png")}
           onPress={navigation.goBack}
         />
         <View style={styles.flatListContainer}>
