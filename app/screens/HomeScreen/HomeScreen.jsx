@@ -17,6 +17,7 @@ import { BASE_HOST } from "../../config/BaseUrl";
 import LoadingComponent from "../../components/LoadingComponent";
 import NoDataFound from "../../components/NoDataFound";
 
+
 const { width } = Dimensions.get("screen");
 export default HomeScreen = ({ navigation }) => {
   const [listKost, setListKost] = useState([]);
@@ -24,6 +25,7 @@ export default HomeScreen = ({ navigation }) => {
   useEffect(() => {
     fetchKostData();
   }, []);
+
 
   const fetchKostData = async () => {
     try {
@@ -56,9 +58,11 @@ export default HomeScreen = ({ navigation }) => {
     }
   };
 
+
   const navigateToPopularKostScreen = async (provinceId, cityId) => {
     navigation.navigate("PopularKostArea", { provinceId, cityId });
   };
+
 
   const listKostByArea = [
     {
@@ -81,9 +85,11 @@ export default HomeScreen = ({ navigation }) => {
     },
   ];
 
+
   if (isLoading) {
     return <LoadingComponent />;
   }
+
 
   return (
     <SafeAreaView style={{ backgroundColor: Colors.WHITE, flex: 1 }}>

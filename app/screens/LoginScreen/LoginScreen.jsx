@@ -8,9 +8,7 @@ import {
   Alert,
   Image,
 } from "react-native";
-import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { BASE_HOST } from "../../config/BaseUrl";
 import { Entypo, AntDesign, FontAwesome } from "@expo/vector-icons";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { ScrollView } from "react-native-gesture-handler";

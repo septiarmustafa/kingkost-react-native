@@ -77,13 +77,17 @@ export default DetailKostScreen = ({ navigation, route }) => {
           availability={kost.availableRoom != 0 ? "Available" : "Not Available"}
           roomCount={kost.availableRoom}
           city={kost.city}
-          subdistrict = {kost.subdistrict}
+          subdistrict={kost.subdistrict}
           province={kost.province}
           wifi={kost.isWifi}
           parking={kost.isParking}
-          airConditioner= {kost.isAc }
+          airConditioner={kost.isAc}
           description={kost.description}
-          gender={kost.gender === "male" ? require("../../../assets/icons/male.jpg") : require("../../../assets/icons/female.jpg")}
+          gender={
+            kost.gender === "male"
+              ? require("../../../assets/icons/male.jpg")
+              : require("../../../assets/icons/female.jpg")
+          }
         />
 
         <SellerInfo
@@ -95,7 +99,10 @@ export default DetailKostScreen = ({ navigation, route }) => {
           selectedMonths={selectedMonths}
           setSelectedMonths={setSelectedMonths}
         />
-        <TotalPrice onPress={()=>navigation.navigate("CreateOrderScreen")} calculateTotalPrice={calculateTotalPrice} />
+        <TotalPrice
+          onPress={() => navigation.navigate("CreateOrderScreen")}
+          calculateTotalPrice={calculateTotalPrice}
+        />
       </ScrollView>
     </SafeAreaView>
   );

@@ -21,6 +21,7 @@ import { BASE_HOST } from "../../config/BaseUrl";
 import LoadingComponent from "../../components/LoadingComponent";
 import NoDataFound from "../../components/NoDataFound";
 
+
 export default ListAllKostScreen = ({ navigation, route }) => {
     const kost = route.params;
     const [searchQuery, setSearchQuery] = useState("");
@@ -36,6 +37,7 @@ export default ListAllKostScreen = ({ navigation, route }) => {
     // const [cities, setCities] = useState([]);
     // const [districts, setDistricts] = useState([]);
 
+
     // const fetchProvinces = async () => {
     //     try {
     //         console.log("get provinces");
@@ -46,6 +48,7 @@ export default ListAllKostScreen = ({ navigation, route }) => {
     //     }
     // };
 
+
     // const fetchCities = async (provinceId) => {
     //     try {
     //         const response = await http.get(`/city?province_id=${provinceId}`);
@@ -54,6 +57,7 @@ export default ListAllKostScreen = ({ navigation, route }) => {
     //         console.error('Error fetching cities:', error);
     //     }
     // };
+
 
     // const fetchDistricts = async (cityId) => {
     //     try {
@@ -64,10 +68,13 @@ export default ListAllKostScreen = ({ navigation, route }) => {
     //     }
     // };
 
+
     // useEffect(() => {
+
 
     //     fetchProvinces();
     // }, []);
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -104,6 +111,7 @@ export default ListAllKostScreen = ({ navigation, route }) => {
         };
         fetchData();
     }, [currentPage]);
+
 
     const handleSearch = async (text) => {
         setSearchQuery(text);
@@ -142,11 +150,13 @@ export default ListAllKostScreen = ({ navigation, route }) => {
         }
     };
 
+
     const handleNextPage = () => {
         if (currentPage < totalPage) {
             setCurrentPage(currentPage + 1);
         }
     };
+
 
     const handlePreviousPage = () => {
         if (currentPage > 0) {
@@ -155,14 +165,18 @@ export default ListAllKostScreen = ({ navigation, route }) => {
     };
 
 
+
+
     const handleFilterIconPress = () => {
         setShowFilterModal(true);
     };
+
 
     const handleFilter = (filterType) => {
         console.log("Filter selected:", filterType);
         setShowFilterModal(false);
     };
+
 
     return (
         <SafeAreaView style={styles.container}>
@@ -180,6 +194,7 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                             <Feather name="filter" size={24} color="black" />
                         </TouchableOpacity>
                     </View>
+
 
                 </View>
                 <SearchBar onSearch={handleSearch} />
@@ -267,6 +282,7 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                                 </Picker>
                             </View> */}
 
+
                         </View>
                         <View style={{ marginBottom: 10 }}>
                             <TouchableOpacity>
@@ -289,6 +305,7 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                             </TouchableOpacity>
                         </View>
                     </View>
+
 
                 </View>
             </Modal>
