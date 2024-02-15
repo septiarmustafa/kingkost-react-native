@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { SafeAreaView, View, StyleSheet, ScrollView } from "react-native";
+import { SafeAreaView, View, StyleSheet, ScrollView, Image, Dimensions } from "react-native";
 
 import Colors from "../../utils/Colors";
 import { FlatList } from "react-native-gesture-handler";
@@ -12,6 +12,8 @@ import SellerInfo from "../../components/DetailKost/SellerInfo";
 import ChoosePeriod from "../../components/DetailKost/ChoosePeriod";
 import TotalPrice from "../../components/DetailKost/TotalPrice";
 import { StatusBar } from "expo-status-bar";
+const { width } = Dimensions.get("screen");
+
 
 export default DetailKostScreen = ({ navigation, route }) => {
   const kost = route.params;
@@ -43,11 +45,11 @@ export default DetailKostScreen = ({ navigation, route }) => {
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <BackgroundImage
-          source={require("../../../assets/images/jakarta.jpg")}
+          source= {kost.image != null || kost.image != "" ? kost.image : require("../../../assets/images/default-image.png")}
           onPress={navigation.goBack}
         />
         <View style={styles.flatListContainer}>
-          <FlatList
+        {kost.images !== null || kost.images.length != 0 ? (<FlatList
             contentContainerStyle={{ marginTop: 20 }}
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -60,7 +62,9 @@ export default DetailKostScreen = ({ navigation, route }) => {
                 onPress={openModal}
               />
             )}
-          />
+          />) : (<Image source={ require("../../../assets/images/default-image.png")} style={styles.cardImage} />)}
+
+          
         </View>
         <ImageModal
           visible={isModalVisible}
@@ -101,4 +105,12 @@ const styles = StyleSheet.create({
   flatListContainer: {
     paddingHorizontal: 20,
   },
+  cardImage : {
+    width: width / 3 - 20,
+    height: 80,
+    marginRight: 10,
+    borderRadius: 10,
+    marginTop : 10,
+    backgroundColor : Colors.WEAK_COLOR
+  }
 });

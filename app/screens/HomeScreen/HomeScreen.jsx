@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import {
   SafeAreaView,
-  View,
   StatusBar,
   FlatList,
   Dimensions,
   ScrollView,
-  Text,
 } from "react-native";
 import Colors from "../../utils/Colors";
 import Header from "../../components/Home/Header";
-import ListOptions from "../../components/Home/ListOptions";
 import KostAreaCard from "../../components/Home/KostAreaCard";
 import KostCard from "../../components/Home/KostCard";
 import CustomTitle from "../../components/Home/CustomTitle";
@@ -18,19 +15,16 @@ import CarouselBanner from "../../components/Home/CarouselBanner";
 import http from "../../config/HttpConfig"
 import { BASE_HOST } from "../../config/BaseUrl";
 import LoadingComponent from "../../components/LoadingComponent";
+import NoDataFound from "../../components/NoDataFound";
 
 const { width } = Dimensions.get("screen");
 export default HomeScreen = ({ navigation }) => {
   const [listKost, setListKost] = useState([]);
-  const [femaleKostData, setFemaleKostData] = useState([]);
-  const [maleKostData, setMaleKostData] = useState([]);
-  const [kostJakarta, setKostJakarta] = useState([]);
-  const [kostBogor, setKostBogor] = useState([]);
-  const [kostBandung, setKostBandung] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     fetchKostData();
-  }, [listKost], [kostJakarta], [kostBogor], [kostBandung], );
+  }, []);
+
   const fetchKostData = async () => {
     try {
       const response = await http.get('/kost?page=0');
@@ -55,29 +49,21 @@ export default HomeScreen = ({ navigation }) => {
           uri: `${BASE_HOST}/${image.fileName}`,
         })),
       }));
-      const kostJakarta = kostData.filter((item) => item.city.toLowerCase().includes("jakarta"));
-      const kostBandung = kostData.filter((item) => item.city.toLowerCase().includes("bandung"));
-      const kostBogor = kostData.filter((item) => item.city.toLowerCase().includes("bogor"));
-
-      const maleKostData = listKost.filter((item) => item.gender === "male");
-      const femaleKostData = listKost.filter((item) => item.gender === "female");
-    
-      setKostBandung(kostBandung)
-      setKostBogor(kostBogor)
-      setKostJakarta(kostJakarta)
       setListKost(kostData);
-      setMaleKostData(maleKostData)
-      setFemaleKostData(femaleKostData)
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
 
+  const navigateToPopularKostScreen = async (provinceId, cityId) => {
+    navigation.navigate("PopularKostArea", { provinceId, cityId });
+  };
 
   const listKostByArea = [
     {
       id: "1",
+      provinceId : 31,
       image: require("../../../assets/images/jakarta.jpg"),
       city: "Jakarta",
     },
@@ -85,13 +71,16 @@ export default HomeScreen = ({ navigation }) => {
       id: "2",
       image: require("../../../assets/images/jakarta.jpg"),
       city: "Bandung",
+      cityId : 32.73
     },
     {
       id: "3",
       image: require("../../../assets/images/jakarta.jpg"),
       city: "Bogor",
+      cityId : 32.71
     },
   ];
+
   if (isLoading) {
     return <LoadingComponent />;
   }
@@ -106,15 +95,7 @@ export default HomeScreen = ({ navigation }) => {
       <Header />
       <ScrollView showsVerticalScrollIndicator={false}>
         <CarouselBanner />
-        <View style={{ marginBottom: 20 }}>
-          <CustomTitle title="Pilih Preferensi Kost" />
-        </View>
-        <ListOptions
-          navigation={navigation}
-          maleKostData={maleKostData}
-          femaleKostData={femaleKostData}
-        />
-        <CustomTitle title="Area Kost Terpopuler" />
+        <CustomTitle title="Popular Area" />
         <FlatList
           snapToInterval={width - 20}
           showsHorizontalScrollIndicator={false}
@@ -123,25 +104,14 @@ export default HomeScreen = ({ navigation }) => {
           data={listKostByArea}
           renderItem={({ item }) => (
             <KostAreaCard
-              listKostArea={
-                item.city === "Jakarta"
-                  ? kostJakarta
-                  : item.city === "Bogor"
-                    ? kostBogor
-                    : item.city === "Bandung"
-                      ? kostBandung
-                      : []
-              }
-              kostArea={item}
-              navigation={navigation}
-            />
+            kostArea={item}
+            onPress={()=> navigateToPopularKostScreen(item.provinceId, item.cityId)}
+          />
           )}
         />
-        <CustomTitle onPress={() => navigation.navigate("ListAllKostScreen", listKost)} title="Kost" subTitle="Lihat Semua" />
+        <CustomTitle onPress={() => navigation.navigate("ListAllKostScreen", listKost)} title="Kost" subTitle="See All" />
         {listKost.length === 0 ? (
-          <View style={{ alignItems: 'center', marginTop: 20 }}>
-            <Text>No kosts available</Text>
-          </View>
+        <NoDataFound/>
         ) : (
           <FlatList
             snapToInterval={width - 20}

@@ -12,13 +12,13 @@ export default KostItem = ({ item, onPress }) => {
             onPress={onPress}
         >
             <View style={styles.card}>
-                <Image source={item.image} style={styles.image} />
+                <Image source={item.image == null ? require("../../../assets/images/default-image.png") : item.image} style={styles.image} />
                 <View style={styles.infoContainer}>
                     <View style={styles.titleLocationPriceContainer}>
                         <View style={styles.textContainer}>
                             <Text style={styles.title}>{item.title}</Text>
                             <Text style={styles.location}>{item.city}, {item.province}</Text>
-                            <Text style={styles.price}>{formatCurrencyIDR(item.price)}  / Bulan</Text>
+                            <Text style={styles.price}>{formatCurrencyIDR(item.price)}  / Month</Text>
                         </View>
                         {item.availableRoom == 0 ? <AvailabilityAndGender
                             availability="Not Available"
