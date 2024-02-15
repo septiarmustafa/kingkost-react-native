@@ -42,7 +42,7 @@ export default PopularKostArea = ({ navigation, route }) => {
         const newData = data.map((item) => ({
           id: item.id,
           title: item.name,
-          image: item.images[0].fileName,
+          image: item.images[0].url,
           subdistrict: item.subdistrict.name,
           city: item.city.name,
           description: item.description,
@@ -56,7 +56,7 @@ export default PopularKostArea = ({ navigation, route }) => {
           isAc: item.isAc,
           isParking: item.isParking,
           images: item.images.map((image) => ({
-            uri: `${BASE_HOST}/${image.fileName}`,
+            uri: `${image.url}`,
           })),
         }));
         setOriginalKostData(newData);
@@ -83,7 +83,7 @@ export default PopularKostArea = ({ navigation, route }) => {
         const newData = data.map((item) => ({
           id: item.id,
           title: item.name,
-          image: item.images[0].fileName,
+          image: item.images[0].url,
           subdistrict: item.subdistrict.name,
           city: item.city.name,
           description: item.description,
@@ -97,7 +97,7 @@ export default PopularKostArea = ({ navigation, route }) => {
           isAc: item.isAc,
           isParking: item.isParking,
           images: item.images.map((image) => ({
-            uri: `${BASE_HOST}/${image.fileName}`,
+            uri: `${image.url}`,
           })),
         }));
         setKostData(newData);
@@ -163,7 +163,7 @@ export default PopularKostArea = ({ navigation, route }) => {
             <Text style={[styles.paginationText, { color: currentPage === 0 ? 'gray' : 'black' }]}>Previous</Text>
           </View>
         </TouchableOpacity>
-        <Text style={styles.paginationText}>{currentPage + 1}/{totalPage}</Text>
+        <Text style={styles.paginationText}>{totalPage == 0  ? currentPage:currentPage + 1}/{totalPage}</Text>
         <TouchableOpacity onPress={handleNextPage} disabled={currentPage === totalPage - 1}>
           <View style={styles.paginationButton}>
             <Text style={[styles.paginationText, { color: currentPage === totalPage - 1 ? 'gray' : 'black' }]}>Next</Text>

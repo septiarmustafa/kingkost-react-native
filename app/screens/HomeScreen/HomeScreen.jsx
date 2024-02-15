@@ -34,7 +34,7 @@ export default HomeScreen = ({ navigation }) => {
       const kostData = data.data.map((item) => ({
         id: item.id,
         title: item.name,
-        image: item.images[0].fileName,
+        image: item.images[0].url,
         subdistrict: item.subdistrict.name,
         city: item.city.name,
         description: item.description,
@@ -48,9 +48,10 @@ export default HomeScreen = ({ navigation }) => {
         isAc: item.isAc,
         isParking: item.isParking,
         images: item.images.map((image) => ({
-          uri: `${BASE_HOST}/${image.fileName}`,
+          uri: `${image.url}`,
         })),
       }));
+      console.log(kostData[0].image);
       setListKost(kostData);
       setIsLoading(false);
     } catch (error) {

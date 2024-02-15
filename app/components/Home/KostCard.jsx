@@ -2,10 +2,10 @@ import React from "react";
 import {
   Pressable,
   Text,
-  Image,
   StyleSheet,
   View,
   Dimensions,
+  Image,
 } from "react-native";
 import Colors from "../../utils/Colors";
 import {
@@ -23,7 +23,7 @@ export default KostCard = ({ kost, navigation }) => {
       onPress={() => navigation.navigate("DetailKostScreen", kost)}
     >
       <View style={styles.card}>
-        {kost.image !== null ? (<Image source={kost.image} style={styles.cardImage} />) : (<Image source={ require("../../../assets/images/default-image.png")} style={styles.cardImage} />)}
+        {kost.image !== null ? (<Image source={{ uri: kost.image }} style={styles.cardImage} />) : (<Image source={require("../../../assets/images/default-image.png")} style={styles.cardImage} />)}
         <View>
           <View
             style={{
