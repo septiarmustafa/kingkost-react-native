@@ -39,33 +39,33 @@ export default PopularKostArea = ({ navigation, route }) => {
       <View style={styles.appBar}>
         <View style={styles.header}>
           <BackButton onPress={navigation.goBack} />
-          <Text style={styles.title}>
-            List Kost Area
-          </Text>
+          <Text style={styles.title}>List Kost Area</Text>
         </View>
         <SearchBar onSearch={handleSearch} />
       </View>
       <View style={styles.listCard}>
-      {kostData.length === 0 ? (
-        <View style={styles.noDataContainer}>
-          <Text style={styles.noDataText}>Tidak ada data kost yang tersedia.</Text>
-        </View>
-      ) : (
-        <FlatList
-          data={kostData}
-          renderItem={({ item }) => (
-            <KostItem
-              item={item}
-              onPress={() => navigation.navigate("DetailKostScreen", item)}
-            />
-          )}
-          keyExtractor={(item) => item.id}
-          contentContainerStyle={styles.flatListContainer}
-          onEndReached={handleLoadMore}
-          onEndReachedThreshold={0.1}
-        />
-      )}
-    </View>
+        {kostData.length === 0 ? (
+          <View style={styles.noDataContainer}>
+            <Text style={styles.noDataText}>
+              Tidak ada data kost yang tersedia.
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={kostData}
+            renderItem={({ item }) => (
+              <KostItem
+                item={item}
+                onPress={() => navigation.navigate("DetailKostScreen", item)}
+              />
+            )}
+            keyExtractor={(item) => item.id}
+            contentContainerStyle={styles.flatListContainer}
+            onEndReached={handleLoadMore}
+            onEndReachedThreshold={0.1}
+          />
+        )}
+      </View>
     </SafeAreaView>
   );
 };

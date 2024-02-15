@@ -42,7 +42,9 @@ export default FemaleKostListScreen = ({ navigation, route }) => {
       <View style={styles.appBar}>
         <View style={styles.header}>
           <BackButton onPress={navigation.goBack} />
-          <Text style={styles.title}>{kost[0]?.gender == "female" ? "Female" : kost[0]?.gender} Kost List</Text>
+          <Text style={styles.title}>
+            {kost[0]?.gender == "female" ? "Female" : kost[0]?.gender} Kost List
+          </Text>
         </View>
         <SearchBar onSearch={handleSearch} />
       </View>

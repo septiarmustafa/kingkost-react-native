@@ -15,7 +15,7 @@ import KostAreaCard from "../../components/Home/KostAreaCard";
 import KostCard from "../../components/Home/KostCard";
 import CustomTitle from "../../components/Home/CustomTitle";
 import CarouselBanner from "../../components/Home/CarouselBanner";
-import http from "../../config/HttpConfig"
+import http from "../../config/HttpConfig";
 import { BASE_HOST } from "../../config/BaseUrl";
 import LoadingComponent from "../../components/LoadingComponent";
 
@@ -30,10 +30,10 @@ export default HomeScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     fetchKostData();
-  }, [listKost], [kostJakarta], [kostBogor], [kostBandung], );
+  }, []);
   const fetchKostData = async () => {
     try {
-      const response = await http.get('/kost?page=0');
+      const response = await http.get("/kost?page=0");
       const data = response.data;
       const kostData = data.data.map((item) => ({
         id: item.id,
@@ -55,25 +55,32 @@ export default HomeScreen = ({ navigation }) => {
           uri: `${BASE_HOST}/${image.fileName}`,
         })),
       }));
-      const kostJakarta = kostData.filter((item) => item.city.toLowerCase().includes("jakarta"));
-      const kostBandung = kostData.filter((item) => item.city.toLowerCase().includes("bandung"));
-      const kostBogor = kostData.filter((item) => item.city.toLowerCase().includes("bogor"));
+      const kostJakarta = kostData.filter((item) =>
+        item.city.toLowerCase().includes("jakarta")
+      );
+      const kostBandung = kostData.filter((item) =>
+        item.city.toLowerCase().includes("bandung")
+      );
+      const kostBogor = kostData.filter((item) =>
+        item.city.toLowerCase().includes("bogor")
+      );
 
       const maleKostData = listKost.filter((item) => item.gender === "male");
-      const femaleKostData = listKost.filter((item) => item.gender === "female");
-    
-      setKostBandung(kostBandung)
-      setKostBogor(kostBogor)
-      setKostJakarta(kostJakarta)
+      const femaleKostData = listKost.filter(
+        (item) => item.gender === "female"
+      );
+
+      setKostBandung(kostBandung);
+      setKostBogor(kostBogor);
+      setKostJakarta(kostJakarta);
       setListKost(kostData);
-      setMaleKostData(maleKostData)
-      setFemaleKostData(femaleKostData)
+      setMaleKostData(maleKostData);
+      setFemaleKostData(femaleKostData);
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
 
   const listKostByArea = [
     {
@@ -127,19 +134,23 @@ export default HomeScreen = ({ navigation }) => {
                 item.city === "Jakarta"
                   ? kostJakarta
                   : item.city === "Bogor"
-                    ? kostBogor
-                    : item.city === "Bandung"
-                      ? kostBandung
-                      : []
+                  ? kostBogor
+                  : item.city === "Bandung"
+                  ? kostBandung
+                  : []
               }
               kostArea={item}
               navigation={navigation}
             />
           )}
         />
-        <CustomTitle onPress={() => navigation.navigate("ListAllKostScreen", listKost)} title="Kost" subTitle="Lihat Semua" />
+        <CustomTitle
+          onPress={() => navigation.navigate("ListAllKostScreen", listKost)}
+          title="Kost"
+          subTitle="Lihat Semua"
+        />
         {listKost.length === 0 ? (
-          <View style={{ alignItems: 'center', marginTop: 20 }}>
+          <View style={{ alignItems: "center", marginTop: 20 }}>
             <Text>No kosts available</Text>
           </View>
         ) : (

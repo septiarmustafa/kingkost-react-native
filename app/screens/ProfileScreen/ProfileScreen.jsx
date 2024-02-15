@@ -15,10 +15,10 @@ export default ProfileScreen = ({ navigation }) => {
   const [fullName, setFullName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [userId, setUserId] = useState(null);
+  const [notificationOn, setNotificationOn] = useState(true);
 
   const fetchUserData = async (userId) => {
     try {
-      console.log("Fetching user data...");
       const response = await fetch(`${BASE_HOST}/customer/user/${userId}`);
       const data = await response.json();
       setFullName(data.data.fullName);
@@ -46,8 +46,8 @@ export default ProfileScreen = ({ navigation }) => {
   const handleHelpCenterPress = () => {
     navigation.navigate("HelpCenter");
   };
-  const handlePrivacyAndPolicyPress = () => {
-    navigation.navigate("PrivacyAndPolicy");
+  const handleTermsAndConditionsPress = () => {
+    navigation.navigate("TermsAndConditions");
   };
 
   const handleLogout = async () => {
@@ -58,6 +58,10 @@ export default ProfileScreen = ({ navigation }) => {
       console.error("Error logging out:", error);
       Alert.alert("Error", "An error occurred while logging out.");
     }
+  };
+
+  const toggleNotification = () => {
+    setNotificationOn(!notificationOn);
   };
 
   return (
@@ -84,11 +88,20 @@ export default ProfileScreen = ({ navigation }) => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.settingsItem}>
-          <FontAwesome name="bell" size={24} color={"#333"} />
+        <TouchableOpacity
+          style={styles.settingsItem}
+          onPress={toggleNotification}
+        >
+          <FontAwesome
+            name={notificationOn ? "bell" : "bell-slash"}
+            size={24}
+            color={"#333"}
+          />
           <View style={styles.settingsTextContainer}>
             <Text style={styles.settingsTitle}>Notification</Text>
-            <Text style={styles.settingsValue}>On</Text>
+            <Text style={styles.settingsValue}>
+              {notificationOn ? "On" : "Off"}
+            </Text>
           </View>
         </TouchableOpacity>
 
@@ -100,11 +113,15 @@ export default ProfileScreen = ({ navigation }) => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.settingsItem}>
-          <FontAwesome name="lightbulb-o" size={24} color={"#333"} />
+        <TouchableOpacity
+          style={styles.settingsItem}
+          onPress={() =>
+            navigation.navigate("ChangePassword", { userId: userId })
+          }
+        >
+          <FontAwesome name="lock" size={24} color={"#333"} />
           <View style={styles.settingsTextContainer}>
-            <Text style={styles.settingsTitle}>Theme</Text>
-            <Text style={styles.settingsValue}>Light</Text>
+            <Text style={styles.settingsTitle}>Change Password</Text>
           </View>
         </TouchableOpacity>
 
@@ -121,11 +138,11 @@ export default ProfileScreen = ({ navigation }) => {
 
         <TouchableOpacity
           style={styles.settingsItem}
-          onPress={handlePrivacyAndPolicyPress}
+          onPress={handleTermsAndConditionsPress}
         >
           <FontAwesome name="font-awesome" size={24} color={"#333"} />
           <View style={styles.settingsTextContainer}>
-            <Text style={styles.settingsTitle}>Privacy and Policy</Text>
+            <Text style={styles.settingsTitle}>Terms and Conditions</Text>
             <Text style={styles.settingsValue}>Read More</Text>
           </View>
         </TouchableOpacity>
