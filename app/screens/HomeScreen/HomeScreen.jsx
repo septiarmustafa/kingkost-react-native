@@ -30,7 +30,8 @@ export default HomeScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     fetchKostData();
-  }, [listKost], [kostJakarta], [kostBogor], [kostBandung], );
+  }, [] );
+  
   const fetchKostData = async () => {
     try {
       const response = await http.get('/kost?page=0');
@@ -59,21 +60,24 @@ export default HomeScreen = ({ navigation }) => {
       const kostBandung = kostData.filter((item) => item.city.toLowerCase().includes("bandung"));
       const kostBogor = kostData.filter((item) => item.city.toLowerCase().includes("bogor"));
 
-      const maleKostData = listKost.filter((item) => item.gender === "male");
-      const femaleKostData = listKost.filter((item) => item.gender === "female");
+      const maleKost = listKost.filter((item) => item.gender === "male");
+      const femaleKost = listKost.filter((item) => item.gender === "female");
+      console.log("filter female "+ femaleKost);
+      console.log("filter male "+ maleKost);
     
       setKostBandung(kostBandung)
       setKostBogor(kostBogor)
       setKostJakarta(kostJakarta)
       setListKost(kostData);
-      setMaleKostData(maleKostData)
-      setFemaleKostData(femaleKostData)
+      setMaleKostData(maleKost)
+      setFemaleKostData(femaleKost)
+      console.log("female "+femaleKostData);
+      console.log("male"+maleKostData);
       setIsLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
-
 
   const listKostByArea = [
     {
@@ -92,6 +96,7 @@ export default HomeScreen = ({ navigation }) => {
       city: "Bogor",
     },
   ];
+
   if (isLoading) {
     return <LoadingComponent />;
   }
@@ -139,7 +144,7 @@ export default HomeScreen = ({ navigation }) => {
         />
         <CustomTitle onPress={() => navigation.navigate("ListAllKostScreen", listKost)} title="Kost" subTitle="Lihat Semua" />
         {listKost.length === 0 ? (
-          <View style={{ alignItems: 'center', marginTop: 20 }}>
+          <View style={{ alignItems: 'center', margin: 20 }}>
             <Text>No kosts available</Text>
           </View>
         ) : (
