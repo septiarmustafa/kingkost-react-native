@@ -102,7 +102,7 @@ export default function RegisterScreen() {
       if (response.status === 200) {
         Alert.alert(
           "Registration Success",
-          "You can now login",
+          "You can login now",
           [
             {
               onPress: () => {

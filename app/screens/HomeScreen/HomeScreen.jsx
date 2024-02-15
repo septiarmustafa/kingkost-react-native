@@ -12,11 +12,10 @@ import KostAreaCard from "../../components/Home/KostAreaCard";
 import KostCard from "../../components/Home/KostCard";
 import CustomTitle from "../../components/Home/CustomTitle";
 import CarouselBanner from "../../components/Home/CarouselBanner";
-import http from "../../config/HttpConfig"
+import http from "../../config/HttpConfig";
 import { BASE_HOST } from "../../config/BaseUrl";
 import LoadingComponent from "../../components/LoadingComponent";
 import NoDataFound from "../../components/NoDataFound";
-
 
 const { width } = Dimensions.get("screen");
 export default HomeScreen = ({ navigation }) => {
@@ -26,10 +25,9 @@ export default HomeScreen = ({ navigation }) => {
     fetchKostData();
   }, []);
 
-
   const fetchKostData = async () => {
     try {
-      const response = await http.get('/kost?page=0');
+      const response = await http.get("/kost?page=0");
       const data = response.data;
       const kostData = data.data.map((item) => ({
         id: item.id,
@@ -59,38 +57,40 @@ export default HomeScreen = ({ navigation }) => {
     }
   };
 
-
   const navigateToPopularKostScreen = async (provinceId, cityId) => {
     navigation.navigate("PopularKostArea", { provinceId, cityId });
   };
 
-
   const listKostByArea = [
     {
       id: "1",
-      provinceId : 31,
+      provinceId: 31,
       image: require("../../../assets/images/jakarta.jpg"),
       city: "Jakarta",
     },
     {
       id: "2",
-      image: require("../../../assets/images/jakarta.jpg"),
+      image: require("../../../assets/images/bandung.jpg"),
       city: "Bandung",
-      cityId : 32.73
+      cityId: 32.73,
     },
     {
       id: "3",
-      image: require("../../../assets/images/jakarta.jpg"),
+      image: require("../../../assets/images/bogor.jpg"),
       city: "Bogor",
-      cityId : 32.71
+      cityId: 32.71,
+    },
+    {
+      id: "4",
+      image: require("../../../assets/images/jogja.jpg"),
+      city: "Jogja",
+      cityId: 34.71,
     },
   ];
-
 
   if (isLoading) {
     return <LoadingComponent />;
   }
-
 
   return (
     <SafeAreaView style={{ backgroundColor: Colors.WHITE, flex: 1 }}>
@@ -111,14 +111,20 @@ export default HomeScreen = ({ navigation }) => {
           data={listKostByArea}
           renderItem={({ item }) => (
             <KostAreaCard
-            kostArea={item}
-            onPress={()=> navigateToPopularKostScreen(item.provinceId, item.cityId)}
-          />
+              kostArea={item}
+              onPress={() =>
+                navigateToPopularKostScreen(item.provinceId, item.cityId)
+              }
+            />
           )}
         />
-        <CustomTitle onPress={() => navigation.navigate("ListAllKostScreen", listKost)} title="Kost" subTitle="See All" />
+        <CustomTitle
+          onPress={() => navigation.navigate("ListAllKostScreen", listKost)}
+          title="Kost"
+          subTitle="See All"
+        />
         {listKost.length === 0 ? (
-        <NoDataFound/>
+          <NoDataFound />
         ) : (
           <FlatList
             snapToInterval={width - 20}
