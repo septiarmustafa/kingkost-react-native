@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { SafeAreaView, StyleSheet, View, Text, FlatList, TouchableOpacity } from "react-native";
-
-
 import Colors from "../../utils/Colors";
 import { StatusBar } from "expo-status-bar";
 import BackButton from "../../components/DetailKost/BackButton";
@@ -9,9 +7,7 @@ import SearchBar from "../../components/PopularKostArea/SearchBar";
 import KostItem from "../../components/PopularKostArea/KostItem";
 import NoDataFound from "../../components/NoDataFound";
 import http from "../../config/HttpConfig";
-import { BASE_HOST } from "../../config/BaseUrl";
 import LoadingComponent from "../../components/LoadingComponent";
-
 
 export default PopularKostArea = ({ navigation, route }) => {
   const { provinceId, cityId } = route.params;
@@ -21,9 +17,6 @@ export default PopularKostArea = ({ navigation, route }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPage, setTotalPage] = useState(1);
   const [loading, setLoading] = useState(false);
-
-
-
 
   useEffect(() => {
     const fetchKostData = async () => {
@@ -70,7 +63,6 @@ export default PopularKostArea = ({ navigation, route }) => {
     fetchKostData();
   }, [currentPage]);
 
-
   const handleSearch = async (text) => {
     setSearchQuery(text);
     try {
@@ -108,20 +100,17 @@ export default PopularKostArea = ({ navigation, route }) => {
     }
   };
 
-
   const handleNextPage = () => {
     if (currentPage < totalPage) {
       setCurrentPage(currentPage + 1);
     }
   };
 
-
   const handlePreviousPage = () => {
     if (currentPage > 0) {
       setCurrentPage(currentPage - 1);
     }
   };
-
 
   return (
     <SafeAreaView style={styles.container}>

@@ -17,10 +17,8 @@ import KostItem from "../../components/PopularKostArea/KostItem";
 import { Picker } from "@react-native-picker/picker";
 import { AntDesign } from '@expo/vector-icons';
 import http from "../../config/HttpConfig"
-import { BASE_HOST } from "../../config/BaseUrl";
 import LoadingComponent from "../../components/LoadingComponent";
 import NoDataFound from "../../components/NoDataFound";
-
 
 export default ListAllKostScreen = ({ navigation, route }) => {
     const kost = route.params;
@@ -33,48 +31,46 @@ export default ListAllKostScreen = ({ navigation, route }) => {
     const [selectedCity, setSelectedCity] = useState("");
     const [selectedProvince, setSelectedProvince] = useState("");
     const [selectedDistrict, setSelectedDistrict] = useState("");
-    // const [provinces, setProvinces] = useState([]);
-    // const [cities, setCities] = useState([]);
-    // const [districts, setDistricts] = useState([]);
+    const [provinces, setProvinces] = useState([]);
+    const [cities, setCities] = useState([]);
+    const [districts, setDistricts] = useState([]);
 
+    useEffect(() => {
+        fetchProvinces();
+    }, []);
 
-    // const fetchProvinces = async () => {
-    //     try {
-    //         console.log("get provinces");
-    //         const response = await http.get('/province');
-    //         setProvinces(response.data);
-    //     } catch (error) {
-    //         console.error('Error fetching provinces:', error);
-    //     }
-    // };
+    const fetchProvinces = async () => {
+        try {
+            const response = await http.get('/province');
+            const dataProvinces = response.data.data
+            setProvinces(dataProvinces);
+            console.log(provinces);
+        } catch (error) {
+            console.error('Error fetching provinces:', error);
+        }
+    };
 
+    const fetchCities = async (provinceId) => {
+        try {
+            const response = await http.get(`/city?province_id=${provinceId}`);
+            const dataCity = response.data.data
+            setCities(dataCity);
+            console.log("data city " + cities);
+        } catch (error) {
+            console.error('Error fetching cities:', error);
+        }
+    };
 
-    // const fetchCities = async (provinceId) => {
-    //     try {
-    //         const response = await http.get(`/city?province_id=${provinceId}`);
-    //         setCities(response.data);
-    //     } catch (error) {
-    //         console.error('Error fetching cities:', error);
-    //     }
-    // };
-
-
-    // const fetchDistricts = async (cityId) => {
-    //     try {
-    //         const response = await http.get(`/subdistrict?city_id=${cityId}`);
-    //         setDistricts(response.data);
-    //     } catch (error) {
-    //         console.error('Error fetching districts:', error);
-    //     }
-    // };
-
-
-    // useEffect(() => {
-
-
-    //     fetchProvinces();
-    // }, []);
-
+    const fetchDistricts = async (cityId) => {
+        try {
+            const response = await http.get(`/subdistrict?city_id=${cityId}`);
+            const dataDistrict = response.data.data
+            setDistricts(dataDistrict);
+            console.log("data district " + districts);
+        } catch (error) {
+            console.error('Error fetching districts:', error);
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -111,7 +107,6 @@ export default ListAllKostScreen = ({ navigation, route }) => {
         };
         fetchData();
     }, [currentPage]);
-
 
     const handleSearch = async (text) => {
         setSearchQuery(text);
@@ -150,13 +145,11 @@ export default ListAllKostScreen = ({ navigation, route }) => {
         }
     };
 
-
     const handleNextPage = () => {
         if (currentPage < totalPage) {
             setCurrentPage(currentPage + 1);
         }
     };
-
 
     const handlePreviousPage = () => {
         if (currentPage > 0) {
@@ -164,19 +157,14 @@ export default ListAllKostScreen = ({ navigation, route }) => {
         }
     };
 
-
-
-
     const handleFilterIconPress = () => {
         setShowFilterModal(true);
     };
-
 
     const handleFilter = (filterType) => {
         console.log("Filter selected:", filterType);
         setShowFilterModal(false);
     };
-
 
     return (
         <SafeAreaView style={styles.container}>
@@ -223,7 +211,7 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                         <Text style={[styles.paginationText, { color: currentPage === 0 ? 'gray' : 'black' }]}>Previous</Text>
                     </View>
                 </TouchableOpacity>
-                <Text style={styles.paginationText}>{totalPage == 0  ? currentPage:currentPage + 1}/{totalPage}</Text>
+                <Text style={styles.paginationText}>{totalPage == 0 ? currentPage : currentPage + 1}/{totalPage}</Text>
                 <TouchableOpacity onPress={handleNextPage} disabled={currentPage === totalPage - 1}>
                     <View style={styles.paginationButton}>
                         <Text style={[styles.paginationText, { color: currentPage === totalPage - 1 ? 'gray' : 'black' }]}>Next</Text>
@@ -250,23 +238,25 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                                     selectedValue={selectedProvince}
                                     style={styles.dropdown}
                                     onValueChange={(itemValue) => {
-                                        setSelectedProvince(itemValue);
-                                        // fetchCities(itemValue);
+                                        const selectedProv = provinces.find((province) => province.id === itemValue);
+                                        setSelectedProvince(selectedProv.name);
+                                        fetchCities(selectedProv.id);
                                     }}>
-                                    {/* {provinces.map((province) => (
+                                    {provinces.length > 0 && provinces.map((province) => (
                                         <Picker.Item key={province.id} label={province.name} value={province.id} />
-                                    ))} */}
+                                    ))}
                                 </Picker>
                             </View>
-                            {/* <View style={styles.pickerContainer}>
+                            <View style={styles.pickerContainer}>
                                 <Picker
                                     selectedValue={selectedCity}
                                     style={styles.dropdown}
                                     onValueChange={(itemValue) => {
-                                        setSelectedCity(itemValue);
-                                        fetchDistricts(itemValue);
+                                        const selectedCity = cities.find((city) => city.id === itemValue);
+                                        setSelectedCity(selectedCity.name);
+                                        fetchDistricts(selectedCity.id);
                                     }}>
-                                    {cities.map((city) => (
+                                    {cities.length > 0 && cities.map((city) => (
                                         <Picker.Item key={city.id} label={city.name} value={city.id} />
                                     ))}
                                 </Picker>
@@ -275,14 +265,15 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                                 <Picker
                                     selectedValue={selectedDistrict}
                                     style={styles.dropdown}
-                                    onValueChange={(itemValue) => setSelectedDistrict(itemValue)}>
-                                    {districts.map((district) => (
+                                    onValueChange={(itemValue) => {
+                                        const selectedDist = districts.find((district) => district.id === itemValue);
+                                        setSelectedDistrict(selectedDist.name);
+                                    }}>
+                                    {districts.length > 0 && districts.map((district) => (
                                         <Picker.Item key={district.id} label={district.name} value={district.id} />
                                     ))}
                                 </Picker>
-                            </View> */}
-
-
+                            </View>
                         </View>
                         <View style={{ marginBottom: 10 }}>
                             <TouchableOpacity>
