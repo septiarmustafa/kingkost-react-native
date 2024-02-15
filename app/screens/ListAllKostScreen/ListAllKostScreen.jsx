@@ -22,7 +22,7 @@ import LoadingComponent from "../../components/LoadingComponent";
 import NoDataFound from "../../components/NoDataFound";
 
 export default ListAllKostScreen = ({ navigation, route }) => {
-    const kost = route.params;    
+    const kost = route.params;
     const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPage, setTotalPage] = useState(1);
@@ -102,20 +102,52 @@ export default ListAllKostScreen = ({ navigation, route }) => {
             }
             setLoading(false);
         };
-
         fetchData();
     }, [currentPage]);
 
-    useEffect(() => {
-        setKostData(kost);
-    }, [kost]);
+    // const handleSearch = (text) => {
+    //     setSearchQuery(text);
+    //     const filteredData = kost.filter((item) =>
+    //         item.title.toLowerCase().includes(text.toLowerCase())
+    //     );
+    //     setKostData(filteredData);
+    // };
 
-    const handleSearch = (text) => {
+    const handleSearch = async (text) => {
         setSearchQuery(text);
-        const filteredData = kost.filter((item) =>
-            item.title.toLowerCase().includes(text.toLowerCase())
-        );
-        setKostData(filteredData);
+        try {
+            if (text === "") {
+                setKostData(kost);
+            } else {
+                const response = await http.get(`/kost?name=${text}`);
+                console.log(`/kost?name=${text}`);
+                const { data, paggingResponse } = response.data;
+                const newData = data.map((item) => ({
+                    id: item.id,
+                    title: item.name,
+                    image: item.images[0].fileName,
+                    subdistrict: item.subdistrict.name,
+                    city: item.city.name,
+                    description: item.description,
+                    province: item.city.province.name,
+                    gender: item.genderType.name.toLowerCase(),
+                    price: item.kostPrice.price,
+                    sellerName: item.seller.fullName,
+                    sellerPhone: item.seller.phoneNumber,
+                    availableRoom: item.availableRoom,
+                    isWifi: item.isWifi,
+                    isAc: item.isAc,
+                    isParking: item.isParking,
+                    images: item.images.map((image) => ({
+                        uri: `${BASE_HOST}/${image.fileName}`,
+                    })),
+                }));
+                setKostData(newData);
+                setTotalPage(paggingResponse.totalPage);
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
+        }
     };
 
     const handleNextPage = () => {
@@ -162,8 +194,8 @@ export default ListAllKostScreen = ({ navigation, route }) => {
             </View>
             <View style={styles.listCard}>
                 {loading ? (
-                    <LoadingComponent/>
-                ) : kostData.length === 0 ? <NoDataFound/> : (
+                    <LoadingComponent />
+                ) : kostData.length === 0 ? <NoDataFound /> : (
                     <FlatList
                         data={kostData}
                         renderItem={({ item }) => (
@@ -185,9 +217,9 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                     </View>
                 </TouchableOpacity>
                 <Text style={styles.paginationText}>{currentPage + 1}/{totalPage}</Text>
-                <TouchableOpacity onPress={handleNextPage} disabled={currentPage === totalPage -1}>
+                <TouchableOpacity onPress={handleNextPage} disabled={currentPage === totalPage - 1}>
                     <View style={styles.paginationButton}>
-                        <Text style={[styles.paginationText, { color: currentPage === totalPage -1 ? 'gray' : 'black' }]}>Next</Text>
+                        <Text style={[styles.paginationText, { color: currentPage === totalPage - 1 ? 'gray' : 'black' }]}>Next</Text>
                     </View>
                 </TouchableOpacity>
             </View>
@@ -344,14 +376,14 @@ const styles = StyleSheet.create({
     paginationText: {
         fontSize: 16,
         textAlign: "center",
-        alignContent : "center"
+        alignContent: "center"
     },
     paginationButton: {
         height: 30,
         width: 80,
         marginVertical: 10,
         borderRadius: 5,
-        paddingTop : 3,
+        paddingTop: 3,
         backgroundColor: Colors.PRIMARY_COLOR
     }
 });

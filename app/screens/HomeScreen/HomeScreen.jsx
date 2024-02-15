@@ -20,9 +20,6 @@ import NoDataFound from "../../components/NoDataFound";
 const { width } = Dimensions.get("screen");
 export default HomeScreen = ({ navigation }) => {
   const [listKost, setListKost] = useState([]);
-  const [kostJakarta, setKostJakarta] = useState([]);
-  const [kostBogor, setKostBogor] = useState([]);
-  const [kostBandung, setKostBandung] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     fetchKostData();
@@ -52,13 +49,6 @@ export default HomeScreen = ({ navigation }) => {
           uri: `${BASE_HOST}/${image.fileName}`,
         })),
       }));
-      const kostJakarta = kostData.filter((item) => item.city.toLowerCase().includes("jakarta"));
-      const kostBandung = kostData.filter((item) => item.city.toLowerCase().includes("bandung"));
-      const kostBogor = kostData.filter((item) => item.city.toLowerCase().includes("bogor"));
-
-      setKostBandung(kostBandung)
-      setKostBogor(kostBogor)
-      setKostJakarta(kostJakarta)
       setListKost(kostData);
       setIsLoading(false);
     } catch (error) {
@@ -66,9 +56,14 @@ export default HomeScreen = ({ navigation }) => {
     }
   };
 
+  const navigateToPopularKostScreen = async (provinceId, cityId) => {
+    navigation.navigate("PopularKostArea", { provinceId, cityId });
+  };
+
   const listKostByArea = [
     {
       id: "1",
+      provinceId : 31,
       image: require("../../../assets/images/jakarta.jpg"),
       city: "Jakarta",
     },
@@ -76,11 +71,13 @@ export default HomeScreen = ({ navigation }) => {
       id: "2",
       image: require("../../../assets/images/jakarta.jpg"),
       city: "Bandung",
+      cityId : 32.73
     },
     {
       id: "3",
       image: require("../../../assets/images/jakarta.jpg"),
       city: "Bogor",
+      cityId : 32.71
     },
   ];
 
@@ -107,18 +104,9 @@ export default HomeScreen = ({ navigation }) => {
           data={listKostByArea}
           renderItem={({ item }) => (
             <KostAreaCard
-              listKostArea={
-                item.city === "Jakarta"
-                  ? kostJakarta
-                  : item.city === "Bogor"
-                    ? kostBogor
-                    : item.city === "Bandung"
-                      ? kostBandung
-                      : []
-              }
-              kostArea={item}
-              navigation={navigation}
-            />
+            kostArea={item}
+            onPress={()=> navigateToPopularKostScreen(item.provinceId, item.cityId)}
+          />
           )}
         />
         <CustomTitle onPress={() => navigation.navigate("ListAllKostScreen", listKost)} title="Kost" subTitle="Lihat Semua" />
