@@ -31,6 +31,9 @@ export default ListAllKostScreen = ({ navigation, route }) => {
     const [selectedCity, setSelectedCity] = useState("");
     const [selectedProvince, setSelectedProvince] = useState("");
     const [selectedDistrict, setSelectedDistrict] = useState("");
+    const [selectedCityId, setSelectedCityId] = useState(0);
+    const [selectedProvinceId, setSelectedProvinceId] = useState(0);
+    const [selectedDistrictId, setSelectedDistrictId] = useState(0);
     const [provinces, setProvinces] = useState([]);
     const [cities, setCities] = useState([]);
     const [districts, setDistricts] = useState([]);
@@ -235,25 +238,29 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                         <View style={styles.dropdownContainer}>
                             <View style={styles.pickerContainer}>
                                 <Picker
-                                    selectedValue={selectedProvince}
+                                    selectedValue={selectedProvinceId}
                                     style={styles.dropdown}
                                     onValueChange={(itemValue) => {
                                         const selectedProv = provinces.find((province) => province.id === itemValue);
                                         setSelectedProvince(selectedProv.name);
+                                        setSelectedProvinceId(selectedProv.id);
                                         fetchCities(selectedProv.id);
+                                        console.log(selectedProvince);
+                                        console.log(selectedProvinceId);
                                     }}>
                                     {provinces.length > 0 && provinces.map((province) => (
-                                        <Picker.Item key={province.id} label={province.name} value={province.id} />
+                                        <Picker.Item key={province.id} label={province.name} value={province.id}/>
                                     ))}
                                 </Picker>
                             </View>
                             <View style={styles.pickerContainer}>
                                 <Picker
-                                    selectedValue={selectedCity}
+                                    selectedValue={selectedCityId}
                                     style={styles.dropdown}
                                     onValueChange={(itemValue) => {
                                         const selectedCity = cities.find((city) => city.id === itemValue);
                                         setSelectedCity(selectedCity.name);
+                                        setSelectedCityId(selectedCity.id);
                                         fetchDistricts(selectedCity.id);
                                     }}>
                                     {cities.length > 0 && cities.map((city) => (
@@ -263,11 +270,12 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                             </View>
                             <View style={styles.pickerContainer}>
                                 <Picker
-                                    selectedValue={selectedDistrict}
+                                    selectedValue={selectedDistrictId}
                                     style={styles.dropdown}
                                     onValueChange={(itemValue) => {
                                         const selectedDist = districts.find((district) => district.id === itemValue);
                                         setSelectedDistrict(selectedDist.name);
+                                        setSelectedDistrictId(selectedDist.id);
                                     }}>
                                     {districts.length > 0 && districts.map((district) => (
                                         <Picker.Item key={district.id} label={district.name} value={district.id} />
@@ -335,7 +343,7 @@ const styles = StyleSheet.create({
     modalContainer: {
         flex: 1,
         justifyContent: "flex-end",
-        backgroundColor: "rgba(0, 0, 0, 0.3)",
+        backgroundColor: "rgba(0, 0, 0, 0.1)",
     },
     modalContent: {
         backgroundColor: Colors.WEAK_COLOR,
