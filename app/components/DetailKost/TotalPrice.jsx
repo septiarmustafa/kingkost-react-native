@@ -11,7 +11,7 @@ export default TotalPrice = ({ calculateTotalPrice, onPress }) => {
             </View>
             <View style={styles.bookNowContainer}>
                 <TouchableOpacity style={styles.bookNowButton} onPress={onPress}>
-                    <Text style={{ color: Colors.BLACK, fontWeight: "bold" }}>Book Now</Text>
+                    <Text style={{ color: Colors.BLACK, fontWeight: "bold" }}>Book This Kost</Text>
                 </TouchableOpacity>
             </View>
         </View>

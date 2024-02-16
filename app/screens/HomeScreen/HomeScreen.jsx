@@ -119,7 +119,7 @@ export default HomeScreen = ({ navigation }) => {
           )}
         />
         <CustomTitle
-          onPress={() => navigation.navigate("ListAllKostScreen", listKost)}
+          onPress={() => navigation.navigate("ListAllKostScreen")}
           title="Kost"
           subTitle="See All"
         />

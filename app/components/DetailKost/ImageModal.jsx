@@ -18,16 +18,18 @@ const styles = StyleSheet.create({
   modalContainer: {
     justifyContent: 'center',
     alignItems: 'center',
+    height: '100%',
+    backgroundColor : "rgba(0,0,0,0.8)"
   },
   modalImageLarge: {
     width: '80%',
-    height: '80%',
+    height: '70%',
     borderRadius: 10,
   },
   closeButton: {
     position: 'absolute',
-    top: 70,
-    right: 45,
+    top: "16%",
+    right: "12%",
   },
 });
 

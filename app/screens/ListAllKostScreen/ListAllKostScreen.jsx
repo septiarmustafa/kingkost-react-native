@@ -20,8 +20,7 @@ import http from "../../config/HttpConfig"
 import LoadingComponent from "../../components/LoadingComponent";
 import NoDataFound from "../../components/NoDataFound";
 
-export default ListAllKostScreen = ({ navigation, route }) => {
-    const kost = route.params;
+export default ListAllKostScreen = ({ navigation }) => {
     const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
     const [totalPage, setTotalPage] = useState(1);
@@ -127,7 +126,6 @@ export default ListAllKostScreen = ({ navigation, route }) => {
         setSearchQuery(text);
         try {
             if (text === "") {
-                // setKostData(kost);
                 const params = new URLSearchParams();
                 if (selectedDistrictId) params.append('subdistrict_id', selectedDistrictId);
                 if (selectedProvinceId) params.append('province_id', selectedProvinceId);

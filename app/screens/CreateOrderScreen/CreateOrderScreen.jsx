@@ -15,7 +15,7 @@ import {
 import { ScrollView } from "react-native-gesture-handler";
 import BackButton from "../../components/DetailKost/BackButton";
 
-export default function InfoProfileScreen({ navigation }) {
+export default function CreateOrderScreen({ navigation }) {
   const [username, setusername] = useState("");
   const [password, setPassword] = useState("");
   const [hidePassword, setHidePassword] = useState(true);
