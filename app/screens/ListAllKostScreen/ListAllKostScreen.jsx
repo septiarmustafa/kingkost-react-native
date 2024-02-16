@@ -37,10 +37,26 @@ export default ListAllKostScreen = ({ navigation, route }) => {
     const [provinces, setProvinces] = useState([]);
     const [cities, setCities] = useState([]);
     const [districts, setDistricts] = useState([]);
+    const [genders, setGenders] = useState([]);
+    const [selectedGender, setSelectedGender] = useState("");
+    const [selectedGenderId, setSelectedGenderId] = useState("");
 
     useEffect(() => {
+        fetchGenders();
         fetchProvinces();
     }, []);
+
+    const fetchGenders = async () => {
+        try {
+            const response = await http.get('/gender/v1');
+            const dataGenders = response.data;
+            setGenders(dataGenders);
+            console.log(genders);
+        } catch (error) {
+            console.error('Error fetching genders:', error);
+        }
+    };
+
 
     const fetchProvinces = async () => {
         try {
@@ -148,6 +164,86 @@ export default ListAllKostScreen = ({ navigation, route }) => {
         }
     };
 
+    const handleFilter = async () => {
+        try {
+          setLoading(true);
+          setShowFilterModal(false)
+          const params = new URLSearchParams();
+          if (selectedDistrictId) params.append('subdistrict_id', selectedDistrictId);
+          if (selectedProvinceId) params.append('province_id', selectedProvinceId);
+          if (selectedCityId) params.append('city_id', selectedCityId);
+          if (selectedGenderId) params.append('genderTypeId', selectedGenderId);
+          const response = await http.get(`/kost?${params.toString()}`);
+          const { data, paggingResponse } = response.data;
+          console.log(`/kost?${params.toString()}`);
+          const newData = data.map((item) => ({
+            id: item.id,
+            title: item.name,
+            image: item.images[0].url,
+            subdistrict: item.subdistrict.name,
+            city: item.city.name,
+            description: item.description,
+            province: item.city.province.name,
+            gender: item.genderType.name.toLowerCase(),
+            price: item.kostPrice.price,
+            sellerName: item.seller.fullName,
+            sellerPhone: item.seller.phoneNumber,
+            availableRoom: item.availableRoom,
+            isWifi: item.isWifi,
+            isAc: item.isAc,
+            isParking: item.isParking,
+            images: item.images.map((image) => ({
+              uri: `${image.url}`,
+            })),
+          }));
+          setKostData(newData);
+          setTotalPage(paggingResponse.totalPage);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+        setLoading(false);
+      };
+      
+      const handleResetFilter = async () => {
+        try {
+          setLoading(true);
+          setCurrentPage(0)
+          setSelectedDistrictId(0);
+          setSelectedProvinceId(0);
+          setSelectedCityId(0);
+          setSelectedGenderId("");
+          setShowFilterModal(false)
+          const response = await http.get(`/kost?page=${currentPage}`);
+          const { data, paggingResponse } = response.data;
+          const newData = data.map((item) => ({
+            id: item.id,
+            title: item.name,
+            image: item.images[0].url,
+            subdistrict: item.subdistrict.name,
+            city: item.city.name,
+            description: item.description,
+            province: item.city.province.name,
+            gender: item.genderType.name.toLowerCase(),
+            price: item.kostPrice.price,
+            sellerName: item.seller.fullName,
+            sellerPhone: item.seller.phoneNumber,
+            availableRoom: item.availableRoom,
+            isWifi: item.isWifi,
+            isAc: item.isAc,
+            isParking: item.isParking,
+            images: item.images.map((image) => ({
+              uri: `${image.url}`,
+            })),
+          }));
+          setKostData(newData);
+          setTotalPage(paggingResponse.totalPage);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+        setLoading(false);
+      };
+      
+
     const handleNextPage = () => {
         if (currentPage < totalPage) {
             setCurrentPage(currentPage + 1);
@@ -164,10 +260,6 @@ export default ListAllKostScreen = ({ navigation, route }) => {
         setShowFilterModal(true);
     };
 
-    const handleFilter = (filterType) => {
-        console.log("Filter selected:", filterType);
-        setShowFilterModal(false);
-    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -238,18 +330,47 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                         <View style={styles.dropdownContainer}>
                             <View style={styles.pickerContainer}>
                                 <Picker
+                                    selectedValue={selectedGenderId}
+                                    style={styles.dropdown}
+                                    onValueChange={(itemValue) => {
+                                        if (itemValue === "") {
+                                            setSelectedGender("");
+                                            setSelectedGenderId("");
+                                        } else {
+                                            const selectedGenderObj = genders.find((gender) => gender.id === itemValue);
+                                            setSelectedGender(selectedGenderObj.name);
+                                            setSelectedGenderId(selectedGenderObj.id);
+                                            console.log(selectedGender);
+                                            console.log(selectedGenderId);
+                                        }
+                                    }}>
+                                    <Picker.Item label="Pilih Jenis Kelamin" value="" />
+                                    {genders.map((gender) => (
+                                        <Picker.Item key={gender.id} label={gender.name} value={gender.id} />
+                                    ))}
+                                </Picker>
+                            </View>
+                            <View style={styles.pickerContainer}>
+                                <Picker
                                     selectedValue={selectedProvinceId}
                                     style={styles.dropdown}
                                     onValueChange={(itemValue) => {
-                                        const selectedProv = provinces.find((province) => province.id === itemValue);
-                                        setSelectedProvince(selectedProv.name);
-                                        setSelectedProvinceId(selectedProv.id);
-                                        fetchCities(selectedProv.id);
-                                        console.log(selectedProvince);
-                                        console.log(selectedProvinceId);
+                                        if (itemValue === 0) {
+                                            setSelectedProvince("");
+                                            setSelectedProvinceId(0);
+                                            setSelectedDistrict("");
+                                            setSelectedDistrictId(0);
+                                            setCities([]);
+                                        } else {
+                                            const selectedProv = provinces.find((province) => province.id === itemValue);
+                                            setSelectedProvince(selectedProv.name);
+                                            setSelectedProvinceId(selectedProv.id);
+                                            fetchCities(selectedProv.id);
+                                        }
                                     }}>
+                                    <Picker.Item label="Pilih Provinsi" value={0} />
                                     {provinces.length > 0 && provinces.map((province) => (
-                                        <Picker.Item key={province.id} label={province.name} value={province.id}/>
+                                        <Picker.Item key={province.id} label={province.name} value={province.id} />
                                     ))}
                                 </Picker>
                             </View>
@@ -258,11 +379,20 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                                     selectedValue={selectedCityId}
                                     style={styles.dropdown}
                                     onValueChange={(itemValue) => {
-                                        const selectedCity = cities.find((city) => city.id === itemValue);
-                                        setSelectedCity(selectedCity.name);
-                                        setSelectedCityId(selectedCity.id);
-                                        fetchDistricts(selectedCity.id);
+                                        if (itemValue === 0) {
+                                            setSelectedCity("");
+                                            setSelectedCityId(0);
+                                            setSelectedDistrict("");
+                                            setSelectedDistrictId(0);
+                                            setDistricts([])
+                                        } else {
+                                            const selectedCity = cities.find((city) => city.id === itemValue);
+                                            setSelectedCity(selectedCity.name);
+                                            setSelectedCityId(selectedCity.id);
+                                            fetchDistricts(selectedCity.id);
+                                        }
                                     }}>
+                                    <Picker.Item label="Pilih Kota" value={0} />
                                     {cities.length > 0 && cities.map((city) => (
                                         <Picker.Item key={city.id} label={city.name} value={city.id} />
                                     ))}
@@ -273,18 +403,25 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                                     selectedValue={selectedDistrictId}
                                     style={styles.dropdown}
                                     onValueChange={(itemValue) => {
-                                        const selectedDist = districts.find((district) => district.id === itemValue);
-                                        setSelectedDistrict(selectedDist.name);
-                                        setSelectedDistrictId(selectedDist.id);
+                                        if (itemValue === 0) {
+                                            setSelectedDistrict("");
+                                            setSelectedDistrictId(0);
+                                        } else {
+                                            const selectedDist = districts.find((district) => district.id === itemValue);
+                                            setSelectedDistrict(selectedDist.name);
+                                            setSelectedDistrictId(selectedDist.id);
+                                        }
                                     }}>
+                                    <Picker.Item label="Pilih Kecamatan" value={0} />
                                     {districts.length > 0 && districts.map((district) => (
                                         <Picker.Item key={district.id} label={district.name} value={district.id} />
                                     ))}
                                 </Picker>
                             </View>
+
                         </View>
-                        <View style={{ marginBottom: 10 }}>
-                            <TouchableOpacity>
+                        <View style={{ marginBottom: 10 , marginTop : 20}}>
+                            <TouchableOpacity onPress={handleFilter}>
                                 <View style={styles.filter}>
                                     <Text style={{
                                         fontSize: 20, margin: 8, textAlign
@@ -294,7 +431,7 @@ export default ListAllKostScreen = ({ navigation, route }) => {
                             </TouchableOpacity>
                         </View>
                         <View style={{ marginBottom: 10 }}>
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress={handleResetFilter}>
                                 <View style={styles.filter}>
                                     <Text style={{
                                         fontSize: 20, margin: 8, textAlign
@@ -350,7 +487,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 20,
         borderTopRightRadius: 20,
         padding: 20,
-        height: 350
+        height: 450
     },
     modalTitle: {
         fontSize: 22,
