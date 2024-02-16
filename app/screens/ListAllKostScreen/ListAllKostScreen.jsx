@@ -51,7 +51,6 @@ export default ListAllKostScreen = ({ navigation, route }) => {
             const response = await http.get('/gender/v1');
             const dataGenders = response.data;
             setGenders(dataGenders);
-            console.log(genders);
         } catch (error) {
             console.error('Error fetching genders:', error);
         }
@@ -63,7 +62,6 @@ export default ListAllKostScreen = ({ navigation, route }) => {
             const response = await http.get('/province');
             const dataProvinces = response.data.data
             setProvinces(dataProvinces);
-            console.log(provinces);
         } catch (error) {
             console.error('Error fetching provinces:', error);
         }
@@ -74,7 +72,6 @@ export default ListAllKostScreen = ({ navigation, route }) => {
             const response = await http.get(`/city?province_id=${provinceId}`);
             const dataCity = response.data.data
             setCities(dataCity);
-            console.log("data city " + cities);
         } catch (error) {
             console.error('Error fetching cities:', error);
         }
@@ -85,7 +82,6 @@ export default ListAllKostScreen = ({ navigation, route }) => {
             const response = await http.get(`/subdistrict?city_id=${cityId}`);
             const dataDistrict = response.data.data
             setDistricts(dataDistrict);
-            console.log("data district " + districts);
         } catch (error) {
             console.error('Error fetching districts:', error);
         }
@@ -131,10 +127,46 @@ export default ListAllKostScreen = ({ navigation, route }) => {
         setSearchQuery(text);
         try {
             if (text === "") {
-                setKostData(kost);
+                // setKostData(kost);
+                const params = new URLSearchParams();
+                if (selectedDistrictId) params.append('subdistrict_id', selectedDistrictId);
+                if (selectedProvinceId) params.append('province_id', selectedProvinceId);
+                if (selectedCityId) params.append('city_id', selectedCityId);
+                if (selectedGenderId) params.append('gender_type_id', selectedGenderId);
+                const response = await http.get(`/kost?${params.toString()}`);
+                console.log(`/kost?${params.toString()}`);
+                const { data, paggingResponse } = response.data;
+                const newData = data.map((item) => ({
+                    id: item.id,
+                    title: item.name,
+                    image: item.images[0].url,
+                    subdistrict: item.subdistrict.name,
+                    city: item.city.name,
+                    description: item.description,
+                    province: item.city.province.name,
+                    gender: item.genderType.name.toLowerCase(),
+                    price: item.kostPrice.price,
+                    sellerName: item.seller.fullName,
+                    sellerPhone: item.seller.phoneNumber,
+                    availableRoom: item.availableRoom,
+                    isWifi: item.isWifi,
+                    isAc: item.isAc,
+                    isParking: item.isParking,
+                    images: item.images.map((image) => ({
+                        uri: `${image.url}`,
+                    })),
+                }));
+                setKostData(newData);
+                setTotalPage(paggingResponse.totalPage);
             } else {
-                const response = await http.get(`/kost?name=${text}`);
-                console.log(`/kost?name=${text}`);
+                const params = new URLSearchParams();
+                if (selectedDistrictId) params.append('subdistrict_id', selectedDistrictId);
+                if (selectedProvinceId) params.append('province_id', selectedProvinceId);
+                if (selectedCityId) params.append('city_id', selectedCityId);
+                if (selectedGenderId) params.append('gender_type_id', selectedGenderId);
+                if (text) params.append('name', text);
+                const response = await http.get(`/kost?${params.toString()}`);
+                console.log(`/kost?${params.toString()}`);
                 const { data, paggingResponse } = response.data;
                 const newData = data.map((item) => ({
                     id: item.id,
@@ -172,7 +204,8 @@ export default ListAllKostScreen = ({ navigation, route }) => {
           if (selectedDistrictId) params.append('subdistrict_id', selectedDistrictId);
           if (selectedProvinceId) params.append('province_id', selectedProvinceId);
           if (selectedCityId) params.append('city_id', selectedCityId);
-          if (selectedGenderId) params.append('genderTypeId', selectedGenderId);
+          if (selectedGenderId) params.append('gender_type_id', selectedGenderId);
+          if (searchQuery) params.append('name', searchQuery);
           const response = await http.get(`/kost?${params.toString()}`);
           const { data, paggingResponse } = response.data;
           console.log(`/kost?${params.toString()}`);
@@ -215,6 +248,7 @@ export default ListAllKostScreen = ({ navigation, route }) => {
           setShowFilterModal(false)
           const response = await http.get(`/kost?page=${currentPage}`);
           const { data, paggingResponse } = response.data;
+          console.log(`/kost?page=${currentPage}`);
           const newData = data.map((item) => ({
             id: item.id,
             title: item.name,
