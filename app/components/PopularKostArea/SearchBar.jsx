@@ -18,7 +18,7 @@ export default SearchBar = ({ onSearch }) => {
         style={styles.searchInput}
         value={searchQuery}
         onChangeText={handleSearch}
-        placeholder="Search Kost..."
+        placeholder="Search name kost"
       />
     </View>
   );
