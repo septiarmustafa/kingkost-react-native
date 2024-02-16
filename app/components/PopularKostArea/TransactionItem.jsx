@@ -2,14 +2,20 @@ import React from "react";
 import { View, Text, TouchableOpacity, Image, StyleSheet } from "react-native";
 import formatCurrencyIDR from "../../utils/formatCurrencyIDR";
 import Facility from "../Facility";
-import AvailabilityAndGender from "../AvailabilityBadge";
 import Colors from "../../utils/Colors";
+import TransactionStatusBadge from "../TransactionStatusBadge";
+
+const getRandomImage = () => {
+  const baseUrl = "https://source.unsplash.com/";
+  const imageSize = "800x600";
+  return `${baseUrl}${imageSize}/?house=${Math.random()}`;
+};
 
 export default TransactionItem = ({ item, onPress }) => {
   return (
     <TouchableOpacity style={styles.itemContainer} onPress={onPress}>
       <View style={styles.card}>
-        <Image source={item.image} style={styles.image} />
+        <Image source={{ uri: getRandomImage() }} style={styles.image} />
         <View style={styles.infoContainer}>
           <View style={styles.titleLocationPriceContainer}>
             <View style={styles.textContainer}>
@@ -21,17 +27,7 @@ export default TransactionItem = ({ item, onPress }) => {
                 {formatCurrencyIDR(item.price)} / Bulan
               </Text>
             </View>
-            {item.availableRoom == 0 ? (
-              <AvailabilityAndGender
-                availability="Not Available"
-                roomCount={item.availableRoom}
-              />
-            ) : (
-              <AvailabilityAndGender
-                availability="Available"
-                roomCount={item.availableRoom}
-              />
-            )}
+            <TransactionStatusBadge status={item.status} date={item.date} />
           </View>
           <View style={styles.facilityContainer}>
             <Facility

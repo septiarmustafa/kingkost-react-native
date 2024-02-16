@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, StyleSheet, View, Text, FlatList, TouchableOpacity } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import Colors from "../../utils/Colors";
 import { StatusBar } from "expo-status-bar";
 import BackButton from "../../components/DetailKost/BackButton";
@@ -122,14 +129,14 @@ export default PopularKostArea = ({ navigation, route }) => {
       <View style={styles.appBar}>
         <View style={styles.header}>
           <BackButton onPress={navigation.goBack} />
-          <Text style={styles.title}>
-            List Kost Area
-          </Text>
+          <Text style={styles.title}>List Kost Area</Text>
         </View>
         <SearchBar onSearch={handleSearch} />
       </View>
       <View style={styles.listCard}>
-        {loading ? <LoadingComponent /> : kostData.length === 0 ? (
+        {loading ? (
+          <LoadingComponent />
+        ) : kostData.length === 0 ? (
           <NoDataFound />
         ) : (
           <FlatList
@@ -147,15 +154,37 @@ export default PopularKostArea = ({ navigation, route }) => {
         )}
       </View>
       <View style={styles.pagination}>
-        <TouchableOpacity onPress={handlePreviousPage} disabled={currentPage === 0}>
+        <TouchableOpacity
+          onPress={handlePreviousPage}
+          disabled={currentPage === 0}
+        >
           <View style={styles.paginationButton}>
-            <Text style={[styles.paginationText, { color: currentPage === 0 ? 'gray' : 'black' }]}>Previous</Text>
+            <Text
+              style={[
+                styles.paginationText,
+                { color: currentPage === 0 ? "gray" : "black" },
+              ]}
+            >
+              Previous
+            </Text>
           </View>
         </TouchableOpacity>
-        <Text style={styles.paginationText}>{totalPage == 0  ? currentPage:currentPage + 1}/{totalPage}</Text>
-        <TouchableOpacity onPress={handleNextPage} disabled={currentPage === totalPage - 1}>
+        <Text style={styles.paginationText}>
+          {totalPage == 0 ? currentPage : currentPage + 1}/{totalPage}
+        </Text>
+        <TouchableOpacity
+          onPress={handleNextPage}
+          disabled={currentPage === totalPage - 1}
+        >
           <View style={styles.paginationButton}>
-            <Text style={[styles.paginationText, { color: currentPage === totalPage - 1 ? 'gray' : 'black' }]}>Next</Text>
+            <Text
+              style={[
+                styles.paginationText,
+                { color: currentPage === totalPage - 1 ? "gray" : "black" },
+              ]}
+            >
+              Next
+            </Text>
           </View>
         </TouchableOpacity>
       </View>
@@ -192,18 +221,16 @@ const styles = StyleSheet.create({
     color: Colors.BLACK,
   },
   pagination: {
-
-
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    alignContent: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    alignContent: "center",
     paddingHorizontal: 20,
   },
   paginationText: {
     fontSize: 16,
     textAlign: "center",
-    alignContent: "center"
+    alignContent: "center",
   },
   paginationButton: {
     height: 30,
@@ -211,6 +238,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     borderRadius: 5,
     paddingTop: 3,
-    backgroundColor: Colors.PRIMARY_COLOR
-  }
+    backgroundColor: Colors.PRIMARY_COLOR,
+  },
 });

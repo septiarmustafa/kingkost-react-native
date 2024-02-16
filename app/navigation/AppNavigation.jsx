@@ -109,6 +109,11 @@ export const AppNavigation = () => {
             component={ChangePasswordScreen}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="Register"
+            component={RegisterScreen}
+            options={{ headerShown: false }}
+          />
         </>
       ) : (
         <>
