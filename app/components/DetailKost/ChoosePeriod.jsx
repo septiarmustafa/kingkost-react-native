@@ -7,7 +7,7 @@ export default ChoosePeriod = ({ selectedMonths, setSelectedMonths }) => {
     return (
         <View style={styles.container}>
             <View style={styles.choosePeriodContent}>
-                <Text style={styles.choosePeriodText}>Choose Period</Text>
+                <Text style={styles.choosePeriodText}>Simulate Prices</Text>
                 <View style={styles.pickerContainer}>
                     <Picker
                         style={styles.monthPicker}
