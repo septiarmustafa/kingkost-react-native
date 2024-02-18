@@ -16,6 +16,7 @@ import OrderStatusScreen from "../screens/OrderStatusScreen/OrderStatusScreen";
 import LoginScreen from "../screens/LoginScreen/LoginScreen";
 import ChangePasswordScreen from "../screens/ChangePasswordScreen/ChangePasswordScreen";
 import TermsAndConditionsScreen from "../screens/TermsAndConditionsScreen/TermsAndConditionsScreen";
+import ForgotPasswordScreen from "../screens/ForgotPasswordScreen.jsx/ForgotPasswordScreen";
 
 const Stack = createStackNavigator();
 
@@ -125,6 +126,11 @@ export const AppNavigation = () => {
           <Stack.Screen
             name="Register"
             component={RegisterScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="ForgotPassword"
+            component={ForgotPasswordScreen}
             options={{ headerShown: false }}
           />
           <Stack.Screen

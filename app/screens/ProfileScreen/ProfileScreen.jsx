@@ -6,6 +6,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  Modal,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from "@expo/vector-icons";
@@ -16,6 +17,7 @@ export default ProfileScreen = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [userId, setUserId] = useState(null);
   const [notificationOn, setNotificationOn] = useState(true);
+  const [modalVisible, setModalVisible] = useState(false);
 
   const fetchUserData = async (userId) => {
     try {
@@ -67,13 +69,36 @@ export default ProfileScreen = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <Image
-          source={require("../../../assets/images/default-profile.jpg")}
-          style={styles.profileImage}
-        />
+        <TouchableOpacity onPress={() => setModalVisible(true)}>
+          <Image
+            source={require("../../../assets/images/default-profile.jpg")}
+            style={styles.profileImage}
+          />
+        </TouchableOpacity>
         <Text style={styles.userName}>{fullName}</Text>
         <Text style={styles.userRole}>{phoneNumber}</Text>
       </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}
+      >
+        <View style={styles.modalContainer}>
+          <Image
+            source={require("../../../assets/images/default-profile.jpg")}
+            style={styles.modalImage}
+          />
+          <TouchableOpacity
+            onPress={() => setModalVisible(false)}
+            style={styles.closeButton}
+          >
+            <FontAwesome name="close" size={24} color={"#fff"} />
+          </TouchableOpacity>
+        </View>
+      </Modal>
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Settings</Text>
 
@@ -185,6 +210,22 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "white",
     marginTop: 5,
+  },
+  modalContainer: {
+    flex: 1,
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalImage: {
+    width: 300,
+    height: 300,
+    resizeMode: "contain",
+  },
+  closeButton: {
+    position: "absolute",
+    top: 20,
+    right: 20,
   },
   section: {
     padding: 20,

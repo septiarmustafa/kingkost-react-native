@@ -14,6 +14,7 @@ import BackButton from "../../components/DetailKost/BackButton";
 import http from "../../config/HttpConfig";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from "expo-image-picker";
 
 export default function InfoProfileScreen({ navigation, route }) {
   const [userData, setUserData] = useState({
@@ -25,6 +26,7 @@ export default function InfoProfileScreen({ navigation, route }) {
     phoneNumber: "",
     username: "",
     password: "",
+    url: "",
   });
 
   const [genders, setGenders] = useState([]);
@@ -95,13 +97,61 @@ export default function InfoProfileScreen({ navigation, route }) {
     }));
   };
 
+  const handleChooseImage = async () => {
+    try {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      if (!result.canceled) {
+        uploadImage(result.uri);
+      }
+    } catch (error) {
+      console.error("Error choosing image:", error);
+    }
+  };
+
+  const uploadImage = async (uri) => {
+    const formData = new FormData();
+    formData.append("profileImage", {
+      uri,
+      name: "photo.jpg",
+      type: "image/jpeg",
+    });
+    try {
+      const response = await http.post(`/customer/v1/upload/${userData.id}`, {
+        body: formData,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (response.ok) {
+        const responseData = await response.json();
+        const { url } = responseData;
+        setUserData((prevUserData) => ({ ...prevUserData, url }));
+        Alert.alert("Success", "Profile picture updated successfully");
+      } else {
+        throw new Error("Failed to upload image");
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      Alert.alert(
+        "Error",
+        "Failed to upload profile picture. Please try again."
+      );
+    }
+  };
+
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Image
-          style={styles.loginImage}
-          source={require("../../../assets/images/infoprofil.png")}
-        />
+        <Image style={styles.loginImage} source={{ uri: userData.url }} />
+        <TouchableOpacity onPress={handleChooseImage}>
+          <Text style={styles.changePhotoText}>Change Photo</Text>
+        </TouchableOpacity>
+
         <View style={{ position: "absolute", top: 10, left: "4%" }}>
           <BackButton onPress={() => navigation.goBack()} />
         </View>
@@ -212,6 +262,12 @@ const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  changePhotoText: {
+    color: "white",
+    fontWeight: "bold",
+    marginTop: -260,
+    marginLeft: 230,
   },
   title: {
     fontSize: 24,
