@@ -137,7 +137,7 @@ export default PopularKostArea = ({ navigation, route }) => {
         {loading ? (
           <LoadingComponent />
         ) : kostData.length === 0 ? (
-          <NoDataFound />
+          <NoDataFound description="No kosts available" />
         ) : (
           <FlatList
             data={kostData}
