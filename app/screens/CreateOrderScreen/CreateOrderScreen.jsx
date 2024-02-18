@@ -29,6 +29,7 @@ export default function CreateOrderScreen({ navigation, route }) {
   const [paymentTypes, setPaymentTypes] = useState([]);
   const [userId, setUserId] = useState(null);
   const [userGender, setUserGender] = useState(null);
+  const [dataOrder, setDataOrder] = useState(null);
 
   const [sections, setSections] = useState({
     section1: true,
@@ -157,8 +158,11 @@ export default function CreateOrderScreen({ navigation, route }) {
       const response = await http.post("/transactions", orderData);
 
       if (response.status === 200 || response.status === 201) {
+        setDataOrder(response.data.data)
+        console.log(response.data.data);
+        console.log(dataOrder);
         console.log( response.status+" Order submitted successfully");
-       navigation.navigate("OrderStatusScreen")
+       navigation.navigate("OrderStatusScreen", response.data.data)
       } else {
         const errorData = await response.json();
         console.error("Error:", errorData);
@@ -213,9 +217,11 @@ export default function CreateOrderScreen({ navigation, route }) {
                   <Text style={styles.titleInfo}>
                     Description
                   </Text>
+                  <View style ={{ width : 150 }}>
                   <Text style={styles.trailingInfo}>
                     {kost.description}
                   </Text>
+                  </View>
                 </View>
                 <View style={styles.info}>
                   <Text style={styles.titleInfo}>
@@ -229,9 +235,12 @@ export default function CreateOrderScreen({ navigation, route }) {
                   <Text style={styles.titleInfo}>
                     City
                   </Text>
+                  <View style ={{ width : 150 }}>
                   <Text style={styles.trailingInfo}>
                     {kost.city}
                   </Text>
+                  </View>
+             
                 </View>
                 <View style={styles.info}>
                   <Text style={styles.titleInfo}>
@@ -526,7 +535,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     overflow: "visible",
     color: Colors.BLACK,
-    fontWeight: "bold"
+    fontWeight: "bold",
+    textAlign: "right"
   },
   paymentOptionCheckbox: {
     height: 12,
