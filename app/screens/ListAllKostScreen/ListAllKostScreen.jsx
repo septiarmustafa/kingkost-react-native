@@ -317,7 +317,7 @@ export default ListAllKostScreen = ({ navigation }) => {
             <View style={styles.listCard}>
                 {loading ? (
                     <LoadingComponent />
-                ) : kostData.length === 0 ? <NoDataFound /> : (
+                ) : kostData.length === 0 ? <NoDataFound description="No kosts available" /> : (
                     <FlatList
                         data={kostData}
                         renderItem={({ item }) => (

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   SafeAreaView,
   StatusBar,
@@ -21,8 +21,15 @@ const { width } = Dimensions.get("screen");
 export default HomeScreen = ({ navigation }) => {
   const [listKost, setListKost] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const isMounted = useRef(true);
+
   useEffect(() => {
     fetchKostData();
+  }, []);
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
   }, []);
 
   const fetchKostData = async () => {
@@ -39,8 +46,11 @@ export default HomeScreen = ({ navigation }) => {
         province: item.city.province.name,
         gender: item.genderType.name.toLowerCase(),
         price: item.kostPrice.price,
+        sellerId: item.seller.id,
         sellerName: item.seller.fullName,
         sellerPhone: item.seller.phoneNumber,
+        sellerEmail: item.seller.email,
+        sellerAddress: item.seller.address,
         availableRoom: item.availableRoom,
         isWifi: item.isWifi,
         isAc: item.isAc,
@@ -49,7 +59,10 @@ export default HomeScreen = ({ navigation }) => {
           uri: `${image.url}`,
         })),
       }));
-      console.log(kostData[0].image);
+      if (!isMounted.current) {
+        console.log("Component is unmounted, skipping state update");
+        return;
+      }
       setListKost(kostData);
       setIsLoading(false);
     } catch (error) {
@@ -124,7 +137,7 @@ export default HomeScreen = ({ navigation }) => {
           subTitle="See All"
         />
         {listKost.length === 0 ? (
-          <NoDataFound />
+          <NoDataFound description="No kosts available" />
         ) : (
           <FlatList
             snapToInterval={width - 20}

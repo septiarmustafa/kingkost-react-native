@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 
-export default NoDataFound = () => {
+export default NoDataFound = ({description}) => {
   return (
     <View style={{ alignItems: "center", marginBottom: 20 }}>
       <View style={styles.containerDataNotFound}>
@@ -10,7 +10,7 @@ export default NoDataFound = () => {
           style={styles.imageNotFound}
         />
       </View>
-      <Text>No kosts available</Text>
+      <Text>{description}</Text>
     </View>
   );
 };
