@@ -134,7 +134,7 @@ export default function CreateOrderScreen({ navigation, route }) {
       let message = '';
 
       if (!paymentTypeId) {
-        message = 'Please fill payment type';
+        message = 'Please choose payment type';
       }
 
       if (!monthPeriod) {
@@ -157,7 +157,7 @@ export default function CreateOrderScreen({ navigation, route }) {
       const response = await http.post("/transactions", orderData);
 
       if (response.status === 200 || response.status === 201) {
-        console.log("Order submitted successfully");
+        console.log( response.status+" Order submitted successfully");
        navigation.navigate("OrderStatusScreen")
       } else {
         const errorData = await response.json();
@@ -165,7 +165,7 @@ export default function CreateOrderScreen({ navigation, route }) {
         alert(errorData);
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error :", error);
       alert(error);
     }
   };
