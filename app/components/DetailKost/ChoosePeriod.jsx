@@ -3,11 +3,11 @@ import { View, Text } from 'react-native';
 import Colors from '../../utils/Colors';
 import { Picker } from '@react-native-picker/picker';
 
-export default ChoosePeriod = ({ selectedMonths, setSelectedMonths }) => {
+export default ChoosePeriod = ({ title, selectedMonths, setSelectedMonths }) => {
     return (
         <View style={styles.container}>
             <View style={styles.choosePeriodContent}>
-                <Text style={styles.choosePeriodText}>Simulate Prices</Text>
+                <Text style={styles.choosePeriodText}>{title}</Text>
                 <View style={styles.pickerContainer}>
                     <Picker
                         style={styles.monthPicker}

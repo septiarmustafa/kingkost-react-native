@@ -11,6 +11,7 @@ export default {
   WEAK_ORANGE3 : "#ffe3c7",
   TRANSPARENT: "rgba(0,0,0,0)",
   GREY: "#A9A9A9",
+  GREY_BOLD: "#808080",
   GREEN: "green",
   RED: "red",
 };

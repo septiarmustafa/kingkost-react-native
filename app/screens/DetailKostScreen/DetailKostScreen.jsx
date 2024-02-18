@@ -96,11 +96,12 @@ export default DetailKostScreen = ({ navigation, route }) => {
           image={require("../../../assets/images/default-profile.jpg")}
         />
         <ChoosePeriod
+        title = "Simulate Prices"
           selectedMonths={selectedMonths}
           setSelectedMonths={setSelectedMonths}
         />
         <TotalPrice
-          onPress={() => navigation.navigate("CreateOrderScreen")}
+          onPress={() => navigation.navigate("CreateOrderScreen", kost )}
           calculateTotalPrice={calculateTotalPrice}
         />
       </ScrollView>
