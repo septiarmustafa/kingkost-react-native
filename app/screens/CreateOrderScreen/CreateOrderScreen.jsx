@@ -28,6 +28,7 @@ export default function CreateOrderScreen({ navigation, route }) {
   const [paymentTypeId, setPaymentTypeId] = useState("");
   const [paymentTypes, setPaymentTypes] = useState([]);
   const [userId, setUserId] = useState(null);
+  const [userGender, setUserGender] = useState(null);
 
   const [sections, setSections] = useState({
     section1: true,
@@ -42,6 +43,10 @@ export default function CreateOrderScreen({ navigation, route }) {
       const response = await http.get(`/customer/user/${userId}`);
       const data = response.data;
       setUserId(data.data.id);
+      setUserGender(data.data.genderTypeId.name)
+      console.log("kost gender " + kost.gender);
+      console.log("user id " + userId);
+      console.log("user gender " + userGender);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -52,6 +57,7 @@ export default function CreateOrderScreen({ navigation, route }) {
       .then((userId) => {
         setUserId(userId);
         fetchUserData(userId);
+    
       })
       .catch((error) => {
         console.error("Error retrieving userId from AsyncStorage:", error);
@@ -89,7 +95,6 @@ export default function CreateOrderScreen({ navigation, route }) {
   useEffect(() => {
     fetchPaymentTypes();
     fetchMonthData();
-
   }, []);
 
   const fetchPaymentTypes = async () => {
@@ -120,6 +125,11 @@ export default function CreateOrderScreen({ navigation, route }) {
     setSelectedMonthId(id);
   };
   const handleOrderSubmit = async () => {
+    if (kost.gender.toLowerCase() !== "mix" && userGender.toLowerCase() !== kost.gender.toLowerCase()) {
+      alert(`This kost is only available for ${kost.gender.toLowerCase()}`);
+      return;
+    }
+  
     if (!paymentTypeId || !monthPeriod) {
       let message = '';
 
@@ -148,7 +158,7 @@ export default function CreateOrderScreen({ navigation, route }) {
 
       if (response.status === 200 || response.status === 201) {
         console.log("Order submitted successfully");
-        // Navigate
+       navigation.navigate("OrderStatusScreen")
       } else {
         const errorData = await response.json();
         console.error("Error:", errorData);
