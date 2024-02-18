@@ -15,6 +15,8 @@ import http from "../../config/HttpConfig";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
+import { BASE_HOST } from "../../config/BaseUrl";
+import LoadingComponent from "../../components/LoadingComponent";
 
 export default function InfoProfileScreen({ navigation, route }) {
   const [userData, setUserData] = useState({
@@ -28,6 +30,7 @@ export default function InfoProfileScreen({ navigation, route }) {
     password: "",
     url: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const [genders, setGenders] = useState([]);
 
@@ -82,8 +85,9 @@ export default function InfoProfileScreen({ navigation, route }) {
         throw new Error("Failed to update user data");
       }
 
-      Alert.alert("Success", "Profile updated successfully");
-      navigation.goBack();
+      Alert.alert("Success", "Profile updated successfully", [
+        { text: "OK", onPress: () => navigation.goBack() },
+      ]);
     } catch (error) {
       console.error("Error updating user data:", error);
       Alert.alert("Error", "Failed to update user data. Please try again.");
@@ -97,7 +101,14 @@ export default function InfoProfileScreen({ navigation, route }) {
     }));
   };
 
-  const handleChooseImage = async () => {
+  const handleImageClick = () => {
+    Alert.alert("Upload Image", "Please upload an image", [
+      { text: "Cancel", style: "cancel" },
+      { text: "Upload", onPress: handleFileInputChange },
+    ]);
+  };
+
+  const handleFileInputChange = async () => {
     try {
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -105,50 +116,61 @@ export default function InfoProfileScreen({ navigation, route }) {
         aspect: [4, 3],
         quality: 1,
       });
-      if (!result.canceled) {
-        uploadImage(result.uri);
-      }
-    } catch (error) {
-      console.error("Error choosing image:", error);
-    }
-  };
 
-  const uploadImage = async (uri) => {
-    const formData = new FormData();
-    formData.append("profileImage", {
-      uri,
-      name: "photo.jpg",
-      type: "image/jpeg",
-    });
-    try {
-      const response = await http.post(`/customer/v1/upload/${userData.id}`, {
-        body: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      if (response.ok) {
-        const responseData = await response.json();
-        const { url } = responseData;
-        setUserData((prevUserData) => ({ ...prevUserData, url }));
-        Alert.alert("Success", "Profile picture updated successfully");
-      } else {
-        throw new Error("Failed to upload image");
+      console.log(result.assets[0].uri);
+
+      if (!result.canceled) {
+        const formData = new FormData();
+        formData.append("file", {
+          uri: result.assets[0].uri,
+          name: "image.jpg",
+          type: "image/jpeg",
+        });
+
+        setIsLoading(true);
+
+        const response = await fetch(
+          `${BASE_HOST}/customer/v1/upload/${userData.id}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Upload successful:", data);
+          Alert.alert("Success", "Profile updated successfully", [
+            { text: "OK", onPress: () => navigation.goBack() },
+          ]);
+        } else {
+          const errorData = await response.json();
+          console.error("Upload failed:", errorData);
+        }
       }
     } catch (error) {
       console.error("Error uploading image:", error);
-      Alert.alert(
-        "Error",
-        "Failed to upload profile picture. Please try again."
-      );
+      Alert.alert("Error", "Failed to upload image. Please try again.");
     }
+    setIsLoading(false);
   };
+
+  if (isLoading) {
+    return <LoadingComponent />;
+  }
 
   return (
     <ScrollView>
       <View style={styles.container}>
-        <Image style={styles.loginImage} source={{ uri: userData.url }} />
-        <TouchableOpacity onPress={handleChooseImage}>
+        <Image
+          style={styles.loginImage}
+          source={
+            userData.url
+              ? { uri: userData.url }
+              : require("../../../assets/images/default-profile.jpg")
+          }
+        />
+        <TouchableOpacity onPress={handleImageClick}>
           <Text style={styles.changePhotoText}>Change Photo</Text>
         </TouchableOpacity>
 

@@ -15,6 +15,7 @@ import { BASE_HOST } from "../../config/BaseUrl";
 export default ProfileScreen = ({ navigation }) => {
   const [fullName, setFullName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [userData, setUserData] = useState([]);
   const [userId, setUserId] = useState(null);
   const [notificationOn, setNotificationOn] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
@@ -24,6 +25,7 @@ export default ProfileScreen = ({ navigation }) => {
       const response = await fetch(`${BASE_HOST}/customer/user/${userId}`);
       const data = await response.json();
       setFullName(data.data.fullName);
+      setUserData(data.data);
       setPhoneNumber(data.data.phoneNumber);
       console.log("User data fetched:", data);
     } catch (error) {
@@ -40,7 +42,7 @@ export default ProfileScreen = ({ navigation }) => {
       .catch((error) => {
         console.error("Error retrieving userId from AsyncStorage:", error);
       });
-  }, [navigation]);
+  }, [navigation][userData]);
 
   const handleProfilePress = () => {
     navigation.navigate("InfoProfile", { userId: userId });
@@ -70,10 +72,7 @@ export default ProfileScreen = ({ navigation }) => {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <Image
-            source={require("../../../assets/images/default-profile.jpg")}
-            style={styles.profileImage}
-          />
+          <Image source={{ uri: userData.url }} style={styles.profileImage} />
         </TouchableOpacity>
         <Text style={styles.userName}>{fullName}</Text>
         <Text style={styles.userRole}>{phoneNumber}</Text>
@@ -87,10 +86,7 @@ export default ProfileScreen = ({ navigation }) => {
         }}
       >
         <View style={styles.modalContainer}>
-          <Image
-            source={require("../../../assets/images/default-profile.jpg")}
-            style={styles.modalImage}
-          />
+          <Image source={{ uri: userData.url }} style={styles.modalImage} />
           <TouchableOpacity
             onPress={() => setModalVisible(false)}
             style={styles.closeButton}
