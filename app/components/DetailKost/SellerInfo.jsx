@@ -1,19 +1,26 @@
 import React from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import Colors from '../../utils/Colors';
 import { FontAwesome } from '@expo/vector-icons';
 
-export default SellerInfo = ({ seller, phone, image }) => {
+export default SellerInfo = ({ seller, phone, image, onPress }) => {
     return (
         <View style={styles.container}>
             <View style={styles.profileContainer}>
                 <Image style={styles.profileImage} source={image ?? require('../../../assets/images/default-profile.jpg')} />
-                <View style={styles.sellerInfo}>
-                    <Text style={styles.sellerName}>{seller ?? "Martini"}</Text>
-                    <View style={styles.whatsappContainer}>
-                        <FontAwesome name="whatsapp" size={20} color={Colors.BLACK} style={styles.whatsappIcon} />
-                        <Text style={styles.whatsappText}>{phone ?? "081299886549"}</Text>
+                <View style={{ justifyContent: "space-between", flexDirection: "row", flex: 1 }}>
+                    <View style={styles.sellerInfo}>
+                        <Text style={styles.sellerName}>{seller ?? ""}</Text>
+                        <View style={styles.whatsappContainer}>
+                            <FontAwesome name="whatsapp" size={20} color={Colors.BLACK} style={styles.whatsappIcon} />
+                            <Text style={styles.whatsappText}>{phone ?? ""}</Text>
+                        </View>
                     </View>
+                    <TouchableOpacity onPress={onPress}>
+                        <View style={{ height: 40, borderRadius: 10, backgroundColor: Colors.WHITE, alignSelf: "center" }}>
+                            <Text style={{ margin: 10, alignItems: "center", alignContent: "center", alignSelf: "center" }}>Chat Now</Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
             </View>
         </View>

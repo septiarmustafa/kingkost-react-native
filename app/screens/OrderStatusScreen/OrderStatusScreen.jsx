@@ -3,29 +3,12 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
 import http from "../../config/HttpConfig";
 import LoadingComponent from "../../components/LoadingComponent";
 import Colors from "../../utils/Colors";
+import { OpenWhatsApp } from "../../utils/OpenWhatsapp";
 
-export default OrderStatusScreen = ({ navigation }) => {
+export default OrderStatusScreen = ({ navigation, route }) => {
+  const dataOrder = route.params
   const [orderStatus, setOrderStatus] = useState(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchOrderStatus = async () => {
-      try {
-        const response = await http.get("/order-status");
-        if (response.status === 200) {
-          setOrderStatus(response.data);
-        } else {
-          console.error("Error fetching order status:", response.data);
-        }
-      } catch (error) {
-        console.error("Error:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOrderStatus();
-  }, []);
+  console.log(dataOrder);
 
   return (
     <View style={styles.container}>
@@ -33,25 +16,32 @@ export default OrderStatusScreen = ({ navigation }) => {
         source={require("../../../assets/images/order-status.png")}
         style={styles.image}
       />
-
-      {loading ? (
-        <LoadingComponent />
-      ) : (
-        <Text style={styles.orderStatus}>
-          {orderStatus === null
-            ? "Pesanan sedang diproses"
-            : orderStatus
-            ? "Pesanan berhasil"
-            : "Pesanan gagal"}
-        </Text>
-      )}
+      <Text style={styles.orderStatus}>
+        {dataOrder.aprStatus === 0
+          ? "Order in progress"
+          : dataOrder.aprStatus === 1
+            ? "Order has been canceled by you"
+            : dataOrder.aprStatus === 2
+              ? "Order failed"
+              : "Order successful"}
+      </Text>
       <View>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => navigation.navigate("Transaction")}
         >
           <Text style={{ color: Colors.BLACK, fontWeight: "bold" }}>
-            Back To Home
+            Check your order
+          </Text>
+        </TouchableOpacity>
+      </View>
+      <View style={{ marginTop : 20 }}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => OpenWhatsApp(phone=dataOrder.kost.seller.phoneNumber ?? "", message=`Halo, Saya sudah memesan kost ${dataOrder.kost.name ?? ""}`)}
+        >
+          <Text style={{ color: Colors.BLACK, fontWeight: "bold" }}>
+            Chat Seller
           </Text>
         </TouchableOpacity>
       </View>

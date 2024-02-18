@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { SafeAreaView, View, StyleSheet, ScrollView, Image, Dimensions } from "react-native";
-
+import  {OpenWhatsApp} from '../../utils/OpenWhatsapp';
 import Colors from "../../utils/Colors";
 import { FlatList } from "react-native-gesture-handler";
 import BackgroundImage from "../../components/DetailKost/BackgroundImage";
@@ -13,7 +13,6 @@ import ChoosePeriod from "../../components/DetailKost/ChoosePeriod";
 import TotalPrice from "../../components/DetailKost/TotalPrice";
 import { StatusBar } from "expo-status-bar";
 const { width } = Dimensions.get("screen");
-
 
 export default DetailKostScreen = ({ navigation, route }) => {
   const kost = route.params;
@@ -45,11 +44,11 @@ export default DetailKostScreen = ({ navigation, route }) => {
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <BackgroundImage
-          source= {kost.image != null || kost.image != "" ?{ uri : kost.image} : require("../../../assets/images/default-image.png")}
+          source={kost.image != null || kost.image != "" ? { uri: kost.image } : require("../../../assets/images/default-image.png")}
           onPress={navigation.goBack}
         />
         <View style={styles.flatListContainer}>
-        {kost.images !== null || kost.images.length != 0 ? (<FlatList
+          {kost.images !== null || kost.images.length != 0 ? (<FlatList
             contentContainerStyle={{ marginTop: 20 }}
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -62,9 +61,9 @@ export default DetailKostScreen = ({ navigation, route }) => {
                 onPress={openModal}
               />
             )}
-          />) : (<Image source={ require("../../../assets/images/default-image.png")} style={styles.cardImage} />)}
+          />) : (<Image source={require("../../../assets/images/default-image.png")} style={styles.cardImage} />)}
 
-          
+
         </View>
         <ImageModal
           visible={isModalVisible}
@@ -91,17 +90,18 @@ export default DetailKostScreen = ({ navigation, route }) => {
         />
 
         <SellerInfo
+          onPress={() => OpenWhatsApp(phone = kost.sellerPhone, message = `Halo! Saya ingin bertanya tentang kost "${kost.title}"`)}
           seller={kost.sellerName}
           phone={kost.sellerPhone}
           image={require("../../../assets/images/default-profile.jpg")}
         />
         <ChoosePeriod
-        title = "Simulate Prices"
+          title="Simulate Prices"
           selectedMonths={selectedMonths}
           setSelectedMonths={setSelectedMonths}
         />
         <TotalPrice
-          onPress={() => navigation.navigate("CreateOrderScreen", kost )}
+          onPress={() => navigation.navigate("CreateOrderScreen", kost)}
           calculateTotalPrice={calculateTotalPrice}
         />
       </ScrollView>
@@ -113,12 +113,12 @@ const styles = StyleSheet.create({
   flatListContainer: {
     paddingHorizontal: 20,
   },
-  cardImage : {
+  cardImage: {
     width: width / 3 - 20,
     height: 80,
     marginRight: 10,
     borderRadius: 10,
-    marginTop : 10,
-    backgroundColor : Colors.WEAK_COLOR
+    marginTop: 10,
+    backgroundColor: Colors.WEAK_COLOR
   }
 });
