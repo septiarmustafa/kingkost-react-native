@@ -14,10 +14,10 @@ export default CarouselBanner = () => {
   ];
 
   const renderItem = ({ item }) => (
-    <View style={{ width: '90%', height: 200, marginBottom: 10, marginLeft: 20 }}>
+    <View style={{ width: '90%', height: 200, marginBottom: 10, marginLeft: 20, }}>
       <Image
         source={item.imageUrl}
-        style={{ width: '100%', height: '100%', borderRadius: 20 }}
+        style={{ width: '100%', height: '100%', borderRadius: 10 , resizeMode: 'contain'}}
       />
     </View>
   );

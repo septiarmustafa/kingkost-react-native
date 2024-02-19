@@ -61,7 +61,7 @@ export default DetailsSection = ({
             <Text style={{ fontSize: 16, color: Colors.GREY }}>
               Gender type:{" "}
             </Text>
-            <Image style={{ width: 20, height: 20 }} source={gender} />
+            <Image style={{ width: gender == "campuran"  ? 35: 20, height: gender == "campuran"  ? 25 : 20 }} source={gender} />
           </View>
         </View>
         <View>

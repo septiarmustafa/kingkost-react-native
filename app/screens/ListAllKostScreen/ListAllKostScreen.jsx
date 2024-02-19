@@ -376,7 +376,7 @@ export default ListAllKostScreen = ({ navigation }) => {
                                             console.log(selectedGenderId);
                                         }
                                     }}>
-                                    <Picker.Item label="Pilih Jenis Kelamin" value="" />
+                                    <Picker.Item label="Select kost type" value="" />
                                     {genders.map((gender) => (
                                         <Picker.Item key={gender.id} label={gender.name} value={gender.id} />
                                     ))}
@@ -400,7 +400,7 @@ export default ListAllKostScreen = ({ navigation }) => {
                                             fetchCities(selectedProv.id);
                                         }
                                     }}>
-                                    <Picker.Item label="Pilih Provinsi" value={0} />
+                                    <Picker.Item label="Select province" value={0} />
                                     {provinces.length > 0 && provinces.map((province) => (
                                         <Picker.Item key={province.id} label={province.name} value={province.id} />
                                     ))}
@@ -424,7 +424,7 @@ export default ListAllKostScreen = ({ navigation }) => {
                                             fetchDistricts(selectedCity.id);
                                         }
                                     }}>
-                                    <Picker.Item label="Pilih Kota" value={0} />
+                                    <Picker.Item label="Select city" value={0} />
                                     {cities.length > 0 && cities.map((city) => (
                                         <Picker.Item key={city.id} label={city.name} value={city.id} />
                                     ))}
@@ -444,7 +444,7 @@ export default ListAllKostScreen = ({ navigation }) => {
                                             setSelectedDistrictId(selectedDist.id);
                                         }
                                     }}>
-                                    <Picker.Item label="Pilih Kecamatan" value={0} />
+                                    <Picker.Item label="Select district" value={0} />
                                     {districts.length > 0 && districts.map((district) => (
                                         <Picker.Item key={district.id} label={district.name} value={district.id} />
                                     ))}
@@ -456,7 +456,7 @@ export default ListAllKostScreen = ({ navigation }) => {
                             <TouchableOpacity onPress={handleFilter}>
                                 <View style={styles.filter}>
                                     <Text style={{
-                                        fontSize: 20, margin: 8, textAlign
+                                        fontSize: 17, margin: 8, textAlign
                                             : "center"
                                     }}>Filter</Text>
                                 </View>
@@ -466,7 +466,7 @@ export default ListAllKostScreen = ({ navigation }) => {
                             <TouchableOpacity onPress={handleResetFilter}>
                                 <View style={styles.filter}>
                                     <Text style={{
-                                        fontSize: 20, margin: 8, textAlign
+                                        fontSize: 17, margin: 8, textAlign
                                             : "center"
                                     }}>Reset Filter</Text>
                                 </View>

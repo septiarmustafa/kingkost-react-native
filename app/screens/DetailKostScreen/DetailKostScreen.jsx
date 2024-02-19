@@ -84,8 +84,8 @@ export default DetailKostScreen = ({ navigation, route }) => {
           description={kost.description}
           gender={
             kost.gender === "male"
-              ? require("../../../assets/icons/male.jpg")
-              : require("../../../assets/icons/female.jpg")
+              ?  require("../../../assets/icons/male.jpg")
+              :  kost.gender === "campuran" ? require("../../../assets/icons/mix.jpg"): require("../../../assets/icons/female.jpg")
           }
         />
 
