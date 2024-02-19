@@ -107,11 +107,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
-  genderIcon: {
-    width: 25,
-    height: 25,
-    marginRight: 5,
-  },
   genderText: {
     fontSize: 13,
   },

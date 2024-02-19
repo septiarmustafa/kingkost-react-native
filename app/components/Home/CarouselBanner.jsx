@@ -30,6 +30,8 @@ export default CarouselBanner = () => {
       sliderWidth={Dimensions.get('window').width}
       itemWidth={Dimensions.get('window').width}
       layout={'default'}
+      autoplay={true}
+      autoplayInterval={3000}
     />
   );
 };
