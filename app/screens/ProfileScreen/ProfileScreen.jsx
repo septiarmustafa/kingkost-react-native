@@ -27,7 +27,6 @@ export default ProfileScreen = ({ navigation }) => {
       setFullName(data.data.fullName);
       setUserData(data.data);
       setPhoneNumber(data.data.phoneNumber);
-      console.log("User data fetched:", data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }

@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import http from "../../config/HttpConfig";
-import LoadingComponent from "../../components/LoadingComponent";
 import Colors from "../../utils/Colors";
-import { OpenWhatsApp } from "../../utils/OpenWhatsapp";
+// import { OpenWhatsApp } from "../../utils/OpenWhatsapp";
 
 export default OrderStatusScreen = ({ navigation, route }) => {
   const dataOrder = route.params
@@ -38,7 +36,7 @@ export default OrderStatusScreen = ({ navigation, route }) => {
       <View style={{ marginTop : 20 }}>
         <TouchableOpacity
           style={styles.backButton}
-          onPress={() => OpenWhatsApp(phone=dataOrder.kost.seller.phoneNumber ?? "", message=`Halo, Saya sudah memesan kost ${dataOrder.kost.name ?? ""}`)}
+          // onPress={() => OpenWhatsApp(phone=dataOrder.kost.seller?.phoneNumber ?? "", message=`Halo, Saya sudah memesan kost ${dataOrder.kost.name ?? ""}`)}
         >
           <Text style={{ color: Colors.BLACK, fontWeight: "bold" }}>
             Chat Seller
