@@ -7,19 +7,19 @@ const TransactionStatusBadge = ({ status, date }) => {
   let statusText = "";
 
   switch (status) {
-    case "pending":
+    case 0:
       badgeColor = Colors.PRIMARY_COLOR;
       statusText = "Pending";
       break;
-    case "approve":
+    case 3:
       badgeColor = Colors.GREEN;
       statusText = "Approved";
       break;
-    case "rejected":
+    case 2:
       badgeColor = Colors.RED;
       statusText = "Rejected";
       break;
-    case "cancel":
+    case 1:
       badgeColor = Colors.GREY;
       statusText = "Cancelled";
       break;

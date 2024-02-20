@@ -17,6 +17,7 @@ import LoginScreen from "../screens/LoginScreen/LoginScreen";
 import ChangePasswordScreen from "../screens/ChangePasswordScreen/ChangePasswordScreen";
 import TermsAndConditionsScreen from "../screens/TermsAndConditionsScreen/TermsAndConditionsScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen.jsx/ForgotPasswordScreen";
+import DetailTransactionScreen from "../screens/DetailTransactionScreen/DetailTransactionScreen";
 
 const Stack = createStackNavigator();
 
@@ -53,6 +54,11 @@ export const AppNavigation = () => {
           <Stack.Screen
             name="DetailKostScreen"
             component={DetailKostScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="DetailTransactionScreen"
+            component={DetailTransactionScreen}
             options={{ headerShown: false }}
           />
           <Stack.Screen
@@ -141,6 +147,11 @@ export const AppNavigation = () => {
           <Stack.Screen
             name="DetailKostScreen"
             component={DetailKostScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="DetailTransactionScreen"
+            component={DetailTransactionScreen}
             options={{ headerShown: false }}
           />
           <Stack.Screen
