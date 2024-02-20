@@ -1,34 +1,26 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import Colors from "../../utils/Colors";
-import { Picker } from "@react-native-picker/picker";
+import MonthTypeConverter from "../../utils/MonthTypeConverter";
 
-export default BookingPeriod = ({
-  title,
-  selectedMonths,
-  setSelectedMonths,
-}) => {
+export default BookingPeriod = ({ title, selectedMonths }) => {
+  const selectedMonthsNumber = MonthTypeConverter.getMonthCount(selectedMonths);
+
   return (
     <View style={styles.container}>
       <View style={styles.bookingPeriodContent}>
         <Text style={styles.bookingPeriodText}>{title}</Text>
         <View style={styles.pickerContainer}>
-          <Picker
-            style={styles.monthPicker}
-            selectedValue={selectedMonths}
-            onValueChange={(itemValue) => setSelectedMonths(itemValue)}
-          >
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((month) => (
-              <Picker.Item key={month} label={`${month} Month`} value={month} />
-            ))}
-          </Picker>
+          <Text style={styles.monthPeriodText}>
+            {selectedMonthsNumber} Month
+          </Text>
         </View>
       </View>
     </View>
   );
 };
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     marginHorizontal: 20,
     marginBottom: 20,
@@ -47,15 +39,17 @@ const styles = {
     fontWeight: "bold",
     marginLeft: 20,
   },
+  monthPeriodText: {
+    color: Colors.BLACK,
+    fontWeight: "bold",
+  },
   pickerContainer: {
     backgroundColor: Colors.PRIMARY_COLOR,
     borderRadius: 10,
     width: "40%",
     marginRight: 10,
+    justifyContent: "center",
+    alignItems: "center",
+    height: 40,
   },
-  monthPicker: {
-    width: "100%",
-    height: 50,
-    color: Colors.BLACK,
-  },
-};
+});

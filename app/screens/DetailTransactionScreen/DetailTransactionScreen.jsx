@@ -14,7 +14,6 @@ import { StatusBar } from "expo-status-bar";
 import DetailSection from "../../components/DetailKost/DetailSection";
 import SellerInfo from "../../components/DetailKost/SellerInfo";
 import { OpenWhatsApp } from "../../utils/OpenWhatsapp";
-import TotalPrice from "../../components/DetailKost/TotalPrice";
 import MonthTypeConverter from "../../utils/MonthTypeConverter";
 import apiInstance from "../../config/apiInstance";
 import LoadingComponent from "../../components/LoadingComponent";
@@ -22,6 +21,7 @@ import BackgroundImage from "../../components/DetailKost/BackgroundImage";
 import ImageCardList from "../../components/DetailKost/ImageCardList";
 import ImageModal from "../../components/DetailKost/ImageModal";
 import BookingPeriod from "../../components/DetailTransaction/BookingPeriod";
+import TotalPriceAndCancel from "../../components/DetailTransaction/TotalPriceAndCancel";
 const { width } = Dimensions.get("screen");
 
 export default DetailTransactionScreen = ({ navigation, route }) => {
@@ -50,9 +50,6 @@ export default DetailTransactionScreen = ({ navigation, route }) => {
     setIsModalVisible(true);
   };
 
-  const closeModal = () => {
-    setIsModalVisible(false);
-  };
   const calculateTotalPrice = () => {
     const selectedMonths = MonthTypeConverter.getMonthCount(
       transaction.monthType.name
@@ -108,12 +105,6 @@ export default DetailTransactionScreen = ({ navigation, route }) => {
           )}
         </View>
 
-        {/* <ImageModal
-          visible={isModalVisible}
-          closeModal={closeModal}
-          imageSource={transaction.kost.images[selectedImageIndex].url}
-        /> */}
-
         <DetailSection
           title={transaction.kost.name}
           availability={
@@ -153,7 +144,12 @@ export default DetailTransactionScreen = ({ navigation, route }) => {
           selectedMonths={transaction.monthType.name}
         />
 
-        <TotalPrice calculateTotalPrice={calculateTotalPrice} />
+        <TotalPriceAndCancel
+          calculateTotalPrice={calculateTotalPrice}
+          transactionStatus={transaction.aprStatus}
+          transactionId={transaction.id}
+          customerId={transaction.customer.id}
+        />
       </ScrollView>
     </SafeAreaView>
   );
