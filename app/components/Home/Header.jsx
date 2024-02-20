@@ -8,8 +8,8 @@ import apiInstance from "../../config/apiInstance";
 export default function Header() {
   const [fullName, setFullName] = useState("");
 
-  useEffect(() => {
-    const fetchUserData = async () => {
+  useEffect(async () => {
+    async function fetchUserData(){
       try {
         const userId = await AsyncStorage.getItem("userId");
         if (userId) {

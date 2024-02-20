@@ -16,6 +16,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import LoadingComponent from "../../components/LoadingComponent";
 import apiInstance from "../../config/apiInstance";
+import axios from "axios";
+import { BASE_HOST } from "../../config/BaseUrl";
 
 export default function InfoProfileScreen({ navigation, route }) {
   const [userData, setUserData] = useState({
@@ -127,12 +129,20 @@ export default function InfoProfileScreen({ navigation, route }) {
         });
 
         console.log(formData);
+        const token = await AsyncStorage.getItem('token');
+        console.log(token);
 
         setIsLoading(true);
-        console.log("user id ",userData.id);
-        const response = await apiInstance.post(
-          `/customer/v1/upload/${userData.id}`,
-           formData
+        console.log("user id ", userData.id);
+        const response = await axios.post(
+          `${BASE_HOST}/customer/v1/upload/${userData.id}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         console.log(response);

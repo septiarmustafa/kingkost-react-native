@@ -9,11 +9,10 @@ import {
   Image,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Entypo, AntDesign, FontAwesome } from "@expo/vector-icons";
-import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
+import { Entypo, FontAwesome } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
-import apiInstance from "../../config/apiInstance";
 import { useAuth } from "../../context/AuthContext";
+import axios from "axios";
 
 
 export default function LoginScreen({ navigation }) {
@@ -74,7 +73,7 @@ export default function LoginScreen({ navigation }) {
 
 
     try {
-      const response = await apiInstance.post(`/api/auth/login`, {
+      const response = await axios.post(`/api/auth/login`, {
         username,
         password,
       });
@@ -181,19 +180,6 @@ export default function LoginScreen({ navigation }) {
               onPress={() => navigation.navigate("Register")}
             >
               <Text style={styles.signUpButtonText}>Sign Up</Text>
-            </TouchableOpacity>
-          </View>
-
-
-          <View style={styles.socialLogos}>
-            <TouchableOpacity style={styles.socialButton}>
-              <FontAwesome5 name="facebook" size={40} color="grey" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.socialButton}>
-              <FontAwesome5 name="google" size={40} color="grey" />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.socialButton}>
-              <AntDesign name="apple1" size={40} color="grey" />
             </TouchableOpacity>
           </View>
         </View>
@@ -320,13 +306,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 5,
     color: "black",
-  },
-  socialLogos: {
-    flexDirection: "row",
-    justifyContent: "center",
-    marginTop: 10,
-  },
-  socialButton: {
-    marginHorizontal: 10,
   },
 });

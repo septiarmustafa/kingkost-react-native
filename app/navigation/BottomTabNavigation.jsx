@@ -27,15 +27,9 @@ export default function BottomTabNavigation() {
         tabBarActiveTintColor: Colors.PRIMARY_COLOR,
         tabBarStyle: {
           marginBottom: 7,
-          backgroundColor: Colors.TRANSPARENT,
-          color : Colors.TRANSPARENT,
-          elevation : 0
-        },
-      }}
-      tabBarOptions={{
-        style: {
           backgroundColor: Colors.WHITE,
-          elevation: 0,
+          color : Colors.WHITE,
+          elevation : 0
         },
       }}
     >
