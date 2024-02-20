@@ -69,48 +69,6 @@ export default HomeScreen = ({ navigation }) => {
       })
   }, [])
 
-  // useEffect(() => {
-  //   fetchKostData();
-  // }, []);
-
-  // const fetchKostData = async () => {
-  //   try {
-  //     const response = await axios.get(`${BASE_HOST}/kost?page=0`);
-  //     const data = response.data;
-  //     const kostData = data.data.map((item) => ({
-  //       id: item.id,
-  //       title: item.name,
-  //       image: item.images[0].url,
-  //       subdistrict: item.subdistrict.name,
-  //       city: item.city.name,
-  //       description: item.description,
-  //       province: item.city.province.name,
-  //       gender: item.genderType.name.toLowerCase(),
-  //       price: item.kostPrice.price,
-  //       sellerId: item.seller.id,
-  //       sellerName: item.seller.fullName,
-  //       sellerPhone: item.seller.phoneNumber,
-  //       sellerEmail: item.seller.email,
-  //       sellerAddress: item.seller.address,
-  //       availableRoom: item.availableRoom,
-  //       isWifi: item.isWifi,
-  //       isAc: item.isAc,
-  //       isParking: item.isParking,
-  //       images: item.images.map((image) => ({
-  //         uri: `${image.url}`,
-  //       })),
-  //     }));
-  //     if (!isMounted.current) {
-  //       console.log("Component is unmounted, skipping state update");
-  //       return;
-  //     }
-  //     setListKost(kostData);
-  //     setIsLoading(false);
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
   const navigateToPopularKostScreen = async (provinceId, cityId) => {
     navigation.navigate("PopularKostArea", { provinceId, cityId });
   };

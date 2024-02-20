@@ -26,6 +26,7 @@ export default DetailKostScreen = ({ navigation, route }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   console.log(listKost);
+  console.log(listKost.bookingStatus);
 
   const openModal = (index) => {
     setSelectedImageIndex(index);
@@ -72,8 +73,9 @@ export default DetailKostScreen = ({ navigation, route }) => {
           isWifi: data.isWifi,
           isAc: data.isAc,
           isParking: data.isParking,
+          bookingStatus: data.currentBookingStatus,
           images: data.images.map((image) => ({
-            uri: `${image.url}`,
+            uri: `${image.url}`
           })),
         };
         setListKost(kostData);
