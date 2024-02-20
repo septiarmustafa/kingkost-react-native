@@ -139,6 +139,7 @@ export default DetailKostScreen = ({ navigation, route }) => {
           parking={listKost.isParking}
           airConditioner={listKost.isAc}
           description={listKost.description}
+          type = {listKost.gender}
           gender={
             listKost.gender === "male"
               ? require("../../../assets/icons/male.jpg")
