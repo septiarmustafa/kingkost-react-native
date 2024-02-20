@@ -30,7 +30,6 @@ export default ProfileScreen = ({ navigation }) => {
       setUserData(data.data);
       setPhoneNumber(data.data.phoneNumber);
     } catch (error) {
-      // console.error("Error fetching data:", error);
     }
   };
 
