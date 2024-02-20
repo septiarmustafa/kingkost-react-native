@@ -10,7 +10,6 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { ScrollView } from "react-native-gesture-handler";
 import BackButton from "../../components/DetailKost/BackButton";
 import Colors from "../../utils/Colors";
-import http from "../../config/HttpConfig";
 import { Picker } from "@react-native-picker/picker";
 import formatCurrencyIDR from "../../utils/formatCurrencyIDR";
 import { AntDesign } from "@expo/vector-icons";
@@ -114,13 +113,8 @@ export default function CreateOrderScreen({ navigation, route }) {
   };
 
   const handleOrderSubmit = async () => {
-    if (
-      kost.gender.toLowerCase() !== "campur" &&
-      userGender.toLowerCase() !== kost.gender.toLowerCase()
-    ) {
-      setModalMessage(
-        `This kost is only available for ${kost.gender.toLowerCase()}`
-      );
+    if (kost.gender.toLowerCase() !== "campur" && userGender.toLowerCase() !== kost.gender.toLowerCase()) {
+      setModalMessage(`This kost is only available for ${kost.gender.toLowerCase()}`);
       setModalVisible(true);
       return;
     }
