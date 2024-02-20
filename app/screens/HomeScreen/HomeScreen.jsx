@@ -20,19 +20,12 @@ const { width } = Dimensions.get("screen");
 export default HomeScreen = ({ navigation }) => {
   const [listKost, setListKost] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const isMounted = useRef(true);
 
   useEffect(() => {
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    apiInstance
-      .get('/kost?page=0')
-      .then(res => {
-        const data = res.data;
+     async function fetchData() {
+      try {
+        const response = await apiInstance.get('/kost?page=0');
+        const data = response.data;
         const kostData = data.data.map((item) => ({
           id: item.id,
           title: item.name,
@@ -56,17 +49,14 @@ export default HomeScreen = ({ navigation }) => {
             uri: `${image.url}`,
           })),
         }));
-        if (!isMounted.current) {
-          console.log("Component is unmounted, skipping state update");
-          return;
-        }
         setListKost(kostData);
         setIsLoading(false);
-      })
-      .catch(err => {
-        alert(err)
-        console.log(err)
-      })
+      } catch (error) {
+        console.error("Error fetching Kost data:", error);
+        setIsLoading(false);
+      }
+    }
+    fetchData()
   }, [])
 
   const navigateToPopularKostScreen = async (provinceId, cityId) => {

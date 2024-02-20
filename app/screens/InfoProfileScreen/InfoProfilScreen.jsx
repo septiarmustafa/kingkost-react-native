@@ -14,9 +14,10 @@ import BackButton from "../../components/DetailKost/BackButton";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
-import { BASE_HOST } from "../../config/BaseUrl";
 import LoadingComponent from "../../components/LoadingComponent";
 import apiInstance from "../../config/apiInstance";
+import axios from "axios";
+import { BASE_HOST } from "../../config/BaseUrl";
 
 export default function InfoProfileScreen({ navigation, route }) {
   const [userData, setUserData] = useState({
@@ -127,18 +128,27 @@ export default function InfoProfileScreen({ navigation, route }) {
           type: "image/jpeg",
         });
 
-        setIsLoading(true);
+        console.log(formData);
+        const token = await AsyncStorage.getItem('token');
+        console.log(token);
 
-        const response = await fetch(
+        setIsLoading(true);
+        console.log("user id ", userData.id);
+        const response = await axios.post(
           `${BASE_HOST}/customer/v1/upload/${userData.id}`,
+          formData,
           {
-            method: "POST",
-            body: formData,
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
           }
         );
 
-        if (response.ok) {
-          const data = await response.json();
+        console.log(response);
+
+        if (response.status == 200 || response.status == 201) {
+          const data = await response.data;
           console.log("Upload successful:", data);
           Alert.alert("Success", "Profile updated successfully", [
             { text: "OK", onPress: () => navigation.goBack() },

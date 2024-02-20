@@ -111,7 +111,6 @@ export default TransactionScreen = ({ navigation }) => {
           <Text style={styles.title}>Transaction History</Text>
         </View>
       </View>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.filterContainer}>
           <TouchableOpacity
             style={[
@@ -180,7 +179,6 @@ export default TransactionScreen = ({ navigation }) => {
             />
           )}
         </View>
-      </ScrollView>
     </View>
   );
 };
