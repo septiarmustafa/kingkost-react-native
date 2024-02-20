@@ -77,8 +77,15 @@ export default PopularKostArea = ({ navigation, route }) => {
       if (text === "") {
         setKostData(originalKostData);
       } else {
-        const response = await apiInstance.get(`/kost?name=${text}`);
-        console.log(`/kost?name=${text}`);
+        let url = `/kost?page=${currentPage}&name=${text}`;
+        if (provinceId) {
+          url += `&province_id=${provinceId}`;
+        }
+        if (cityId) {
+          url += `&city_id=${cityId}`;
+        }
+        const response = await apiInstance.get(url);
+        console.log(url);
         const { data, paggingResponse } = response.data;
         const newData = data.map((item) => ({
           id: item.id,

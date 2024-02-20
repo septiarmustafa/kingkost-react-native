@@ -19,6 +19,7 @@ export default DetailsSection = ({
   airConditioner,
   description,
   gender,
+  type
 }) => {
   return (
     <View style={style.detailsContainer}>
@@ -59,9 +60,9 @@ export default DetailsSection = ({
           )}
           <View style={{ flexDirection: "row" }}>
             <Text style={{ fontSize: 16, color: Colors.GREY }}>
-              Gender type:{" "}
+              Gender type:{""}
             </Text>
-            <Image style={{ width: gender == "campur"  ? 35: 20, height: gender == "campur"  ? 25 : 20 }} source={gender} />
+            <Image style={{ width: type == "campur"  ? 35: 20, height: type == "campur"  ? 25 : 20 }} source={gender} />
           </View>
         </View>
         <View>
