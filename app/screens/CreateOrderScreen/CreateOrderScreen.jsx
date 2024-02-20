@@ -17,6 +17,7 @@ import { AntDesign } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Popup from "../../components/Popup";
 import apiInstance from "../../config/apiInstance";
+import LoadingComponent from "../../components/LoadingComponent";
 
 
 export default function CreateOrderScreen({ navigation, route }) {
@@ -32,6 +33,7 @@ export default function CreateOrderScreen({ navigation, route }) {
   const [dataOrder, setDataOrder] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const [sections, setSections] = useState({
     section1: true,
@@ -146,6 +148,7 @@ export default function CreateOrderScreen({ navigation, route }) {
     console.log(orderData);
 
     try {
+      setIsLoading(true)
       const response = await apiInstance.post("/transactions", orderData);
       if (response.status === 200 || response.status === 201) {
         setDataOrder(response.data.data)
@@ -154,14 +157,16 @@ export default function CreateOrderScreen({ navigation, route }) {
         console.log(response.status + " Order submitted successfully");
         navigation.navigate("OrderStatusScreen", response.data.data)
       } else {
-        const errorData = await response.json();
+        const errorData = response.data.message ?? "error ";
         console.error("Error:", errorData);
         alert(errorData);
       }
+      setIsLoading(false)
     } catch (error) {
       console.error("Error :", error);
       alert(error);
     }
+    setIsLoading(false)
   };
 
   useEffect(() => {
@@ -447,9 +452,11 @@ export default function CreateOrderScreen({ navigation, route }) {
             )}
           </View>
         </View>
-        <TouchableOpacity style={styles.button} onPress={handleOrderSubmit}>
-          <Text style={styles.buttonText}>Book Now</Text>
-        </TouchableOpacity>
+        {
+          isLoading ? <LoadingComponent /> : <TouchableOpacity style={styles.button} onPress={handleOrderSubmit}>
+            <Text style={styles.buttonText}>Book Now</Text>
+          </TouchableOpacity>
+        }
       </View>
     </ScrollView>
   );
