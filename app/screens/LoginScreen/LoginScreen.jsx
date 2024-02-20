@@ -12,9 +12,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Entypo, AntDesign, FontAwesome } from "@expo/vector-icons";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { ScrollView } from "react-native-gesture-handler";
-import http from "../../config/HttpConfig";
-import axios from "axios";
-import { BASE_HOST } from "../../config/BaseUrl";
+import apiInstance from "../../config/apiInstance";
 
 export default function LoginScreen({ navigation }) {
   const [username, setUsername] = useState("");
@@ -66,7 +64,7 @@ export default function LoginScreen({ navigation }) {
     }
 
     try {
-      const response = await axios.post(`${BASE_HOST}/api/auth/login`, {
+      const response = await apiInstance.post(`/api/auth/login`, {
         username,
         password,
       });
