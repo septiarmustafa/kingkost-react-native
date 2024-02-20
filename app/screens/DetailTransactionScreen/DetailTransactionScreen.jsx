@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { SafeAreaView, View, Text, StyleSheet, Dimensions } from "react-native";
-import http from "../../config/HttpConfig";
+import {
+  SafeAreaView,
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  Image,
+  FlatList,
+} from "react-native";
 import Colors from "../../utils/Colors";
 import { StatusBar } from "expo-status-bar";
 import DetailSection from "../../components/DetailKost/DetailSection";
@@ -8,16 +16,26 @@ import SellerInfo from "../../components/DetailKost/SellerInfo";
 import { OpenWhatsApp } from "../../utils/OpenWhatsapp";
 import TotalPrice from "../../components/DetailKost/TotalPrice";
 import MonthTypeConverter from "../../utils/MonthTypeConverter";
+import apiInstance from "../../config/apiInstance";
+import LoadingComponent from "../../components/LoadingComponent";
+import BackgroundImage from "../../components/DetailKost/BackgroundImage";
+import ImageCardList from "../../components/DetailKost/ImageCardList";
+import ImageModal from "../../components/DetailKost/ImageModal";
+import BookingPeriod from "../../components/DetailTransaction/BookingPeriod";
 const { width } = Dimensions.get("screen");
 
 export default DetailTransactionScreen = ({ navigation, route }) => {
   const { transactionId } = route.params;
   const [transaction, setTransaction] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   useEffect(() => {
     const fetchTransaction = async () => {
       try {
-        const response = await http.get(`/transactions/${transactionId}`);
+        const response = await apiInstance.get(
+          `/transactions/${transactionId}`
+        );
         setTransaction(response.data.data);
       } catch (error) {
         console.error("Error fetching transaction:", error);
@@ -27,6 +45,14 @@ export default DetailTransactionScreen = ({ navigation, route }) => {
     fetchTransaction();
   }, [transactionId]);
 
+  const openModal = (index) => {
+    setSelectedImageIndex(index);
+    setIsModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
   const calculateTotalPrice = () => {
     const selectedMonths = MonthTypeConverter.getMonthCount(
       transaction.monthType.name
@@ -38,7 +64,7 @@ export default DetailTransactionScreen = ({ navigation, route }) => {
   };
 
   if (!transaction) {
-    return <Text>Loading...</Text>;
+    return <LoadingComponent />;
   }
 
   return (
@@ -48,45 +74,87 @@ export default DetailTransactionScreen = ({ navigation, route }) => {
         backgroundColor={Colors.WHITE}
         barStyle="dark-content"
       />
-      <DetailSection
-        title={transaction.kost.name}
-        availability={
-          transaction.kost.availableRoom != 0 ? "Available" : "Not Available"
-        }
-        roomCount={transaction.kost.availableRoom}
-        city={transaction.kost.city.name}
-        subdistrict={transaction.kost.subdistrict.name}
-        province={transaction.kost.province.name}
-        wifi={transaction.isWifi}
-        parking={transaction.isParking}
-        airConditioner={transaction.isAc}
-        description={transaction.kost.description}
-        gender={
-          transaction.kost.genderType.name === "MALE"
-            ? require("../../../assets/icons/male.jpg")
-            : require("../../../assets/icons/female.jpg")
-        }
-      />
 
-      <SellerInfo
-        onPress={() =>
-          OpenWhatsApp(
-            (phone = transaction.kost.seller.phoneNumber),
-            (message = `Halo! Saya ingin bertanya tentang kost "${transaction.kost.name}"`)
-          )
-        }
-        seller={transaction.kost.seller.fullName}
-        phone={transaction.kost.seller.phoneNumber}
-        image={require("../../../assets/images/default-profile.jpg")}
-      />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <BackgroundImage
+          source={
+            transaction.kost.images && transaction.kost.images.length > 0
+              ? { uri: transaction.kost.images[0].url }
+              : require("../../../assets/images/default-image.png")
+          }
+          onPress={navigation.goBack}
+        />
+        <View style={styles.flatListContainer}>
+          {transaction.kost.images && transaction.kost.images.length > 0 ? (
+            <FlatList
+              contentContainerStyle={{ marginTop: 20 }}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(_, key) => key.toString()}
+              data={transaction.kost.images}
+              renderItem={({ item, index }) => (
+                <ImageCardList
+                  interior={item}
+                  index={index}
+                  onPress={() => openModal(index)}
+                />
+              )}
+            />
+          ) : (
+            <Image
+              source={require("../../../assets/images/default-image.png")}
+              style={styles.cardImage}
+            />
+          )}
+        </View>
 
-      <ChoosePeriod
-        title="Rent for: "
-        selectedMonths="mbew"
-        setSelectedMonths="4 months"
-      />
+        {/* <ImageModal
+          visible={isModalVisible}
+          closeModal={closeModal}
+          imageSource={transaction.kost.images[selectedImageIndex].url}
+        /> */}
 
-      <TotalPrice calculateTotalPrice={calculateTotalPrice} />
+        <DetailSection
+          title={transaction.kost.name}
+          availability={
+            transaction.kost.availableRoom != 0 ? "Available" : "Not Available"
+          }
+          roomCount={transaction.kost.availableRoom}
+          city={transaction.kost.city.name}
+          subdistrict={transaction.kost.subdistrict.name}
+          province={transaction.kost.province.name}
+          wifi={transaction.isWifi}
+          parking={transaction.isParking}
+          airConditioner={transaction.isAc}
+          description={transaction.kost.description}
+          gender={
+            transaction.kost.genderType.name === "MALE"
+              ? require("../../../assets/icons/male.jpg")
+              : transaction.kost.genderType.name == "CAMPUR"
+              ? require("../../../assets/icons/mix.jpg")
+              : require("../../../assets/icons/female.jpg")
+          }
+        />
+
+        <SellerInfo
+          onPress={() =>
+            OpenWhatsApp(
+              (phone = transaction.kost.seller.phoneNumber),
+              (message = `Halo! Saya ingin bertanya tentang kost "${transaction.kost.name}"`)
+            )
+          }
+          seller={transaction.kost.seller.fullName}
+          phone={transaction.kost.seller.phoneNumber}
+          image={require("../../../assets/images/default-profile.jpg")}
+        />
+
+        <BookingPeriod
+          title="Book for: "
+          selectedMonths={transaction.monthType.name}
+        />
+
+        <TotalPrice calculateTotalPrice={calculateTotalPrice} />
+      </ScrollView>
     </SafeAreaView>
   );
 };

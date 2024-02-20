@@ -10,15 +10,13 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { ScrollView } from "react-native-gesture-handler";
 import BackButton from "../../components/DetailKost/BackButton";
 import Colors from "../../utils/Colors";
-import http from "../../config/HttpConfig"
 import { Picker } from "@react-native-picker/picker";
 import formatCurrencyIDR from "../../utils/formatCurrencyIDR";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Popup from "../../components/Popup";
 import apiInstance from "../../config/apiInstance";
 import LoadingComponent from "../../components/LoadingComponent";
-
 
 export default function CreateOrderScreen({ navigation, route }) {
   const kost = route.params;
@@ -32,7 +30,7 @@ export default function CreateOrderScreen({ navigation, route }) {
   const [userGender, setUserGender] = useState(null);
   const [dataOrder, setDataOrder] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
+  const [modalMessage, setModalMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const [sections, setSections] = useState({
@@ -43,18 +41,18 @@ export default function CreateOrderScreen({ navigation, route }) {
   });
 
   const monthTypeMap = {
-    "ONE_MONTH": 1,
-    "TWO_MONTH": 2,
-    "THREE_MONTH": 3,
-    "FOUR_MONTH": 4,
-    "FIVE_MONTH": 5,
-    "SIX_MONTH": 6,
-    "SEVEN_MONTH": 7,
-    "EIGHT_MONTH": 8,
-    "NINE_MONTH": 9,
-    "TEN_MONTH": 10,
-    "ELEVEN_MONTH": 11,
-    "TWELVE_MONTH": 12
+    ONE_MONTH: 1,
+    TWO_MONTH: 2,
+    THREE_MONTH: 3,
+    FOUR_MONTH: 4,
+    FIVE_MONTH: 5,
+    SIX_MONTH: 6,
+    SEVEN_MONTH: 7,
+    EIGHT_MONTH: 8,
+    NINE_MONTH: 9,
+    TEN_MONTH: 10,
+    ELEVEN_MONTH: 11,
+    TWELVE_MONTH: 12,
   };
 
   const calculateTotalPrice = () => {
@@ -76,7 +74,7 @@ export default function CreateOrderScreen({ navigation, route }) {
       const response = await apiInstance.get(`/customer/user/${userId}`);
       const data = response.data;
       setUserId(data.data.id);
-      setUserGender(data.data.genderTypeId.name)
+      setUserGender(data.data.genderTypeId.name);
       console.log("kost gender " + kost.gender);
       console.log("user id " + userId);
       console.log("user gender " + userGender);
@@ -107,7 +105,7 @@ export default function CreateOrderScreen({ navigation, route }) {
         name: month.name,
       }));
       setMonthData(months);
-      setSelectedMonths(months[0].name)
+      setSelectedMonths(months[0].name);
       setSelectedMonthId(months[0].id);
     } catch (error) {
       console.error("Error fetching month data:", error);
@@ -122,15 +120,15 @@ export default function CreateOrderScreen({ navigation, route }) {
     }
 
     if (!paymentTypeId || !monthPeriod) {
-      let message = '';
+      let message = "";
       if (!paymentTypeId) {
-        message = 'Please choose payment type';
+        message = "Please choose payment type";
         setModalMessage(message);
         setModalVisible(true);
         return;
       }
       if (!monthPeriod) {
-        message = 'Please choose period';
+        message = "Please choose period";
         setModalMessage(message);
         setModalVisible(true);
         return;
@@ -148,25 +146,25 @@ export default function CreateOrderScreen({ navigation, route }) {
     console.log(orderData);
 
     try {
-      setIsLoading(true)
+      setIsLoading(true);
       const response = await apiInstance.post("/transactions", orderData);
       if (response.status === 200 || response.status === 201) {
-        setDataOrder(response.data.data)
+        setDataOrder(response.data.data);
         console.log(response.data.data);
         console.log(dataOrder);
         console.log(response.status + " Order submitted successfully");
-        navigation.navigate("OrderStatusScreen", response.data.data)
+        navigation.navigate("OrderStatusScreen", response.data.data);
       } else {
         const errorData = response.data.message ?? "error ";
         console.error("Error:", errorData);
         alert(errorData);
       }
-      setIsLoading(false)
+      setIsLoading(false);
     } catch (error) {
       console.error("Error :", error);
       alert(error);
     }
-    setIsLoading(false)
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -174,7 +172,6 @@ export default function CreateOrderScreen({ navigation, route }) {
       .then((userId) => {
         setUserId(userId);
         fetchUserData(userId);
-
       })
       .catch((error) => {
         console.error("Error retrieving userId from AsyncStorage:", error);
@@ -221,93 +218,97 @@ export default function CreateOrderScreen({ navigation, route }) {
             {sections.section1 && (
               <>
                 <View style={styles.info}>
-                  <Text style={styles.titleInfo}>
-                    Name
-                  </Text>
-                  <Text style={styles.trailingInfo}>
-                    {kost.title}
-                  </Text>
+                  <Text style={styles.titleInfo}>Name</Text>
+                  <Text style={styles.trailingInfo}>{kost.title}</Text>
                 </View>
                 <View style={styles.info}>
-                  <Text style={styles.titleInfo}>
-                    Description
-                  </Text>
+                  <Text style={styles.titleInfo}>Description</Text>
                   <View style={{ width: 150 }}>
-                    <Text style={styles.trailingInfo}>
-                      {kost.description}
-                    </Text>
+                    <Text style={styles.trailingInfo}>{kost.description}</Text>
                   </View>
                 </View>
                 <View style={styles.info}>
-                  <Text style={styles.titleInfo}>
-                    District
-                  </Text>
-                  <Text style={styles.trailingInfo}>
-                    {kost.subdistrict}
-                  </Text>
+                  <Text style={styles.titleInfo}>District</Text>
+                  <Text style={styles.trailingInfo}>{kost.subdistrict}</Text>
                 </View>
                 <View style={styles.info}>
-                  <Text style={styles.titleInfo}>
-                    City
-                  </Text>
+                  <Text style={styles.titleInfo}>City</Text>
                   <View style={{ width: 150 }}>
-                    <Text style={styles.trailingInfo}>
-                      {kost.city}
-                    </Text>
+                    <Text style={styles.trailingInfo}>{kost.city}</Text>
                   </View>
                 </View>
                 <View style={styles.info}>
-                  <Text style={styles.titleInfo}>
-                    Province
-                  </Text>
-                  <Text style={styles.trailingInfo}>
-                    {kost.province}
-                  </Text>
+                  <Text style={styles.titleInfo}>Province</Text>
+                  <Text style={styles.trailingInfo}>{kost.province}</Text>
                 </View>
                 <View style={styles.info}>
-                  <Text style={styles.titleInfo}>
-                    Price
-                  </Text>
+                  <Text style={styles.titleInfo}>Price</Text>
                   <Text style={styles.trailingInfo}>
                     {formatCurrencyIDR(kost.price)} / Month
                   </Text>
                 </View>
                 <View style={styles.info}>
-                  <Text style={styles.titleInfo}>
-                    Available room
-                  </Text>
+                  <Text style={styles.titleInfo}>Available room</Text>
                   <Text style={styles.trailingInfo}>
                     {kost.availableRoom} Room
                   </Text>
                 </View>
                 <View style={styles.info}>
-                  <Text style={styles.titleInfo}>
-                    Wifi
-                  </Text>
+                  <Text style={styles.titleInfo}>Wifi</Text>
                   <Text style={styles.trailingInfo}>
-                    {kost.isWifi ? <AntDesign name="checkcircle" size={22} color={Colors.GREEN} /> : <AntDesign name="closecircle" size={22} color={Colors.RED} />}
+                    {kost.isWifi ? (
+                      <AntDesign
+                        name="checkcircle"
+                        size={22}
+                        color={Colors.GREEN}
+                      />
+                    ) : (
+                      <AntDesign
+                        name="closecircle"
+                        size={22}
+                        color={Colors.RED}
+                      />
+                    )}
                   </Text>
                 </View>
                 <View style={styles.info}>
-                  <Text style={styles.titleInfo}>
-                    Air Conditioner
-                  </Text>
+                  <Text style={styles.titleInfo}>Air Conditioner</Text>
                   <Text style={styles.trailingInfo}>
-                    {kost.isAc ? <AntDesign name="checkcircle" size={22} color={Colors.GREEN} /> : <AntDesign name="closecircle" size={22} color={Colors.RED} />}
+                    {kost.isAc ? (
+                      <AntDesign
+                        name="checkcircle"
+                        size={22}
+                        color={Colors.GREEN}
+                      />
+                    ) : (
+                      <AntDesign
+                        name="closecircle"
+                        size={22}
+                        color={Colors.RED}
+                      />
+                    )}
                   </Text>
                 </View>
                 <View style={styles.info}>
-                  <Text style={styles.titleInfo}>
-                    Parking
-                  </Text>
+                  <Text style={styles.titleInfo}>Parking</Text>
                   <Text style={styles.trailingInfo}>
-                    {kost.isParking ? <AntDesign name="checkcircle" size={22} color={Colors.GREEN} /> : <AntDesign name="closecircle" size={22} color={Colors.RED} />}
+                    {kost.isParking ? (
+                      <AntDesign
+                        name="checkcircle"
+                        size={22}
+                        color={Colors.GREEN}
+                      />
+                    ) : (
+                      <AntDesign
+                        name="closecircle"
+                        size={22}
+                        color={Colors.RED}
+                      />
+                    )}
                   </Text>
                 </View>
                 <View style={styles.info}>
-                  <Text style={styles.titleInfo}>
-                    Kost Type
-                  </Text>
+                  <Text style={styles.titleInfo}>Kost Type</Text>
                   <Text style={styles.trailingInfo}>
                     {kost.gender == "male" ? "Male" : "Female"}
                   </Text>
@@ -332,36 +333,20 @@ export default function CreateOrderScreen({ navigation, route }) {
             {sections.section2 && (
               <>
                 <View style={styles.info}>
-                  <Text style={styles.titleInfo}>
-                    Name
-                  </Text>
-                  <Text style={styles.trailingInfo}>
-                    {kost.sellerName}
-                  </Text>
+                  <Text style={styles.titleInfo}>Name</Text>
+                  <Text style={styles.trailingInfo}>{kost.sellerName}</Text>
                 </View>
                 <View style={styles.info}>
-                  <Text style={styles.titleInfo}>
-                    Phone Number
-                  </Text>
-                  <Text style={styles.trailingInfo}>
-                    {kost.sellerPhone}
-                  </Text>
+                  <Text style={styles.titleInfo}>Phone Number</Text>
+                  <Text style={styles.trailingInfo}>{kost.sellerPhone}</Text>
                 </View>
                 <View style={styles.info}>
-                  <Text style={styles.titleInfo}>
-                    Email
-                  </Text>
-                  <Text style={styles.trailingInfo}>
-                    {kost.sellerEmail}
-                  </Text>
+                  <Text style={styles.titleInfo}>Email</Text>
+                  <Text style={styles.trailingInfo}>{kost.sellerEmail}</Text>
                 </View>
                 <View style={styles.info}>
-                  <Text style={styles.titleInfo}>
-                    Address
-                  </Text>
-                  <Text style={styles.trailingInfo}>
-                    {kost.sellerAddress}
-                  </Text>
+                  <Text style={styles.titleInfo}>Address</Text>
+                  <Text style={styles.trailingInfo}>{kost.sellerAddress}</Text>
                 </View>
               </>
             )}
@@ -388,17 +373,31 @@ export default function CreateOrderScreen({ navigation, route }) {
                     onPress={() => setPaymentTypeId(payment.id)}
                     style={[
                       styles.paymentOption,
-                      payment.id === paymentTypeId ? styles.selectedPaymentOption : null,
+                      payment.id === paymentTypeId
+                        ? styles.selectedPaymentOption
+                        : null,
                     ]}
                   >
-                    <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <View
+                      style={{ flexDirection: "row", alignItems: "center" }}
+                    >
                       <View
                         style={[
                           styles.paymentOptionCheckbox,
-                          payment.id === paymentTypeId ? styles.selectedPaymentOptionCheckbox : null,
+                          payment.id === paymentTypeId
+                            ? styles.selectedPaymentOptionCheckbox
+                            : null,
                         ]}
                       ></View>
-                      <Text style={payment.id === paymentTypeId ? styles.trailingInfo : null}>{payment.name}</Text>
+                      <Text
+                        style={
+                          payment.id === paymentTypeId
+                            ? styles.trailingInfo
+                            : null
+                        }
+                      >
+                        {payment.name}
+                      </Text>
                     </View>
                   </TouchableOpacity>
                 ))}
@@ -441,9 +440,7 @@ export default function CreateOrderScreen({ navigation, route }) {
                   </View>
                 </View>
                 <View style={styles.info}>
-                  <Text style={styles.titleInfo}>
-                    Total Price
-                  </Text>
+                  <Text style={styles.titleInfo}>Total Price</Text>
                   <Text style={styles.trailingInfo}>
                     {calculateTotalPrice()}
                   </Text>
@@ -452,11 +449,13 @@ export default function CreateOrderScreen({ navigation, route }) {
             )}
           </View>
         </View>
-        {
-          isLoading ? <LoadingComponent /> : <TouchableOpacity style={styles.button} onPress={handleOrderSubmit}>
+        {isLoading ? (
+          <LoadingComponent />
+        ) : (
+          <TouchableOpacity style={styles.button} onPress={handleOrderSubmit}>
             <Text style={styles.buttonText}>Book Now</Text>
           </TouchableOpacity>
-        }
+        )}
       </View>
     </ScrollView>
   );
@@ -482,7 +481,7 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingHorizontal: 20,
-    paddingTop: 20
+    paddingTop: 20,
   },
   card: {
     backgroundColor: Colors.WHITE,
@@ -499,7 +498,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "#ccc",
     marginBottom: 20,
-    marginTop: 10
+    marginTop: 10,
   },
   button: {
     backgroundColor: Colors.PRIMARY_COLOR,
@@ -517,33 +516,33 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 10
+    marginBottom: 10,
   },
   pickerContainer: {
     backgroundColor: Colors.WEAK_COLOR,
     borderRadius: 10,
-    width: '50%',
+    width: "50%",
   },
   monthPicker: {
-    width: '100%',
+    width: "100%",
     height: 50,
     color: Colors.BLACK,
   },
   info: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 10
+    marginBottom: 10,
   },
   titleInfo: {
     fontSize: 14,
-    color: Colors.GREY_BOLD
+    color: Colors.GREY_BOLD,
   },
   trailingInfo: {
     fontSize: 14,
     overflow: "visible",
     color: Colors.BLACK,
     fontWeight: "bold",
-    textAlign: "right"
+    textAlign: "right",
   },
   paymentOptionCheckbox: {
     height: 12,
@@ -558,6 +557,6 @@ const styles = StyleSheet.create({
     color: Colors.PRIMARY_COLOR,
   },
   paymentOption: {
-    marginBottom: 10
+    marginBottom: 10,
   },
 });

@@ -15,6 +15,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import apiInstance from "../../config/apiInstance";
 import { useAuth } from "../../context/AuthContext";
 
+
 export default function LoginScreen({ navigation }) {
   const { login } = useAuth();
   const [username, setUsername] = useState("");
@@ -26,28 +27,34 @@ export default function LoginScreen({ navigation }) {
     password: "",
   });
 
+
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
       setUsername("");
       setPassword("");
     });
 
+
     return unsubscribe;
   }, [navigation]);
+
 
   const handleUsername = (text) => {
     setUsername(text);
     setErrorMessages({ ...errorMessages, username: "" });
   };
 
+
   const handlePassword = (text) => {
     setPassword(text);
     setErrorMessages({ ...errorMessages, password: "" });
   };
 
+
   const togglePasswordVisibility = () => {
     setHidePassword(!hidePassword);
   };
+
 
   const handleLogin = async () => {
     if (!username) {
@@ -65,11 +72,13 @@ export default function LoginScreen({ navigation }) {
       return;
     }
 
+
     try {
       const response = await apiInstance.post(`/api/auth/login`, {
         username,
         password,
       });
+
 
       if (response.status === 200) {
         const { userId, token, role, username } = response.data.data;
@@ -78,6 +87,7 @@ export default function LoginScreen({ navigation }) {
         await AsyncStorage.setItem("role", role);
         await AsyncStorage.setItem("password", password);
         login(username, password);
+
 
         console.log("user id: " + userId);
         console.log(token);
@@ -92,6 +102,7 @@ export default function LoginScreen({ navigation }) {
       Alert.alert("Error", error.message);
     }
   };
+
 
   return (
     <ScrollView>
@@ -120,6 +131,7 @@ export default function LoginScreen({ navigation }) {
           {errorMessages.username ? (
             <Text style={styles.errorMessage}>{errorMessages.username}</Text>
           ) : null}
+
 
           <View style={styles.passwordInputContainer}>
             <FontAwesome
@@ -158,6 +170,7 @@ export default function LoginScreen({ navigation }) {
             </TouchableOpacity>
           </View>
 
+
           <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
             <Text style={styles.buttonText}>Login</Text>
           </TouchableOpacity>
@@ -170,6 +183,7 @@ export default function LoginScreen({ navigation }) {
               <Text style={styles.signUpButtonText}>Sign Up</Text>
             </TouchableOpacity>
           </View>
+
 
           <View style={styles.socialLogos}>
             <TouchableOpacity style={styles.socialButton}>
@@ -187,6 +201,7 @@ export default function LoginScreen({ navigation }) {
     </ScrollView>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -215,6 +230,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 30,
     padding: 20,
     paddingTop: 50,
+
 
     marginTop: -65,
   },

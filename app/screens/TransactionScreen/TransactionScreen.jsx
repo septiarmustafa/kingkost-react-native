@@ -12,8 +12,8 @@ import Colors from "../../utils/Colors";
 import { StatusBar } from "expo-status-bar";
 import BackButton from "../../components/DetailKost/BackButton";
 import TransactionItem from "../../components/PopularKostArea/TransactionItem";
-import http from "../../config/HttpConfig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import apiInstance from "../../config/apiInstance";
 
 export default TransactionScreen = ({ navigation }) => {
   const [transactionData, setTransactionData] = useState([]);
@@ -24,10 +24,12 @@ export default TransactionScreen = ({ navigation }) => {
       try {
         const userId = await AsyncStorage.getItem("userId");
 
-        const responseCustomer = await http.get(`/customer/user/${userId}`);
+        const responseCustomer = await apiInstance.get(
+          `/customer/user/${userId}`
+        );
         const customerId = responseCustomer.data.data.id;
 
-        const responseTransactions = await http.get(
+        const responseTransactions = await apiInstance.get(
           `/transactions?customerId=${customerId}`
         );
 
