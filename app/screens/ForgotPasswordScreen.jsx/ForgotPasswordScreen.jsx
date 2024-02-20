@@ -11,6 +11,7 @@ import {
 import React, { useState } from "react";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import http from "../../config/HttpConfig";
+import apiInstance from "../../config/apiInstance";
 
 export default function ForgotPasswordScreen({ navigation }) {
   const [inputData, setInputData] = useState({
@@ -41,7 +42,7 @@ export default function ForgotPasswordScreen({ navigation }) {
     }
 
     try {
-      const response = await http.post(`/reset/request-customer`, inputData);
+      const response = await apiInstance.post(`/reset/request-customer`, inputData);
       console.log(response.status, "status");
       if (response.status === 200) {
         Alert.alert(

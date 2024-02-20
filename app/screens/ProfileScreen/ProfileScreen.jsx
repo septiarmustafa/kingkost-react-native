@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from "@expo/vector-icons";
-import { BASE_HOST } from "../../config/BaseUrl";
+import apiInstance from "../../config/apiInstance";
 
 export default ProfileScreen = ({ navigation }) => {
   const [fullName, setFullName] = useState("");
@@ -22,8 +22,8 @@ export default ProfileScreen = ({ navigation }) => {
 
   const fetchUserData = async (userId) => {
     try {
-      const response = await fetch(`${BASE_HOST}/customer/user/${userId}`);
-      const data = await response.json();
+      const response = await apiInstance(`/customer/user/${userId}`);
+      const data = response.data;
       setFullName(data.data.fullName);
       setUserData(data.data);
       setPhoneNumber(data.data.phoneNumber);

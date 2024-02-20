@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView, View, StyleSheet, ScrollView, Image, Dimensions } from "react-native";
 import  {OpenWhatsApp} from '../../utils/OpenWhatsapp';
 import Colors from "../../utils/Colors";
@@ -12,6 +12,9 @@ import SellerInfo from "../../components/DetailKost/SellerInfo";
 import ChoosePeriod from "../../components/DetailKost/ChoosePeriod";
 import TotalPrice from "../../components/DetailKost/TotalPrice";
 import { StatusBar } from "expo-status-bar";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import apiInstance from "../../config/apiInstance";
+import LoadingComponent from "../../components/LoadingComponent";
 const { width } = Dimensions.get("screen");
 
 export default DetailKostScreen = ({ navigation, route }) => {
@@ -19,6 +22,10 @@ export default DetailKostScreen = ({ navigation, route }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(null);
   const [selectedMonths, setSelectedMonths] = useState(1);
+  const [listKost, setListKost] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  console.log(listKost);
 
   const openModal = (index) => {
     setSelectedImageIndex(index);
@@ -35,6 +42,55 @@ export default DetailKostScreen = ({ navigation, route }) => {
     return formatCurrencyIDR(totalPrice);
   };
 
+  useEffect(async () => {
+    const userId = await AsyncStorage.getItem('customerId');
+    if (!userId) {
+      console.error('User ID not found in localStorage');
+      return;
+    }
+    console.log(`/kost/id?kostId=${kost.id}&customerId=${userId}`);
+    await apiInstance
+      .get(`/kost/id?kostId=${kost.id}&customerId=${userId}`)
+      .then(res => {
+        const data = res.data.data; 
+        const kostData = {
+          id: data.id,
+          title: data.name,
+          image: data.images[0].url,
+          subdistrict: data.subdistrict.name,
+          city: data.city.name,
+          description: data.description,
+          province: data.city.province.name,
+          gender: data.genderType.name.toLowerCase(),
+          price: data.kostPrice.price,
+          sellerId: data.seller.id,
+          sellerName: data.seller.fullName,
+          sellerPhone: data.seller.phoneNumber,
+          sellerEmail: data.seller.email,
+          sellerAddress: data.seller.address,
+          availableRoom: data.availableRoom,
+          isWifi: data.isWifi,
+          isAc: data.isAc,
+          isParking: data.isParking,
+          images: data.images.map((image) => ({
+            uri: `${image.url}`,
+          })),
+        };
+        setListKost(kostData);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        alert(err)
+        console.log(err)
+        setIsLoading(false);
+      })
+  }, [])
+
+  if (isLoading) {
+    return (<LoadingComponent/>)
+  }
+
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.WHITE }}>
       <StatusBar
@@ -44,16 +100,16 @@ export default DetailKostScreen = ({ navigation, route }) => {
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <BackgroundImage
-          source={kost.image != null || kost.image != "" ? { uri: kost.image } : require("../../../assets/images/default-image.png")}
+          source={listKost.image != null || listKost.image != "" ? { uri: listKost.image } : require("../../../assets/images/default-image.png")}
           onPress={navigation.goBack}
         />
         <View style={styles.flatListContainer}>
-          {kost.images !== null || kost.images.length != 0 ? (<FlatList
+          {listKost.images !== null && listKost.images.length > 0 ? (<FlatList
             contentContainerStyle={{ marginTop: 20 }}
             horizontal
             showsHorizontalScrollIndicator={false}
             keyExtractor={(_, key) => key.toString()}
-            data={kost.images}
+            data={listKost.images}
             renderItem={({ item, index }) => (
               <ImageCardList
                 interior={item}
@@ -68,31 +124,31 @@ export default DetailKostScreen = ({ navigation, route }) => {
         <ImageModal
           visible={isModalVisible}
           closeModal={closeModal}
-          imageSource={kost.images[selectedImageIndex]}
+          imageSource={listKost.images[selectedImageIndex]}
         />
 
         <DetailSection
-          title={kost.title}
-          availability={kost.availableRoom != 0 ? "Available" : "Not Available"}
-          roomCount={kost.availableRoom}
-          city={kost.city}
-          subdistrict={kost.subdistrict}
-          province={kost.province}
-          wifi={kost.isWifi}
-          parking={kost.isParking}
-          airConditioner={kost.isAc}
-          description={kost.description}
+          title={listKost.title}
+          availability={listKost.availableRoom != 0 ? "Available" : "Not Available"}
+          roomCount={listKost.availableRoom}
+          city={listKost.city}
+          subdistrict={listKost.subdistrict}
+          province={listKost.province}
+          wifi={listKost.isWifi}
+          parking={listKost.isParking}
+          airConditioner={listKost.isAc}
+          description={listKost.description}
           gender={
-            kost.gender === "male"
-              ? require("../../../assets/icons/male.jpg")
-              : require("../../../assets/icons/female.jpg")
+            listKost.gender === "male"
+              ?  require("../../../assets/icons/male.jpg")
+              :  listKost.gender === "campur" ? require("../../../assets/icons/mix.jpg"): require("../../../assets/icons/female.jpg")
           }
         />
 
         <SellerInfo
-          onPress={() => OpenWhatsApp(phone = kost.sellerPhone, message = `Halo! Saya ingin bertanya tentang kost "${kost.title}"`)}
-          seller={kost.sellerName}
-          phone={kost.sellerPhone}
+          onPress={() => OpenWhatsApp(phone = listKost.sellerPhone, message = `Halo! Saya ingin bertanya tentang listKost "${listKost.title}"`)}
+          seller={listKost.sellerName}
+          phone={listKost.sellerPhone}
           image={require("../../../assets/images/default-profile.jpg")}
         />
         <ChoosePeriod
@@ -101,7 +157,7 @@ export default DetailKostScreen = ({ navigation, route }) => {
           setSelectedMonths={setSelectedMonths}
         />
         <TotalPrice
-          onPress={() => navigation.navigate("CreateOrderScreen", kost)}
+          onPress={() => navigation.navigate("CreateOrderScreen", listKost)}
           calculateTotalPrice={calculateTotalPrice}
         />
       </ScrollView>

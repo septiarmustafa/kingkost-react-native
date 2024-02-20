@@ -37,15 +37,17 @@ export default TransactionItem = ({ item, onPress }) => {
             />
             <View style={styles.genderContainer}>
               <Image
-                style={styles.genderIcon}
+                style={{  width: item.gender == "campur" ? 37 : 25,
+                height:item.gender == "campur" ? 30 : 25,
+                marginRight: 5, }}
                 source={
                   item.gender == "male"
                     ? require("../../../assets/icons/male.jpg")
-                    : require("../../../assets/icons/female.jpg")
+                    : item.gender == "campur" ?  require("../../../assets/icons/mix.jpg") : require("../../../assets/icons/female.jpg")
                 }
               />
               <Text style={styles.genderText}>
-                {item.gender == "male" ? "Male" : "Female"}
+                {item.gender == "male" ? "Male" : item.gender == "campur" ? "Mix" : "Female"}
               </Text>
             </View>
           </View>
@@ -104,11 +106,6 @@ const styles = StyleSheet.create({
   genderContainer: {
     flexDirection: "row",
     alignItems: "center",
-  },
-  genderIcon: {
-    width: 25,
-    height: 25,
-    marginRight: 5,
   },
   genderText: {
     fontSize: 13,

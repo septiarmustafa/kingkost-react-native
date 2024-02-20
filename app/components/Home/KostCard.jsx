@@ -52,11 +52,11 @@ export default KostCard = ({ kost, navigation }) => {
               {kost.city}
             </Text>
             <Image
-              style={{ marginTop: 5, width: 25, height: 25 }}
+              style={{ marginTop: 5, width: kost.gender != "campur" ? 25 : 35, height: 25 }}
               source={
                 kost.gender == "male"
                   ? require("../../../assets/icons/male.jpg")
-                  : require("../../../assets/icons/female.jpg")
+                  : kost.gender == "campur" ? require("../../../assets/icons/mix.jpg") : require("../../../assets/icons/female.jpg")
               }
             />
           </View>

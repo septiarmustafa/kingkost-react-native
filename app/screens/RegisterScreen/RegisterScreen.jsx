@@ -20,6 +20,7 @@ import {
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import http from "../../config/HttpConfig";
+import apiInstance from "../../config/apiInstance";
 
 export default function RegisterScreen() {
   const [hidePassword, setHidePassword] = useState(true);
@@ -94,7 +95,7 @@ export default function RegisterScreen() {
     }
 
     try {
-      const response = await http.post(
+      const response = await apiInstance.post(
         `/api/auth/register/customer`,
         registrationData
       );

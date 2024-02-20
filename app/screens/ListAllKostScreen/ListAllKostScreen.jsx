@@ -19,6 +19,7 @@ import { AntDesign } from '@expo/vector-icons';
 import http from "../../config/HttpConfig"
 import LoadingComponent from "../../components/LoadingComponent";
 import NoDataFound from "../../components/NoDataFound";
+import apiInstance from "../../config/apiInstance";
 
 export default ListAllKostScreen = ({ navigation }) => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -47,7 +48,7 @@ export default ListAllKostScreen = ({ navigation }) => {
 
     const fetchGenders = async () => {
         try {
-            const response = await http.get('/gender/v1');
+            const response = await apiInstance.get('/gender/v1');
             const dataGenders = response.data;
             setGenders(dataGenders);
         } catch (error) {
@@ -58,7 +59,7 @@ export default ListAllKostScreen = ({ navigation }) => {
 
     const fetchProvinces = async () => {
         try {
-            const response = await http.get('/province');
+            const response = await apiInstance.get('/province');
             const dataProvinces = response.data.data
             setProvinces(dataProvinces);
         } catch (error) {
@@ -68,7 +69,7 @@ export default ListAllKostScreen = ({ navigation }) => {
 
     const fetchCities = async (provinceId) => {
         try {
-            const response = await http.get(`/city?province_id=${provinceId}`);
+            const response = await apiInstance.get(`/city?province_id=${provinceId}`);
             const dataCity = response.data.data
             setCities(dataCity);
         } catch (error) {
@@ -78,7 +79,7 @@ export default ListAllKostScreen = ({ navigation }) => {
 
     const fetchDistricts = async (cityId) => {
         try {
-            const response = await http.get(`/subdistrict?city_id=${cityId}`);
+            const response = await apiInstance.get(`/subdistrict?city_id=${cityId}`);
             const dataDistrict = response.data.data
             setDistricts(dataDistrict);
         } catch (error) {
@@ -90,7 +91,7 @@ export default ListAllKostScreen = ({ navigation }) => {
         const fetchData = async () => {
             setLoading(true);
             try {
-                const response = await http.get(`/kost?page=${currentPage}`);
+                const response = await apiInstance.get(`/kost?page=${currentPage}`);
                 const { data, paggingResponse } = response.data;
                 const newData = data.map((item) => ({
                     id: item.id,
@@ -131,7 +132,7 @@ export default ListAllKostScreen = ({ navigation }) => {
                 if (selectedProvinceId) params.append('province_id', selectedProvinceId);
                 if (selectedCityId) params.append('city_id', selectedCityId);
                 if (selectedGenderId) params.append('gender_type_id', selectedGenderId);
-                const response = await http.get(`/kost?${params.toString()}`);
+                const response = await apiInstance.get(`/kost?${params.toString()}`);
                 console.log(`/kost?${params.toString()}`);
                 const { data, paggingResponse } = response.data;
                 const newData = data.map((item) => ({
@@ -163,7 +164,7 @@ export default ListAllKostScreen = ({ navigation }) => {
                 if (selectedCityId) params.append('city_id', selectedCityId);
                 if (selectedGenderId) params.append('gender_type_id', selectedGenderId);
                 if (text) params.append('name', text);
-                const response = await http.get(`/kost?${params.toString()}`);
+                const response = await apiInstance.get(`/kost?${params.toString()}`);
                 console.log(`/kost?${params.toString()}`);
                 const { data, paggingResponse } = response.data;
                 const newData = data.map((item) => ({
@@ -204,7 +205,7 @@ export default ListAllKostScreen = ({ navigation }) => {
           if (selectedCityId) params.append('city_id', selectedCityId);
           if (selectedGenderId) params.append('gender_type_id', selectedGenderId);
           if (searchQuery) params.append('name', searchQuery);
-          const response = await http.get(`/kost?${params.toString()}`);
+          const response = await apiInstance.get(`/kost?${params.toString()}`);
           const { data, paggingResponse } = response.data;
           console.log(`/kost?${params.toString()}`);
           const newData = data.map((item) => ({
@@ -244,7 +245,7 @@ export default ListAllKostScreen = ({ navigation }) => {
           setSelectedCityId(0);
           setSelectedGenderId("");
           setShowFilterModal(false)
-          const response = await http.get(`/kost?page=${currentPage}`);
+          const response = await apiInstance.get(`/kost?page=${currentPage}`);
           const { data, paggingResponse } = response.data;
           console.log(`/kost?page=${currentPage}`);
           const newData = data.map((item) => ({
@@ -376,7 +377,7 @@ export default ListAllKostScreen = ({ navigation }) => {
                                             console.log(selectedGenderId);
                                         }
                                     }}>
-                                    <Picker.Item label="Pilih Jenis Kelamin" value="" />
+                                    <Picker.Item label="Select kost type" value="" />
                                     {genders.map((gender) => (
                                         <Picker.Item key={gender.id} label={gender.name} value={gender.id} />
                                     ))}
@@ -400,7 +401,7 @@ export default ListAllKostScreen = ({ navigation }) => {
                                             fetchCities(selectedProv.id);
                                         }
                                     }}>
-                                    <Picker.Item label="Pilih Provinsi" value={0} />
+                                    <Picker.Item label="Select province" value={0} />
                                     {provinces.length > 0 && provinces.map((province) => (
                                         <Picker.Item key={province.id} label={province.name} value={province.id} />
                                     ))}
@@ -424,7 +425,7 @@ export default ListAllKostScreen = ({ navigation }) => {
                                             fetchDistricts(selectedCity.id);
                                         }
                                     }}>
-                                    <Picker.Item label="Pilih Kota" value={0} />
+                                    <Picker.Item label="Select city" value={0} />
                                     {cities.length > 0 && cities.map((city) => (
                                         <Picker.Item key={city.id} label={city.name} value={city.id} />
                                     ))}
@@ -444,7 +445,7 @@ export default ListAllKostScreen = ({ navigation }) => {
                                             setSelectedDistrictId(selectedDist.id);
                                         }
                                     }}>
-                                    <Picker.Item label="Pilih Kecamatan" value={0} />
+                                    <Picker.Item label="Select district" value={0} />
                                     {districts.length > 0 && districts.map((district) => (
                                         <Picker.Item key={district.id} label={district.name} value={district.id} />
                                     ))}
@@ -456,7 +457,7 @@ export default ListAllKostScreen = ({ navigation }) => {
                             <TouchableOpacity onPress={handleFilter}>
                                 <View style={styles.filter}>
                                     <Text style={{
-                                        fontSize: 20, margin: 8, textAlign
+                                        fontSize: 17, margin: 8, textAlign
                                             : "center"
                                     }}>Filter</Text>
                                 </View>
@@ -466,7 +467,7 @@ export default ListAllKostScreen = ({ navigation }) => {
                             <TouchableOpacity onPress={handleResetFilter}>
                                 <View style={styles.filter}>
                                     <Text style={{
-                                        fontSize: 20, margin: 8, textAlign
+                                        fontSize: 17, margin: 8, textAlign
                                             : "center"
                                     }}>Reset Filter</Text>
                                 </View>
