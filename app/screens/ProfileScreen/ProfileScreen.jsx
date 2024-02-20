@@ -30,7 +30,6 @@ export default ProfileScreen = ({ navigation }) => {
       setUserData(data.data);
       setPhoneNumber(data.data.phoneNumber);
     } catch (error) {
-      // console.error("Error! fetching data:", error);
     }
   };
 
@@ -57,7 +56,7 @@ export default ProfileScreen = ({ navigation }) => {
 
   const handleLogout = async () => {
     try {
-      logout(); 
+      logout();
     } catch (error) {
       console.error("Error logging out:", error);
       Alert.alert("Error", "An error occurred while logging out");
