@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   ScrollView,
@@ -8,70 +8,51 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-
 import Colors from "../../utils/Colors";
 import { StatusBar } from "expo-status-bar";
 import BackButton from "../../components/DetailKost/BackButton";
 import TransactionItem from "../../components/PopularKostArea/TransactionItem";
+import http from "../../config/HttpConfig";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const dummyTransactionData = [
-  {
-    id: "1",
-    title: "Kost Puri Indah Menteng",
-    price: 1600000,
-    province: "DKI Jakarta",
-    city: "Kota Adm. Jakarta Pusat",
-    status: "pending",
-    gender: "male",
-    date: "2024-02-12",
-  },
-  {
-    id: "2",
-    title: "Kost Green Pramuka",
-    price: 1450000,
-    province: "Jawa Barat",
-    city: "Kota Bandung",
-    status: "approve",
-    gender: "male",
-    date: "2024-02-10",
-  },
-  {
-    id: "3",
-    title: "Royal Kost Menteng",
-    price: 2540000,
-    province: "Jawa Barat",
-    city: "Kota Bogor",
-    status: "approve",
-    gender: "female",
-    date: "2024-02-15",
-  },
-  {
-    id: "4",
-    title: "Luxury Kemang Kost",
-    price: 2500000,
-    province: "DI Yogyakarta",
-    city: "Wonosari",
-    status: "rejected",
-    gender: "female",
-    date: "2024-02-20",
-  },
-];
-
-export default TransactionScreen = ({ navigation, route }) => {
-  const [transactionData, setTransactionData] = useState(dummyTransactionData);
+export default TransactionScreen = ({ navigation }) => {
+  const [transactionData, setTransactionData] = useState([]);
   const [activeFilter, setActiveFilter] = useState("all");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const userId = await AsyncStorage.getItem("userId");
+
+        const responseCustomer = await http.get(`/customer/user/${userId}`);
+        const customerId = responseCustomer.data.data.id;
+
+        const responseTransactions = await http.get(
+          `/transactions?customerId=${customerId}`
+        );
+
+        setTransactionData(responseTransactions.data.data);
+      } catch (error) {
+        console.error("Error fetching transaction data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleFilter = (filter) => {
     setActiveFilter(filter);
   };
 
+  const transactionIds = transactionData.map((transaction) => transaction.id);
+  console.log(transactionIds);
   const filteredData =
     activeFilter === "all"
       ? transactionData
-      : transactionData.filter((item) => item.status === activeFilter);
+      : transactionData.filter((item) => item.aprStatus === activeFilter);
 
   let noDataText = "";
-  if (activeFilter === "pending" && filteredData.length === 0) {
+  if (activeFilter === 0 && filteredData.length === 0) {
     noDataText = (
       <View style={styles.noDataContainer}>
         <Image
@@ -81,7 +62,7 @@ export default TransactionScreen = ({ navigation, route }) => {
         <Text style={styles.noDataText}>No pending transaction</Text>
       </View>
     );
-  } else if (activeFilter === "cancel" && filteredData.length === 0) {
+  } else if (activeFilter === 1 && filteredData.length === 0) {
     noDataText = (
       <View style={styles.noDataContainer}>
         <Image
@@ -91,7 +72,7 @@ export default TransactionScreen = ({ navigation, route }) => {
         <Text style={styles.noDataText}>No transaction cancelled</Text>
       </View>
     );
-  } else if (activeFilter === "approve" && filteredData.length === 0) {
+  } else if (activeFilter === 3 && filteredData.length === 0) {
     noDataText = (
       <View style={styles.noDataContainer}>
         <Image
@@ -101,7 +82,7 @@ export default TransactionScreen = ({ navigation, route }) => {
         <Text style={styles.noDataText}>No transaction approved</Text>
       </View>
     );
-  } else if (activeFilter === "rejected" && filteredData.length === 0) {
+  } else if (activeFilter === 2 && filteredData.length === 0) {
     noDataText = (
       <View style={styles.noDataContainer}>
         <Image
@@ -125,7 +106,7 @@ export default TransactionScreen = ({ navigation, route }) => {
       <View style={styles.appBar}>
         <View style={styles.header}>
           <BackButton onPress={navigation.goBack} />
-          <Text style={styles.title}>Transaction Record</Text>
+          <Text style={styles.title}>Transaction History</Text>
         </View>
       </View>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -142,27 +123,27 @@ export default TransactionScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={[
               styles.filterButton,
-              activeFilter === "pending" && styles.activeFilter,
+              activeFilter === 0 && styles.activeFilter,
             ]}
-            onPress={() => handleFilter("pending")}
+            onPress={() => handleFilter(0)}
           >
             <Text style={styles.filterText}>Pending</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[
               styles.filterButton,
-              activeFilter === "approve" && styles.activeFilter,
+              activeFilter === 3 && styles.activeFilter,
             ]}
-            onPress={() => handleFilter("approve")}
+            onPress={() => handleFilter(3)}
           >
             <Text style={styles.filterText}>Approve</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[
               styles.filterButton,
-              activeFilter === "cancel" && styles.activeFilter,
+              activeFilter === 1 && styles.activeFilter,
             ]}
-            onPress={() => handleFilter("cancel")}
+            onPress={() => handleFilter(1)}
           >
             <Text style={styles.filterText}>Cancel</Text>
           </TouchableOpacity>
@@ -170,9 +151,9 @@ export default TransactionScreen = ({ navigation, route }) => {
           <TouchableOpacity
             style={[
               styles.filterButton,
-              activeFilter === "rejected" && styles.activeFilter,
+              activeFilter === 2 && styles.activeFilter,
             ]}
-            onPress={() => handleFilter("rejected")}
+            onPress={() => handleFilter(2)}
           >
             <Text style={styles.filterText}>Rejected</Text>
           </TouchableOpacity>
@@ -186,11 +167,14 @@ export default TransactionScreen = ({ navigation, route }) => {
               renderItem={({ item }) => (
                 <TransactionItem
                   item={item}
-                  // onPress={() => navigation.navigate("DetailKostScreen", item)}
+                  onPress={() =>
+                    navigation.navigate("DetailTransactionScreen", {
+                      transactionId: item.id,
+                    })
+                  }
                 />
               )}
               keyExtractor={(item) => item.id}
-              contentContainerStyle={styles.flatListContainer}
             />
           )}
         </View>

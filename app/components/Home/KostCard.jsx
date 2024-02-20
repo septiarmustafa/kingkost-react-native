@@ -23,7 +23,14 @@ export default KostCard = ({ kost, navigation }) => {
       onPress={() => navigation.navigate("DetailKostScreen", kost)}
     >
       <View style={styles.card}>
-        {kost.image !== null ? (<Image source={{ uri: kost.image }} style={styles.cardImage} />) : (<Image source={require("../../../assets/images/default-image.png")} style={styles.cardImage} />)}
+        {kost.image !== null ? (
+          <Image source={{ uri: kost.image }} style={styles.cardImage} />
+        ) : (
+          <Image
+            source={require("../../../assets/images/default-image.png")}
+            style={styles.cardImage}
+          />
+        )}
         <View>
           <View
             style={{
@@ -32,7 +39,11 @@ export default KostCard = ({ kost, navigation }) => {
               marginTop: 10,
             }}
           >
-            <Text style={{ fontSize: 16, fontWeight: "bold" }} numberOfLines={1} ellipsizeMode="tail">
+            <Text
+              style={{ fontSize: 16, fontWeight: "bold" }}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
               {kost.title}
             </Text>
             <Text
@@ -61,19 +72,25 @@ export default KostCard = ({ kost, navigation }) => {
             />
           </View>
           <View style={{ marginTop: 10, flexDirection: "row" }}>
-            {kost.isWifi ? <View style={styles.facility}>
-              <Fontisto name="wifi-logo" size={20} color="black" />
-            </View> : null}
-            {kost.isParking ? <View style={styles.facility}>
-              <FontAwesome5 name="parking" size={20} color="black" />
-            </View> : null}
-            {kost.isAc ? <View style={styles.facility}>
-              <MaterialCommunityIcons
-                name="air-conditioner"
-                size={20}
-                color="black"
-              />
-            </View> : null}
+            {kost.isWifi ? (
+              <View style={styles.facility}>
+                <Fontisto name="wifi-logo" size={20} color="black" />
+              </View>
+            ) : null}
+            {kost.isParking ? (
+              <View style={styles.facility}>
+                <FontAwesome5 name="parking" size={20} color="black" />
+              </View>
+            ) : null}
+            {kost.isAc ? (
+              <View style={styles.facility}>
+                <MaterialCommunityIcons
+                  name="air-conditioner"
+                  size={20}
+                  color="black"
+                />
+              </View>
+            ) : null}
           </View>
         </View>
       </View>

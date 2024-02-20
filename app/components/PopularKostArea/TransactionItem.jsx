@@ -4,6 +4,7 @@ import formatCurrencyIDR from "../../utils/formatCurrencyIDR";
 import Facility from "../Facility";
 import Colors from "../../utils/Colors";
 import TransactionStatusBadge from "../TransactionStatusBadge";
+import DateFormatter from "../../utils/DateFormatter";
 
 const getRandomImage = () => {
   const baseUrl = "https://source.unsplash.com/";
@@ -19,33 +20,36 @@ export default TransactionItem = ({ item, onPress }) => {
         <View style={styles.infoContainer}>
           <View style={styles.titleLocationPriceContainer}>
             <View style={styles.textContainer}>
-              <Text style={styles.title}>{item.title}</Text>
+              <Text style={styles.title}>{item.kost.name}</Text>
               <Text style={styles.location}>
-                {item.city}, {item.province}
+                {item.kost.city.name}, {item.kost.province.name}
               </Text>
               <Text style={styles.price}>
-                {formatCurrencyIDR(item.price)} / Bulan
+                {formatCurrencyIDR(item.kost.kostPrices[0].price)} / Bulan
               </Text>
             </View>
-            <TransactionStatusBadge status={item.status} date={item.date} />
+            <TransactionStatusBadge
+              status={item.aprStatus}
+              date={DateFormatter.formatDate(item.createdAt, "dd-mm-yyyy")}
+            />
           </View>
           <View style={styles.facilityContainer}>
             <Facility
-              wifi={item.isWifi}
-              parking={item.isParking}
-              airConditioner={item.isAc}
+              wifi={item.kost.isWifi}
+              parking={item.kost.isParking}
+              airConditioner={item.kost.isAc}
             />
             <View style={styles.genderContainer}>
               <Image
                 style={styles.genderIcon}
                 source={
-                  item.gender == "male"
+                  item.kost.genderType.name == "MALE"
                     ? require("../../../assets/icons/male.jpg")
                     : require("../../../assets/icons/female.jpg")
                 }
               />
               <Text style={styles.genderText}>
-                {item.gender == "male" ? "Male" : "Female"}
+                {item.kost.genderType.name == "MALE" ? "Male" : "Female"}
               </Text>
             </View>
           </View>

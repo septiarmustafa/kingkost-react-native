@@ -13,7 +13,6 @@ import KostCard from "../../components/Home/KostCard";
 import CustomTitle from "../../components/Home/CustomTitle";
 import CarouselBanner from "../../components/Home/CarouselBanner";
 import http from "../../config/HttpConfig";
-import { BASE_HOST } from "../../config/BaseUrl";
 import LoadingComponent from "../../components/LoadingComponent";
 import NoDataFound from "../../components/NoDataFound";
 
