@@ -14,7 +14,6 @@ import BackButton from "../../components/DetailKost/BackButton";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
-import { BASE_HOST } from "../../config/BaseUrl";
 import LoadingComponent from "../../components/LoadingComponent";
 import apiInstance from "../../config/apiInstance";
 
@@ -127,18 +126,19 @@ export default function InfoProfileScreen({ navigation, route }) {
           type: "image/jpeg",
         });
 
-        setIsLoading(true);
+        console.log(formData);
 
-        const response = await fetch(
-          `${BASE_HOST}/customer/v1/upload/${userData.id}`,
-          {
-            method: "POST",
-            body: formData,
-          }
+        setIsLoading(true);
+        console.log("user id ",userData.id);
+        const response = await apiInstance.post(
+          `/customer/v1/upload/${userData.id}`,
+           formData
         );
 
-        if (response.ok) {
-          const data = await response.json();
+        console.log(response);
+
+        if (response.status == 200 || response.status == 201) {
+          const data = await response.data;
           console.log("Upload successful:", data);
           Alert.alert("Success", "Profile updated successfully", [
             { text: "OK", onPress: () => navigation.goBack() },
