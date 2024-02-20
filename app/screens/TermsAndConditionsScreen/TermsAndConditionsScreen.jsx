@@ -66,8 +66,8 @@ export default function TermsAndConditionsScreen() {
               selected dates by the Tenant.
             </Text>
             <Text style={styles.definition}>
-              1.2 "Mamikos User Account" means the registered account owned by
-              you and managed by Mamikos.
+              1.2 "Kingkos User Account" means the registered account owned by
+              you and managed by Kingkos.
             </Text>
             <Text style={styles.definition}>
               1.3 "Tenant" means prospective or existing residents of the

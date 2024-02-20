@@ -6,17 +6,16 @@ import Colors from "../../utils/Colors";
 import TransactionStatusBadge from "../TransactionStatusBadge";
 import DateFormatter from "../../utils/DateFormatter";
 
-const getRandomImage = () => {
-  const baseUrl = "https://source.unsplash.com/";
-  const imageSize = "800x600";
-  return `${baseUrl}${imageSize}/?house=${Math.random()}`;
-};
-
 export default TransactionItem = ({ item, onPress }) => {
+  const kostImage =
+    item.kost.images.length > 0 ? item.kost.images[0].url : null;
+
   return (
     <TouchableOpacity style={styles.itemContainer} onPress={onPress}>
       <View style={styles.card}>
-        <Image source={{ uri: getRandomImage() }} style={styles.image} />
+        {kostImage && (
+          <Image source={{ uri: kostImage }} style={styles.image} />
+        )}
         <View style={styles.infoContainer}>
           <View style={styles.titleLocationPriceContainer}>
             <View style={styles.textContainer}>
@@ -25,7 +24,7 @@ export default TransactionItem = ({ item, onPress }) => {
                 {item.kost.city.name}, {item.kost.province.name}
               </Text>
               <Text style={styles.price}>
-                {formatCurrencyIDR(item.kost.kostPrices[0].price)} / Bulan
+                {formatCurrencyIDR(item.kost.kostPrice.price)} / Bulan
               </Text>
             </View>
             <TransactionStatusBadge
@@ -41,17 +40,25 @@ export default TransactionItem = ({ item, onPress }) => {
             />
             <View style={styles.genderContainer}>
               <Image
-                style={{  width: item.gender == "campur" ? 37 : 25,
-                height:item.gender == "campur" ? 30 : 25,
-                marginRight: 5, }}
+                style={{
+                  width: item.kost.genderType.name == "CAMPUR" ? 37 : 25,
+                  height: item.kost.genderType.name == "CAMPUR" ? 30 : 25,
+                  marginRight: 5,
+                }}
                 source={
                   item.kost.genderType.name == "MALE"
                     ? require("../../../assets/icons/male.jpg")
-                    : item.gender == "campur" ?  require("../../../assets/icons/mix.jpg") : require("../../../assets/icons/female.jpg")
+                    : item.kost.genderType.name == "CAMPUR"
+                    ? require("../../../assets/icons/mix.jpg")
+                    : require("../../../assets/icons/female.jpg")
                 }
               />
               <Text style={styles.genderText}>
-                {item.gender == "male" ? "Male" : item.gender == "campur" ? "Mix" : "Female"}
+                {item.kost.genderType.name == "MALE"
+                  ? "Male"
+                  : item.kost.genderType.name == "CAMPUR"
+                  ? "Mix"
+                  : "Female"}
               </Text>
             </View>
           </View>
