@@ -39,6 +39,7 @@ export default DetailKostScreen = ({ navigation, route }) => {
   const calculateTotalPrice = () => {
     const monthlyPrice = kost.price;
     const totalPrice = selectedMonths * monthlyPrice;
+    console.log(totalPrice);
     return formatCurrencyIDR(totalPrice);
   };
 
@@ -118,8 +119,6 @@ export default DetailKostScreen = ({ navigation, route }) => {
               />
             )}
           />) : (<Image source={require("../../../assets/images/default-image.png")} style={styles.cardImage} />)}
-
-
         </View>
         <ImageModal
           visible={isModalVisible}
@@ -175,6 +174,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderRadius: 10,
     marginTop: 10,
-    backgroundColor: Colors.WEAK_COLOR
-  }
+    backgroundColor: Colors.WEAK_COLOR,
+  },
 });

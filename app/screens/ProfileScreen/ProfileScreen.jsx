@@ -71,7 +71,14 @@ export default ProfileScreen = ({ navigation }) => {
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => setModalVisible(true)}>
-          <Image source={{ uri: userData.url }} style={styles.profileImage} />
+          <Image
+            source={
+              userData.url
+                ? { uri: userData.url }
+                : require("../../../assets/images/default-profile.jpg")
+            }
+            style={styles.profileImage}
+          />
         </TouchableOpacity>
         <Text style={styles.userName}>{fullName}</Text>
         <Text style={styles.userRole}>{phoneNumber}</Text>
@@ -85,7 +92,14 @@ export default ProfileScreen = ({ navigation }) => {
         }}
       >
         <View style={styles.modalContainer}>
-          <Image source={{ uri: userData.url }} style={styles.modalImage} />
+          <Image
+            source={
+              userData.url
+                ? { uri: userData.url }
+                : require("../../../assets/images/default-profile.jpg")
+            }
+            style={styles.modalImage}
+          />
           <TouchableOpacity
             onPress={() => setModalVisible(false)}
             style={styles.closeButton}

@@ -21,6 +21,7 @@ import LoadingComponent from "../../components/LoadingComponent";
 import NoDataFound from "../../components/NoDataFound";
 import apiInstance from "../../config/apiInstance";
 
+
 export default ListAllKostScreen = ({ navigation }) => {
     const [searchQuery, setSearchQuery] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
@@ -41,10 +42,12 @@ export default ListAllKostScreen = ({ navigation }) => {
     const [selectedGender, setSelectedGender] = useState("");
     const [selectedGenderId, setSelectedGenderId] = useState("");
 
+
     useEffect(() => {
         fetchGenders();
         fetchProvinces();
     }, []);
+
 
     const fetchGenders = async () => {
         try {
@@ -57,6 +60,8 @@ export default ListAllKostScreen = ({ navigation }) => {
     };
 
 
+
+
     const fetchProvinces = async () => {
         try {
             const response = await apiInstance.get('/province');
@@ -66,6 +71,7 @@ export default ListAllKostScreen = ({ navigation }) => {
             console.error('Error fetching provinces:', error);
         }
     };
+
 
     const fetchCities = async (provinceId) => {
         try {
@@ -77,6 +83,7 @@ export default ListAllKostScreen = ({ navigation }) => {
         }
     };
 
+
     const fetchDistricts = async (cityId) => {
         try {
             const response = await apiInstance.get(`/subdistrict?city_id=${cityId}`);
@@ -86,6 +93,7 @@ export default ListAllKostScreen = ({ navigation }) => {
             console.error('Error fetching districts:', error);
         }
     };
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -122,6 +130,7 @@ export default ListAllKostScreen = ({ navigation }) => {
         };
         fetchData();
     }, [currentPage]);
+
 
     const handleSearch = async (text) => {
         setSearchQuery(text);
@@ -195,6 +204,7 @@ export default ListAllKostScreen = ({ navigation }) => {
         }
     };
 
+
     const handleFilter = async () => {
         try {
           setLoading(true);
@@ -235,7 +245,7 @@ export default ListAllKostScreen = ({ navigation }) => {
         }
         setLoading(false);
       };
-      
+     
       const handleResetFilter = async () => {
         try {
           setLoading(true);
@@ -275,7 +285,8 @@ export default ListAllKostScreen = ({ navigation }) => {
         }
         setLoading(false);
       };
-      
+     
+
 
     const handleNextPage = () => {
         if (currentPage < totalPage) {
@@ -283,15 +294,19 @@ export default ListAllKostScreen = ({ navigation }) => {
         }
     };
 
+
     const handlePreviousPage = () => {
         if (currentPage > 0) {
             setCurrentPage(currentPage - 1);
         }
     };
 
+
     const handleFilterIconPress = () => {
         setShowFilterModal(true);
     };
+
+
 
 
     return (
@@ -310,6 +325,8 @@ export default ListAllKostScreen = ({ navigation }) => {
                             <Feather name="filter" size={24} color="black" />
                         </TouchableOpacity>
                     </View>
+
+
 
 
                 </View>
@@ -452,6 +469,7 @@ export default ListAllKostScreen = ({ navigation }) => {
                                 </Picker>
                             </View>
 
+
                         </View>
                         <View style={{ marginBottom: 10 , marginTop : 20}}>
                             <TouchableOpacity onPress={handleFilter}>
@@ -474,6 +492,8 @@ export default ListAllKostScreen = ({ navigation }) => {
                             </TouchableOpacity>
                         </View>
                     </View>
+
+
 
 
                 </View>
@@ -565,3 +585,8 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.PRIMARY_COLOR
     }
 });
+
+
+
+
+
