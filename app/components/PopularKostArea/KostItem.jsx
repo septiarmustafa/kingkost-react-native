@@ -12,7 +12,7 @@ export default KostItem = ({ item, onPress }) => {
             onPress={onPress}
         >
             <View style={styles.card}>
-                <Image source={item.image == null || item.image === "" ? require("../../../assets/images/default-image.png") : {uri : item.image}} style={styles.image} />
+                <Image source={item.image == null || item.image === "" ? require("../../../assets/images/default-image.png") : { uri: item.image }} style={styles.image} />
                 <View style={styles.infoContainer}>
                     <View style={styles.titleLocationPriceContainer}>
                         <View style={styles.textContainer}>
@@ -37,8 +37,12 @@ export default KostItem = ({ item, onPress }) => {
                             airConditioner={item.isAc}
                         />
                         <View style={styles.genderContainer}>
-                            <Image style={styles.genderIcon} source={item.gender == "male" ? require("../../../assets/icons/male.jpg") : require("../../../assets/icons/female.jpg")} />
-                            <Text style={styles.genderText}>{item.gender == "male" ? "Male" : "Female"}</Text>
+                            <Image style={{
+                                width: item.gender != "campur" ? 25 : 37,
+                                height:item.gender != "campur" ? 25 : 30,
+                                marginRight: 5,
+                            }} source={item.gender == "male" ? require("../../../assets/icons/male.jpg") : item.gender == "campur" ? require("../../../assets/icons/mix.jpg") : require("../../../assets/icons/female.jpg")} />
+                            <Text style={styles.genderText}>{item.gender == "male" ? "Male" : item.gender == "campur" ? "Mix" : "Female"}</Text>
                         </View>
                     </View>
                 </View>
@@ -96,11 +100,6 @@ const styles = StyleSheet.create({
     genderContainer: {
         flexDirection: "row",
         alignItems: "center",
-    },
-    genderIcon: {
-        width: 25,
-        height: 25,
-        marginRight: 5,
     },
     genderText: {
         fontSize: 13,

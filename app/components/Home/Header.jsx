@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import http from "../../config/HttpConfig";
 import Colors from "../../utils/Colors";
 import profile from "../../../assets/images/default-profile.jpg";
+import apiInstance from "../../config/apiInstance";
 
 export default function Header() {
   const [fullName, setFullName] = useState("");
@@ -13,9 +13,11 @@ export default function Header() {
       try {
         const userId = await AsyncStorage.getItem("userId");
         if (userId) {
-          const response = await http.get(`/customer/user/${userId}`);
+          const response = await apiInstance.get(`/customer/user/${userId}`);
           if (response.status === 200) {
             setFullName(response.data.data.fullName);
+            console.log("customer id ",response.data.data.id);
+            await AsyncStorage.setItem("customerId",response.data.data.id)
           } else {
             console.error("Failed to fetch user data:", response.data.message);
           }

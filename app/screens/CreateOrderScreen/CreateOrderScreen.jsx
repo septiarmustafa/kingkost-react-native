@@ -15,12 +15,12 @@ import { Picker } from "@react-native-picker/picker";
 import formatCurrencyIDR from "../../utils/formatCurrencyIDR";
 import { AntDesign } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Popup from "../../components/Popup";
+import apiInstance from "../../config/apiInstance";
 
 
 export default function CreateOrderScreen({ navigation, route }) {
   const kost = route.params;
-  const [sellerId, setSellerId] = useState(null);
-  const [totalHarga, setTotalHarga] = useState(0);
   const [monthPeriod, setMonthPeriod] = useState(1);
   const [monthData, setMonthData] = useState([]);
   const [selectedMonthId, setSelectedMonthId] = useState(null);
@@ -30,6 +30,8 @@ export default function CreateOrderScreen({ navigation, route }) {
   const [userId, setUserId] = useState(null);
   const [userGender, setUserGender] = useState(null);
   const [dataOrder, setDataOrder] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   const [sections, setSections] = useState({
     section1: true,
@@ -37,33 +39,6 @@ export default function CreateOrderScreen({ navigation, route }) {
     section3: false,
     section4: false,
   });
-
-
-  const fetchUserData = async (userId) => {
-    try {
-      const response = await http.get(`/customer/user/${userId}`);
-      const data = response.data;
-      setUserId(data.data.id);
-      setUserGender(data.data.genderTypeId.name)
-      console.log("kost gender " + kost.gender);
-      console.log("user id " + userId);
-      console.log("user gender " + userGender);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
-
-  useEffect(() => {
-    AsyncStorage.getItem("userId")
-      .then((userId) => {
-        setUserId(userId);
-        fetchUserData(userId);
-    
-      })
-      .catch((error) => {
-        console.error("Error retrieving userId from AsyncStorage:", error);
-      });
-  }, []);
 
   const monthTypeMap = {
     "ONE_MONTH": 1,
@@ -86,6 +61,7 @@ export default function CreateOrderScreen({ navigation, route }) {
     const totalPrice = numberOfMonths * monthlyPrice;
     return formatCurrencyIDR(totalPrice);
   };
+
   const toggleSection = (section) => {
     setSections((prevSections) => ({
       ...prevSections,
@@ -93,14 +69,28 @@ export default function CreateOrderScreen({ navigation, route }) {
     }));
   };
 
-  useEffect(() => {
-    fetchPaymentTypes();
-    fetchMonthData();
-  }, []);
+  const fetchUserData = async (userId) => {
+    try {
+      const response = await apiInstance.get(`/customer/user/${userId}`);
+      const data = response.data;
+      setUserId(data.data.id);
+      setUserGender(data.data.genderTypeId.name)
+      console.log("kost gender " + kost.gender);
+      console.log("user id " + userId);
+      console.log("user gender " + userGender);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const handleMonthChange = (id) => {
+    setSelectedMonths(monthData.find((month) => month.id === id).name);
+    setSelectedMonthId(id);
+  };
 
   const fetchPaymentTypes = async () => {
     try {
-      const response = await http.get("/payment/v1");
+      const response = await apiInstance.get("/payment/v1");
       setPaymentTypes(response.data);
     } catch (error) {
       console.error("Error fetching payment types:", error);
@@ -109,7 +99,7 @@ export default function CreateOrderScreen({ navigation, route }) {
 
   const fetchMonthData = async () => {
     try {
-      const response = await http.get("/month/v1");
+      const response = await apiInstance.get("/month/v1");
       const months = response.data.map((month) => ({
         id: month.id,
         name: month.name,
@@ -121,27 +111,28 @@ export default function CreateOrderScreen({ navigation, route }) {
       console.error("Error fetching month data:", error);
     }
   };
-  const handleMonthChange = (id) => {
-    setSelectedMonths(monthData.find((month) => month.id === id).name);
-    setSelectedMonthId(id);
-  };
+
   const handleOrderSubmit = async () => {
     if (kost.gender.toLowerCase() !== "mix" && userGender.toLowerCase() !== kost.gender.toLowerCase()) {
-      alert(`This kost is only available for ${kost.gender.toLowerCase()}`);
+      setModalMessage(`This kost is only available for ${kost.gender.toLowerCase()}`);
+      setModalVisible(true);
       return;
     }
-  
+
     if (!paymentTypeId || !monthPeriod) {
       let message = '';
-
       if (!paymentTypeId) {
         message = 'Please choose payment type';
+        setModalMessage(message);
+        setModalVisible(true);
+        return;
       }
-
       if (!monthPeriod) {
         message = 'Please choose period';
+        setModalMessage(message);
+        setModalVisible(true);
+        return;
       }
-      alert(message);
       return;
     }
 
@@ -155,14 +146,13 @@ export default function CreateOrderScreen({ navigation, route }) {
     console.log(orderData);
 
     try {
-      const response = await http.post("/transactions", orderData);
-
+      const response = await apiInstance.post("/transactions", orderData);
       if (response.status === 200 || response.status === 201) {
         setDataOrder(response.data.data)
         console.log(response.data.data);
         console.log(dataOrder);
-        console.log( response.status+" Order submitted successfully");
-       navigation.navigate("OrderStatusScreen", response.data.data)
+        console.log(response.status + " Order submitted successfully");
+        navigation.navigate("OrderStatusScreen", response.data.data)
       } else {
         const errorData = await response.json();
         console.error("Error:", errorData);
@@ -174,12 +164,34 @@ export default function CreateOrderScreen({ navigation, route }) {
     }
   };
 
+  useEffect(() => {
+    AsyncStorage.getItem("userId")
+      .then((userId) => {
+        setUserId(userId);
+        fetchUserData(userId);
+
+      })
+      .catch((error) => {
+        console.error("Error retrieving userId from AsyncStorage:", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetchPaymentTypes();
+    fetchMonthData();
+  }, []);
+
   return (
     <ScrollView>
       <StatusBar
         translucent={false}
         backgroundColor={Colors.WHITE}
         barStyle="dark-content"
+      />
+      <Popup
+        message={modalMessage}
+        modalVisible={modalVisible}
+        setModalVisible={setModalVisible}
       />
       <View style={styles.appBar}>
         <View style={styles.header}>
@@ -188,8 +200,6 @@ export default function CreateOrderScreen({ navigation, route }) {
         </View>
       </View>
       <View style={styles.container}>
-
-
         <View style={styles.card}>
           <View>
             <TouchableOpacity onPress={() => toggleSection("section1")}>
@@ -217,10 +227,10 @@ export default function CreateOrderScreen({ navigation, route }) {
                   <Text style={styles.titleInfo}>
                     Description
                   </Text>
-                  <View style ={{ width : 150 }}>
-                  <Text style={styles.trailingInfo}>
-                    {kost.description}
-                  </Text>
+                  <View style={{ width: 150 }}>
+                    <Text style={styles.trailingInfo}>
+                      {kost.description}
+                    </Text>
                   </View>
                 </View>
                 <View style={styles.info}>
@@ -235,12 +245,11 @@ export default function CreateOrderScreen({ navigation, route }) {
                   <Text style={styles.titleInfo}>
                     City
                   </Text>
-                  <View style ={{ width : 150 }}>
-                  <Text style={styles.trailingInfo}>
-                    {kost.city}
-                  </Text>
+                  <View style={{ width: 150 }}>
+                    <Text style={styles.trailingInfo}>
+                      {kost.city}
+                    </Text>
                   </View>
-             
                 </View>
                 <View style={styles.info}>
                   <Text style={styles.titleInfo}>
@@ -299,11 +308,9 @@ export default function CreateOrderScreen({ navigation, route }) {
                   </Text>
                 </View>
               </>
-
             )}
           </View>
         </View>
-
         <View style={styles.card}>
           <View>
             <TouchableOpacity onPress={() => toggleSection("section2")}>
@@ -391,12 +398,9 @@ export default function CreateOrderScreen({ navigation, route }) {
                   </TouchableOpacity>
                 ))}
               </View>
-
             )}
           </View>
         </View>
-
-
         <View style={styles.card}>
           <View>
             <TouchableOpacity onPress={() => toggleSection("section4")}>
@@ -439,14 +443,10 @@ export default function CreateOrderScreen({ navigation, route }) {
                     {calculateTotalPrice()}
                   </Text>
                 </View>
-
               </View>
             )}
           </View>
         </View>
-
-
-
         <TouchableOpacity style={styles.button} onPress={handleOrderSubmit}>
           <Text style={styles.buttonText}>Book Now</Text>
         </TouchableOpacity>
@@ -552,5 +552,5 @@ const styles = StyleSheet.create({
   },
   paymentOption: {
     marginBottom: 10
-  }
+  },
 });
