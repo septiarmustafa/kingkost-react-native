@@ -11,6 +11,7 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FontAwesome } from "@expo/vector-icons";
 import apiInstance from "../../config/apiInstance";
+import { useAuth } from "../../context/AuthContext";
 
 export default ProfileScreen = ({ navigation }) => {
   const [fullName, setFullName] = useState("");
@@ -19,6 +20,7 @@ export default ProfileScreen = ({ navigation }) => {
   const [userId, setUserId] = useState(null);
   const [notificationOn, setNotificationOn] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const { logout } = useAuth();
 
   const fetchUserData = async (userId) => {
     try {
@@ -55,11 +57,10 @@ export default ProfileScreen = ({ navigation }) => {
 
   const handleLogout = async () => {
     try {
-      await AsyncStorage.multiRemove(["userId", "token", "role", "password"]);
-      navigation.replace("Login");
+      logout(); 
     } catch (error) {
       console.error("Error logging out:", error);
-      Alert.alert("Error", "An error occurred while logging out.");
+      Alert.alert("Error", "An error occurred while logging out");
     }
   };
 

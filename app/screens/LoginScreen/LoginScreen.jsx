@@ -13,8 +13,10 @@ import { Entypo, AntDesign, FontAwesome } from "@expo/vector-icons";
 import FontAwesome5 from "react-native-vector-icons/FontAwesome5";
 import { ScrollView } from "react-native-gesture-handler";
 import apiInstance from "../../config/apiInstance";
+import { useAuth } from "../../context/AuthContext";
 
 export default function LoginScreen({ navigation }) {
+  const { login } = useAuth();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [hidePassword, setHidePassword] = useState(true);
@@ -75,20 +77,12 @@ export default function LoginScreen({ navigation }) {
         await AsyncStorage.setItem("token", token);
         await AsyncStorage.setItem("role", role);
         await AsyncStorage.setItem("password", password);
+        login(username, password);
 
         console.log("user id: " + userId);
         console.log(token);
         console.log(role);
         console.log(password);
-
-        Alert.alert("Success", "Login successful!", [
-          {
-            text: "OK",
-            onPress: () => {
-              navigation.navigate("BottomTabNavigation");
-            },
-          },
-        ]);
       } else {
         Alert.alert("Error", response.data.message);
         setErr(response.data.message);
