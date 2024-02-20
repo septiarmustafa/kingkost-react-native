@@ -16,6 +16,8 @@ export default function Header() {
           const response = await apiInstance.get(`/customer/user/${userId}`);
           if (response.status === 200) {
             setFullName(response.data.data.fullName);
+            console.log("customer id ",response.data.data.id);
+            await AsyncStorage.setItem("customerId",response.data.data.id)
           } else {
             console.error("Failed to fetch user data:", response.data.message);
           }
