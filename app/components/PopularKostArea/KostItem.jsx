@@ -38,11 +38,11 @@ export default KostItem = ({ item, onPress }) => {
                         />
                         <View style={styles.genderContainer}>
                             <Image style={{
-                                width: item.gender != "campuran" ? 25 : 37,
-                                height:item.gender != "campuran" ? 25 : 30,
+                                width: item.gender != "campur" ? 25 : 37,
+                                height:item.gender != "campur" ? 25 : 30,
                                 marginRight: 5,
-                            }} source={item.gender == "male" ? require("../../../assets/icons/male.jpg") : item.gender == "campuran" ? require("../../../assets/icons/mix.jpg") : require("../../../assets/icons/female.jpg")} />
-                            <Text style={styles.genderText}>{item.gender == "male" ? "Male" : item.gender == "campuran" ? "Mix" : "Female"}</Text>
+                            }} source={item.gender == "male" ? require("../../../assets/icons/male.jpg") : item.gender == "campur" ? require("../../../assets/icons/mix.jpg") : require("../../../assets/icons/female.jpg")} />
+                            <Text style={styles.genderText}>{item.gender == "male" ? "Male" : item.gender == "campur" ? "Mix" : "Female"}</Text>
                         </View>
                     </View>
                 </View>

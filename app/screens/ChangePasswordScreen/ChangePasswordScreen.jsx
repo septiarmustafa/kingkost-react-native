@@ -13,6 +13,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import BackButton from "../../components/DetailKost/BackButton";
 import http from "../../config/HttpConfig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import apiInstance from "../../config/apiInstance";
 
 export default function ChangePasswordScreen({ navigation, route }) {
   const [userData, setUserData] = useState({
@@ -37,7 +38,7 @@ export default function ChangePasswordScreen({ navigation, route }) {
   useEffect(() => {
     const fetchGenders = async () => {
       try {
-        const response = await http.get(`/gender/v1`);
+        const response = await apiInstance.get(`/gender/v1`);
         setGenders(response.data);
       } catch (error) {
         console.error("Error fetching genders:", error);
@@ -61,7 +62,7 @@ export default function ChangePasswordScreen({ navigation, route }) {
 
   const fetchUserData = async (userId) => {
     try {
-      const response = await http.get(`/customer/user/${userId}`);
+      const response = await apiInstance.get(`/customer/user/${userId}`);
       if (
         !response.data.data.code === 200 ||
         !response.data.data.code === 201
@@ -86,7 +87,7 @@ export default function ChangePasswordScreen({ navigation, route }) {
       return;
     }
     try {
-      const response = await http.put(`/customer/v1`, userData);
+      const response = await apiInstance.put(`/customer/v1`, userData);
 
       if (!response.data.code === 201 || !response.data.code === 200) {
         throw new Error("Failed to update user data");

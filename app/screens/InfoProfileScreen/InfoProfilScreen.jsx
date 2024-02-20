@@ -17,6 +17,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import { BASE_HOST } from "../../config/BaseUrl";
 import LoadingComponent from "../../components/LoadingComponent";
+import apiInstance from "../../config/apiInstance";
 
 export default function InfoProfileScreen({ navigation, route }) {
   const [userData, setUserData] = useState({
@@ -37,7 +38,7 @@ export default function InfoProfileScreen({ navigation, route }) {
   useEffect(() => {
     const fetchGenders = async () => {
       try {
-        const response = await http.get(`/gender/v1`);
+        const response = await apiInstance.get(`/gender/v1`);
         setGenders(response.data);
       } catch (error) {
         console.error("Error fetching genders:", error);
@@ -61,7 +62,7 @@ export default function InfoProfileScreen({ navigation, route }) {
 
   const fetchUserData = async (userId) => {
     try {
-      const response = await http.get(`/customer/user/${userId}`);
+      const response = await apiInstance.get(`/customer/user/${userId}`);
       if (
         !response.data.data.code === 200 ||
         !response.data.data.code === 201
@@ -79,7 +80,7 @@ export default function InfoProfileScreen({ navigation, route }) {
 
   const handleUpdateProfile = async () => {
     try {
-      const response = await http.put(`/customer/v1`, userData);
+      const response = await apiInstance.put(`/customer/v1`, userData);
 
       if (!response.data.code === 201 || !response.data.code === 200) {
         throw new Error("Failed to update user data");

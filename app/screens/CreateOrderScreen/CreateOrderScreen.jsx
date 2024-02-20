@@ -16,6 +16,7 @@ import formatCurrencyIDR from "../../utils/formatCurrencyIDR";
 import { AntDesign } from '@expo/vector-icons';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Popup from "../../components/Popup";
+import apiInstance from "../../config/apiInstance";
 
 
 export default function CreateOrderScreen({ navigation, route }) {
@@ -70,7 +71,7 @@ export default function CreateOrderScreen({ navigation, route }) {
 
   const fetchUserData = async (userId) => {
     try {
-      const response = await http.get(`/customer/user/${userId}`);
+      const response = await apiInstance.get(`/customer/user/${userId}`);
       const data = response.data;
       setUserId(data.data.id);
       setUserGender(data.data.genderTypeId.name)
@@ -89,7 +90,7 @@ export default function CreateOrderScreen({ navigation, route }) {
 
   const fetchPaymentTypes = async () => {
     try {
-      const response = await http.get("/payment/v1");
+      const response = await apiInstance.get("/payment/v1");
       setPaymentTypes(response.data);
     } catch (error) {
       console.error("Error fetching payment types:", error);
@@ -98,7 +99,7 @@ export default function CreateOrderScreen({ navigation, route }) {
 
   const fetchMonthData = async () => {
     try {
-      const response = await http.get("/month/v1");
+      const response = await apiInstance.get("/month/v1");
       const months = response.data.map((month) => ({
         id: month.id,
         name: month.name,
@@ -145,7 +146,7 @@ export default function CreateOrderScreen({ navigation, route }) {
     console.log(orderData);
 
     try {
-      const response = await http.post("/transactions", orderData);
+      const response = await apiInstance.post("/transactions", orderData);
       if (response.status === 200 || response.status === 201) {
         setDataOrder(response.data.data)
         console.log(response.data.data);

@@ -15,6 +15,7 @@ import KostItem from "../../components/PopularKostArea/KostItem";
 import NoDataFound from "../../components/NoDataFound";
 import http from "../../config/HttpConfig";
 import LoadingComponent from "../../components/LoadingComponent";
+import apiInstance from "../../config/apiInstance";
 
 export default PopularKostArea = ({ navigation, route }) => {
   const { provinceId, cityId } = route.params;
@@ -37,7 +38,7 @@ export default PopularKostArea = ({ navigation, route }) => {
           url += `&city_id=${cityId}`;
         }
         console.log(url);
-        const response = await http.get(url);
+        const response = await apiInstance.get(url);
         const { data, paggingResponse } = response.data;
         const newData = data.map((item) => ({
           id: item.id,
@@ -76,7 +77,7 @@ export default PopularKostArea = ({ navigation, route }) => {
       if (text === "") {
         setKostData(originalKostData);
       } else {
-        const response = await http.get(`/kost?name=${text}`);
+        const response = await apiInstance.get(`/kost?name=${text}`);
         console.log(`/kost?name=${text}`);
         const { data, paggingResponse } = response.data;
         const newData = data.map((item) => ({

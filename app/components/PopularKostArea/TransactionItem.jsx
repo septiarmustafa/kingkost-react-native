@@ -37,17 +37,17 @@ export default TransactionItem = ({ item, onPress }) => {
             />
             <View style={styles.genderContainer}>
               <Image
-                style={{  width: item.gender == "campuran" ? 37 : 25,
-                height:item.gender == "campuran" ? 30 : 25,
+                style={{  width: item.gender == "campur" ? 37 : 25,
+                height:item.gender == "campur" ? 30 : 25,
                 marginRight: 5, }}
                 source={
                   item.gender == "male"
                     ? require("../../../assets/icons/male.jpg")
-                    : item.gender == "campuran" ?  require("../../../assets/icons/mix.jpg") : require("../../../assets/icons/female.jpg")
+                    : item.gender == "campur" ?  require("../../../assets/icons/mix.jpg") : require("../../../assets/icons/female.jpg")
                 }
               />
               <Text style={styles.genderText}>
-                {item.gender == "male" ? "Male" : item.gender == "campuran" ? "Mix" : "Female"}
+                {item.gender == "male" ? "Male" : item.gender == "campur" ? "Mix" : "Female"}
               </Text>
             </View>
           </View>
