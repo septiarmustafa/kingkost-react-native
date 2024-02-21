@@ -29,8 +29,7 @@ export default ProfileScreen = ({ navigation }) => {
       setFullName(data.data.fullName);
       setUserData(data.data);
       setPhoneNumber(data.data.phoneNumber);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {

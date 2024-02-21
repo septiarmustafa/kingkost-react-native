@@ -1,31 +1,62 @@
-import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
+} from "react-native";
 import Colors from "../../utils/Colors";
+import apiInstance from "../../config/apiInstance";
 
-import axios from "axios";
-import { BASE_HOST } from "../../config/BaseUrl";
-
-const TotalPriceAndCancel = ({
+export default TotalPriceAndCancel = ({
   calculateTotalPrice,
   transactionStatus,
   transactionId,
   customerId,
+  onCancelBooking,
 }) => {
   const isPending = transactionStatus === 0;
+  const statusText = getTransactionStatusText(transactionStatus);
+  const [cancellingTransaction, setCancellingTransaction] = useState(false);
 
   const cancelTransaction = async () => {
-    try {
-      const response = await axios.get(`${BASE_HOST}/transactions/cancel`, {
-        params: {
-          transactionId: transactionId,
-          customerId: customerId,
+    Alert.alert(
+      "Are You Sure?",
+      "Do you want to cancel this booking?",
+      [
+        {
+          text: "No",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
         },
-      });
-      console.log("Cancellation request sent successfully:", response.data);
-    } catch (error) {
-      console.log("Ini adalah customer: " + customerId);
-      console.error("Error cancelling transaction:", error);
-    }
+        {
+          text: "Yes",
+          onPress: async () => {
+            try {
+              setCancellingTransaction(true);
+              transactionId = `&transactionId=${transactionId}`;
+              customerId = `&customerId=${customerId}`;
+              let url = `/transactions/cancel?`;
+              if (customerId) {
+                url += customerId;
+              }
+              if (transactionId) {
+                url += transactionId;
+              }
+              const response = await apiInstance.post(url);
+              console.log("Cancellation successfully:", response.data);
+              onCancelBooking();
+            } catch (error) {
+              console.error("Error cancelling transaction:", error);
+            } finally {
+              setCancellingTransaction(false);
+            }
+          },
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   return (
@@ -37,25 +68,66 @@ const TotalPriceAndCancel = ({
       <View style={styles.bookNowContainer}>
         {isPending && (
           <TouchableOpacity
-            style={styles.bookNowButton}
+            style={[
+              styles.bookNowButton,
+              { backgroundColor: Colors.PRIMARY_COLOR },
+            ]}
             onPress={cancelTransaction}
+            disabled={cancellingTransaction}
           >
-            <Text style={{ color: Colors.BLACK, fontWeight: "bold" }}>
-              Cancel Booking
-            </Text>
+            {cancellingTransaction ? (
+              <ActivityIndicator size="small" color={Colors.BLACK} />
+            ) : (
+              <Text style={{ color: Colors.BLACK, fontWeight: "bold" }}>
+                Cancel Booking
+              </Text>
+            )}
           </TouchableOpacity>
         )}
         {!isPending && (
-          <Text style={styles.transactionStatusText}>
-            Transaction Status: {getTransactionStatusText(transactionStatus)}
-          </Text>
+          <View
+            style={{
+              backgroundColor: getStatusColor(statusText),
+              borderRadius: 10,
+              paddingHorizontal: 20,
+              paddingVertical: 10,
+            }}
+          >
+            <Text style={{ color: Colors.WHITE, fontWeight: "bold" }}>
+              {statusText}
+            </Text>
+          </View>
         )}
       </View>
     </View>
   );
 };
 
-export default TotalPriceAndCancel;
+const getTransactionStatusText = (statusCode) => {
+  switch (statusCode) {
+    case 1:
+      return "Cancelled";
+    case 2:
+      return "Rejected";
+    case 3:
+      return "Approved";
+    default:
+      return "Unknown";
+  }
+};
+
+const getStatusColor = (statusText) => {
+  switch (statusText) {
+    case "Rejected":
+      return Colors.RED;
+    case "Cancelled":
+      return Colors.GREY;
+    case "Approved":
+      return Colors.GREEN;
+    default:
+      return Colors.BLACK;
+  }
+};
 
 const styles = {
   container: {
@@ -81,7 +153,6 @@ const styles = {
     height: 50,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: Colors.PRIMARY_COLOR,
     borderRadius: 10,
     paddingHorizontal: 20,
   },
