@@ -29,6 +29,13 @@ export default function InfoProfileScreen({ navigation, route }) {
     password: "",
     url: "",
   });
+  const [errorMessages, setErrorMessages] = useState({
+    fullName: "",
+    genderTypeId: "",
+    email: "",
+    address: "",
+    phoneNumber: "",
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [genders, setGenders] = useState([]);
 
@@ -78,6 +85,19 @@ export default function InfoProfileScreen({ navigation, route }) {
   };
 
   const handleUpdateProfile = async () => {
+    const errors = {};
+    if (!userData.fullName) errors.fullName = "Name is required.";
+    if (!userData.genderTypeId) errors.genderTypeId = "Gender is required.";
+    if (!userData.email) errors.email = "Email is required.";
+    if (!userData.address) errors.address = "Address is required.";
+    if (!userData.phoneNumber) errors.phoneNumber = "Phone number is required.";
+
+    setErrorMessages(errors);
+
+    if (Object.keys(errors).length > 0) {
+      return;
+    }
+
     try {
       setIsLoading(true);
       const response = await apiInstance.put(`/customer/v1`, userData);
@@ -188,7 +208,7 @@ export default function InfoProfileScreen({ navigation, route }) {
           <FontAwesome
             style={styles.changePhotoText}
             name="edit"
-            size={60}
+            size={30}
             color="black"
           />
         </TouchableOpacity>
@@ -207,6 +227,10 @@ export default function InfoProfileScreen({ navigation, route }) {
               onChangeText={(text) => handleChange("fullName", text)}
             />
           </View>
+          {errorMessages.fullName ? (
+            <Text style={styles.errorMessage}>{errorMessages.fullName}</Text>
+          ) : null}
+
           <Text style={styles.inputTitle}>Gender</Text>
           <View style={styles.pickerContainer}>
             <Picker
@@ -233,6 +257,11 @@ export default function InfoProfileScreen({ navigation, route }) {
                   ))}
             </Picker>
           </View>
+          {errorMessages.genderTypeId ? (
+            <Text style={styles.errorMessage}>
+              {errorMessages.genderTypeId}
+            </Text>
+          ) : null}
 
           <Text style={styles.inputTitle}>Email</Text>
           <View style={styles.inputContainer}>
@@ -243,6 +272,10 @@ export default function InfoProfileScreen({ navigation, route }) {
               onChangeText={(text) => handleChange("email", text)}
             />
           </View>
+          {errorMessages.email ? (
+            <Text style={styles.errorMessage}>{errorMessages.email}</Text>
+          ) : null}
+
           <Text style={styles.inputTitle}>Address</Text>
           <View style={styles.inputContainer}>
             <FontAwesome name="home" size={24} color="grey" />
@@ -252,6 +285,10 @@ export default function InfoProfileScreen({ navigation, route }) {
               onChangeText={(text) => handleChange("address", text)}
             />
           </View>
+          {errorMessages.address ? (
+            <Text style={styles.errorMessage}>{errorMessages.address}</Text>
+          ) : null}
+
           <Text style={styles.inputTitle}>Phone</Text>
           <View style={styles.inputContainer}>
             <FontAwesome5 name="phone" size={24} color="grey" />
@@ -261,6 +298,9 @@ export default function InfoProfileScreen({ navigation, route }) {
               onChangeText={(text) => handleChange("phoneNumber", text)}
             />
           </View>
+          {errorMessages.phoneNumber ? (
+            <Text style={styles.errorMessage}>{errorMessages.phoneNumber}</Text>
+          ) : null}
           <TouchableOpacity
             style={styles.loginButton}
             onPress={handleUpdateProfile}
@@ -307,9 +347,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   changePhotoText: {
-    color: "white",
     fontWeight: "bold",
-    marginTop: -280,
+    marginTop: -270,
     marginLeft: 295,
   },
   title: {
@@ -355,5 +394,12 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderWidth: 1,
     borderColor: "#ddd",
+  },
+  errorMessage: {
+    color: "red",
+    fontSize: 12,
+    marginTop: -9,
+    marginBottom: 5,
+    paddingLeft: 5,
   },
 });

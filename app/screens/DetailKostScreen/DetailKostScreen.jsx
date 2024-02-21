@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, View, StyleSheet, ScrollView, Image, Dimensions } from "react-native";
-import { OpenWhatsApp } from '../../utils/OpenWhatsapp';
+import {
+  SafeAreaView,
+  View,
+  StyleSheet,
+  ScrollView,
+  Image,
+  Dimensions,
+} from "react-native";
+import { OpenWhatsApp } from "../../utils/OpenWhatsapp";
 import Colors from "../../utils/Colors";
 import { FlatList } from "react-native-gesture-handler";
 import BackgroundImage from "../../components/DetailKost/BackgroundImage";
@@ -45,14 +52,14 @@ export default DetailKostScreen = ({ navigation, route }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const userId = await AsyncStorage.getItem('customerId');
+      const userId = await AsyncStorage.getItem("customerId");
       if (!userId) {
-        console.error('User ID not found in localStorage')
+        console.error("User ID not found in localStorage");
       } else {
         console.log(`/kost/id?kostId=${kost.id}&customerId=${userId}`);
         await apiInstance
           .get(`/kost/id?kostId=${kost.id}&customerId=${userId}`)
-          .then(res => {
+          .then((res) => {
             const data = res.data.data;
             const kostData = {
               id: data.id,
@@ -69,33 +76,33 @@ export default DetailKostScreen = ({ navigation, route }) => {
               sellerPhone: data.seller.phoneNumber,
               sellerEmail: data.seller.email,
               sellerAddress: data.seller.address,
+              sellerImage: data.seller.url,
               availableRoom: data.availableRoom,
               isWifi: data.isWifi,
               isAc: data.isAc,
               isParking: data.isParking,
               bookingStatus: data.currentBookingStatus,
               images: data.images.map((image) => ({
-                uri: `${image.url}`
+                uri: `${image.url}`,
               })),
             };
             setListKost(kostData);
             setIsLoading(false);
           })
-          .catch(err => {
-            alert(err)
-            console.log(res)
+          .catch((err) => {
+            alert(err);
+            console.log(res);
             setIsLoading(false);
-          })
+          });
       }
     };
-  
+
     fetchData();
-  }, [])
+  }, [listKost]);
 
   if (isLoading) {
-    return (<LoadingComponent />)
+    return <LoadingComponent />;
   }
-
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: Colors.WHITE }}>
@@ -106,24 +113,35 @@ export default DetailKostScreen = ({ navigation, route }) => {
       />
       <ScrollView showsVerticalScrollIndicator={false}>
         <BackgroundImage
-          source={listKost.image != null || listKost.image != "" ? { uri: listKost.image } : require("../../../assets/images/default-image.png")}
+          source={
+            listKost.image != null || listKost.image != ""
+              ? { uri: listKost.image }
+              : require("../../../assets/images/default-image.png")
+          }
           onPress={navigation.goBack}
         />
         <View style={styles.flatListContainer}>
-          {listKost && listKost.images !== null && listKost.images !== "" ? (<FlatList
-            contentContainerStyle={{ marginTop: 20 }}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            keyExtractor={(_, key) => key.toString()}
-            data={listKost.images}
-            renderItem={({ item, index }) => (
-              <ImageCardList
-                interior={item}
-                index={index}
-                onPress={openModal}
-              />
-            )}
-          />) : (<Image source={require("../../../assets/images/default-image.png")} style={styles.cardImage} />)}
+          {listKost && listKost.images !== null && listKost.images !== "" ? (
+            <FlatList
+              contentContainerStyle={{ marginTop: 20 }}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              keyExtractor={(_, key) => key.toString()}
+              data={listKost.images}
+              renderItem={({ item, index }) => (
+                <ImageCardList
+                  interior={item}
+                  index={index}
+                  onPress={openModal}
+                />
+              )}
+            />
+          ) : (
+            <Image
+              source={require("../../../assets/images/default-image.png")}
+              style={styles.cardImage}
+            />
+          )}
         </View>
 
         <ImageModal
@@ -134,7 +152,9 @@ export default DetailKostScreen = ({ navigation, route }) => {
 
         <DetailSection
           title={listKost.title}
-          availability={listKost.availableRoom != 0 ? "Available" : "Not Available"}
+          availability={
+            listKost.availableRoom != 0 ? "Available" : "Not Available"
+          }
           roomCount={listKost.availableRoom}
           city={listKost.city}
           subdistrict={listKost.subdistrict}
@@ -147,15 +167,22 @@ export default DetailKostScreen = ({ navigation, route }) => {
           gender={
             listKost.gender === "male"
               ? require("../../../assets/icons/male.jpg")
-              : listKost.gender === "campur" ? require("../../../assets/icons/mix.jpg") : require("../../../assets/icons/female.jpg")
+              : listKost.gender === "campur"
+              ? require("../../../assets/icons/mix.jpg")
+              : require("../../../assets/icons/female.jpg")
           }
         />
 
         <SellerInfo
-          onPress={() => OpenWhatsApp(phone = listKost.sellerPhone, message = `Halo! Saya ingin bertanya tentang listKost "${listKost.title}"`)}
+          onPress={() =>
+            OpenWhatsApp(
+              (phone = listKost.sellerPhone),
+              (message = `Halo! Saya ingin bertanya tentang listKost "${listKost.title}"`)
+            )
+          }
           seller={listKost.sellerName}
           phone={listKost.sellerPhone}
-          image={require("../../../assets/images/default-profile.jpg")}
+          image={listKost.sellerImage}
         />
         <ChoosePeriod
           title="Simulate Prices"
@@ -163,7 +190,15 @@ export default DetailKostScreen = ({ navigation, route }) => {
           setSelectedMonths={setSelectedMonths}
         />
         <TotalPrice
-          text={listKost.bookingStatus == 4 || listKost.bookingStatus == 1 || listKost.bookingStatus == 2 ? "Book this kost" : listKost.bookingStatus == 0 ? "Book Pending" : "Booked"}
+          text={
+            listKost.bookingStatus == 4 ||
+            listKost.bookingStatus == 1 ||
+            listKost.bookingStatus == 2
+              ? "Book this kost"
+              : listKost.bookingStatus == 0
+              ? "Book Pending"
+              : "Booked"
+          }
           onPress={() => {
             if (listKost.bookingStatus != 0 && listKost.bookingStatus != 3) {
               navigation.navigate("CreateOrderScreen", listKost);
@@ -188,6 +223,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     borderRadius: 10,
     marginTop: 10,
-    backgroundColor: Colors.WEAK_COLOR
-  }
+    backgroundColor: Colors.WEAK_COLOR,
+  },
 });

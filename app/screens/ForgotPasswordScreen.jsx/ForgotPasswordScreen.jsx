@@ -72,7 +72,7 @@ export default function ForgotPasswordScreen({ navigation }) {
       <View style={styles.container}>
         <Image
           style={styles.loginImage}
-          source={require("../../../assets/images/register.png")}
+          source={require("../../../assets/images/forgot.png")}
         />
 
         <View style={styles.subContainer}>
@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
   },
   loginImage: {
     width: "100%",
-    height: 350,
+    height: 320,
   },
   subContainer: {
     minWidth: "100%",
