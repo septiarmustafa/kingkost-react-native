@@ -17,7 +17,6 @@ import SearchBar from "../../components/PopularKostArea/SearchBar";
 import KostItem from "../../components/PopularKostArea/KostItem";
 import { Picker } from "@react-native-picker/picker";
 import { AntDesign } from "@expo/vector-icons";
-import http from "../../config/HttpConfig";
 import LoadingComponent from "../../components/LoadingComponent";
 import NoDataFound from "../../components/NoDataFound";
 import apiInstance from "../../config/apiInstance";

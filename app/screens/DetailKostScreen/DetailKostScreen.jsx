@@ -43,49 +43,53 @@ export default DetailKostScreen = ({ navigation, route }) => {
     return formatCurrencyIDR(totalPrice);
   };
 
-  useEffect(async () => {
-    const userId = await AsyncStorage.getItem('customerId');
-    if (!userId) {
-      console.error('User ID not found in localStorage');
-      return;
-    }
-    console.log(`/kost/id?kostId=${kost.id}&customerId=${userId}`);
-    await apiInstance
-      .get(`/kost/id?kostId=${kost.id}&customerId=${userId}`)
-      .then(res => {
-        const data = res.data.data;
-        const kostData = {
-          id: data.id,
-          title: data.name,
-          image: data.images[0].url,
-          subdistrict: data.subdistrict.name,
-          city: data.city.name,
-          description: data.description,
-          province: data.city.province.name,
-          gender: data.genderType.name.toLowerCase(),
-          price: data.kostPrice.price,
-          sellerId: data.seller.id,
-          sellerName: data.seller.fullName,
-          sellerPhone: data.seller.phoneNumber,
-          sellerEmail: data.seller.email,
-          sellerAddress: data.seller.address,
-          availableRoom: data.availableRoom,
-          isWifi: data.isWifi,
-          isAc: data.isAc,
-          isParking: data.isParking,
-          bookingStatus: data.currentBookingStatus,
-          images: data.images.map((image) => ({
-            uri: `${image.url}`
-          })),
-        };
-        setListKost(kostData);
-        setIsLoading(false);
-      })
-      .catch(err => {
-        alert(err)
-        console.log(res)
-        setIsLoading(false);
-      })
+  useEffect(() => {
+    const fetchData = async () => {
+      const userId = await AsyncStorage.getItem('customerId');
+      if (!userId) {
+        console.error('User ID not found in localStorage')
+      } else {
+        console.log(`/kost/id?kostId=${kost.id}&customerId=${userId}`);
+        await apiInstance
+          .get(`/kost/id?kostId=${kost.id}&customerId=${userId}`)
+          .then(res => {
+            const data = res.data.data;
+            const kostData = {
+              id: data.id,
+              title: data.name,
+              image: data.images[0].url,
+              subdistrict: data.subdistrict.name,
+              city: data.city.name,
+              description: data.description,
+              province: data.city.province.name,
+              gender: data.genderType.name.toLowerCase(),
+              price: data.kostPrice.price,
+              sellerId: data.seller.id,
+              sellerName: data.seller.fullName,
+              sellerPhone: data.seller.phoneNumber,
+              sellerEmail: data.seller.email,
+              sellerAddress: data.seller.address,
+              availableRoom: data.availableRoom,
+              isWifi: data.isWifi,
+              isAc: data.isAc,
+              isParking: data.isParking,
+              bookingStatus: data.currentBookingStatus,
+              images: data.images.map((image) => ({
+                uri: `${image.url}`
+              })),
+            };
+            setListKost(kostData);
+            setIsLoading(false);
+          })
+          .catch(err => {
+            alert(err)
+            console.log(res)
+            setIsLoading(false);
+          })
+      }
+    };
+  
+    fetchData();
   }, [])
 
   if (isLoading) {
@@ -139,7 +143,7 @@ export default DetailKostScreen = ({ navigation, route }) => {
           parking={listKost.isParking}
           airConditioner={listKost.isAc}
           description={listKost.description}
-          type = {listKost.gender}
+          type={listKost.gender}
           gender={
             listKost.gender === "male"
               ? require("../../../assets/icons/male.jpg")
@@ -159,7 +163,7 @@ export default DetailKostScreen = ({ navigation, route }) => {
           setSelectedMonths={setSelectedMonths}
         />
         <TotalPrice
-        text={listKost.bookingStatus == 4 || listKost.bookingStatus == 1 || listKost.bookingStatus == 2 ? "Book this kost" : listKost.bookingStatus == 0 ? "Book Pending" : "Booked" }
+          text={listKost.bookingStatus == 4 || listKost.bookingStatus == 1 || listKost.bookingStatus == 2 ? "Book this kost" : listKost.bookingStatus == 0 ? "Book Pending" : "Booked"}
           onPress={() => {
             if (listKost.bookingStatus != 0 && listKost.bookingStatus != 3) {
               navigation.navigate("CreateOrderScreen", listKost);

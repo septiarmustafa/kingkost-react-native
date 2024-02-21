@@ -19,6 +19,7 @@ import {
   FontAwesome5,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import apiInstance from "../../config/apiInstance";
 
 export default function RegisterScreen() {
   const [hidePassword, setHidePassword] = useState(true);
@@ -93,7 +94,7 @@ export default function RegisterScreen() {
     }
 
     try {
-      const response = await axios.post(
+      const response = await apiInstance.post(
         `/api/auth/register/customer`,
         registrationData
       );

@@ -14,7 +14,6 @@ import BackButton from "../../components/DetailKost/BackButton";
 import SearchBar from "../../components/PopularKostArea/SearchBar";
 import KostItem from "../../components/PopularKostArea/KostItem";
 import NoDataFound from "../../components/NoDataFound";
-import http from "../../config/HttpConfig";
 import LoadingComponent from "../../components/LoadingComponent";
 import apiInstance from "../../config/apiInstance";
 
