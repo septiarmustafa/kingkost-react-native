@@ -185,7 +185,12 @@ export default function InfoProfileScreen({ navigation, route }) {
           }
         />
         <TouchableOpacity onPress={handleImageClick}>
-          <Text style={styles.changePhotoText}>Change Photo</Text>
+          <FontAwesome
+            style={styles.changePhotoText}
+            name="edit"
+            size={60}
+            color="black"
+          />
         </TouchableOpacity>
 
         <View style={{ position: "absolute", top: 10, left: "4%" }}>
@@ -217,13 +222,15 @@ export default function InfoProfileScreen({ navigation, route }) {
                 value=""
               />
               {genders &&
-                genders.map((gender) => (
-                  <Picker.Item
-                    key={gender.id}
-                    label={gender.name}
-                    value={gender.id}
-                  />
-                ))}
+                genders
+                  .filter((gender) => gender.name !== "CAMPUR")
+                  .map((gender) => (
+                    <Picker.Item
+                      key={gender.id}
+                      label={gender.name}
+                      value={gender.id}
+                    />
+                  ))}
             </Picker>
           </View>
 
@@ -292,8 +299,8 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     padding: 20,
-    paddingTop: 50,
-    marginTop: -37,
+    paddingTop: 45,
+    marginTop: -45,
   },
   titleContainer: {
     flexDirection: "row",
@@ -302,8 +309,8 @@ const styles = StyleSheet.create({
   changePhotoText: {
     color: "white",
     fontWeight: "bold",
-    marginTop: -260,
-    marginLeft: 230,
+    marginTop: -280,
+    marginLeft: 295,
   },
   title: {
     fontSize: 24,

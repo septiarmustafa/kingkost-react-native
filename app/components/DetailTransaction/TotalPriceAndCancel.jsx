@@ -47,6 +47,16 @@ export default TotalPriceAndCancel = ({
               const response = await apiInstance.post(url);
               console.log("Cancellation successfully:", response.data);
               onCancelBooking();
+              Alert.alert(
+                "Cancellation Successful",
+                "The booking has been successfully cancelled.",
+                [
+                  {
+                    text: "OK",
+                    onPress: () => console.log("OK Pressed"),
+                  },
+                ]
+              );
             } catch (error) {
               console.error("Error cancelling transaction:", error);
             } finally {
