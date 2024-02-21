@@ -11,8 +11,6 @@ import {
 import { Picker } from "@react-native-picker/picker";
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import axios from "axios";
-import { BASE_HOST } from "../../config/BaseUrl";
 import {
   Entypo,
   FontAwesome,
@@ -47,7 +45,7 @@ export default function RegisterScreen() {
   useEffect(() => {
     const fetchGenders = async () => {
       try {
-        const response = await axios.get(`${BASE_HOST}/gender/v1`);
+        const response = await apiInstance.get(`/gender/v1`);
         setGenders(response.data);
       } catch (error) {
         console.error("Error fetching genders:", error);
@@ -222,13 +220,16 @@ export default function RegisterScreen() {
                   style={{ color: "grey" }}
                   value=""
                 />
-                {genders.map((gender) => (
-                  <Picker.Item
-                    key={gender.id}
-                    label={gender.name}
-                    value={gender.id}
-                  />
-                ))}
+                {genders &&
+                  genders
+                    .filter((gender) => gender.name !== "CAMPUR")
+                    .map((gender) => (
+                      <Picker.Item
+                        key={gender.id}
+                        label={gender.name}
+                        value={gender.id}
+                      />
+                    ))}
               </Picker>
             </View>
             {errorMessages.genderTypeId ? (
