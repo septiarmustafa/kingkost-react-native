@@ -31,6 +31,7 @@ export default DetailTransactionScreen = ({ navigation, route }) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [images, setImages] = useState([]);
+  const [sellerImage, setSellerImage] = useState(null);
 
   console.log(images);
 
@@ -45,7 +46,9 @@ export default DetailTransactionScreen = ({ navigation, route }) => {
         const image = response.data.data.kost.images.map((image) => ({
           uri: `${image.url}`,
         }));
+        const sellerPhoto = response.data.data.kost.seller.url;
         setImages(image);
+        setSellerImage(sellerPhoto);
       } catch (error) {
         console.error("Error fetching transaction:", error);
       }
@@ -157,7 +160,7 @@ export default DetailTransactionScreen = ({ navigation, route }) => {
           }
           seller={transaction.kost.seller.fullName}
           phone={transaction.kost.seller.phoneNumber}
-          image={require("../../../assets/images/default-profile.jpg")}
+          image={sellerImage}
         />
 
         <BookingPeriod

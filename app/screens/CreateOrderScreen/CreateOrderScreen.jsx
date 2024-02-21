@@ -158,7 +158,7 @@ export default function CreateOrderScreen({ navigation, route }) {
         console.log(response.data.data);
         console.log(dataOrder);
         console.log(response.status + " Order submitted successfully");
-        navigation.navigate("OrderStatusScreen", response.data.data);
+        navigation.replace("OrderStatusScreen", response.data.data);
       } else {
         const errorData = response.data.message ?? "error ";
         console.error("Error:", errorData);
