@@ -11,7 +11,6 @@ import {
 import { FontAwesome, Entypo } from "@expo/vector-icons";
 import { ScrollView } from "react-native-gesture-handler";
 import BackButton from "../../components/DetailKost/BackButton";
-import http from "../../config/HttpConfig";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import apiInstance from "../../config/apiInstance";
 
