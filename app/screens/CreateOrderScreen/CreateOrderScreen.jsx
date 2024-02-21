@@ -113,8 +113,13 @@ export default function CreateOrderScreen({ navigation, route }) {
   };
 
   const handleOrderSubmit = async () => {
-    if (kost.gender.toLowerCase() !== "campur" && userGender.toLowerCase() !== kost.gender.toLowerCase()) {
-      setModalMessage(`This kost is only available for ${kost.gender.toLowerCase()}`);
+    if (
+      kost.gender.toLowerCase() !== "campur" &&
+      userGender.toLowerCase() !== kost.gender.toLowerCase()
+    ) {
+      setModalMessage(
+        `This kost is only available for ${kost.gender.toLowerCase()}`
+      );
       setModalVisible(true);
       return;
     }

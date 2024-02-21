@@ -7,10 +7,8 @@ import {
 } from "@expo/vector-icons";
 import Colors from "../../utils/Colors";
 
-export default DetailsSection = ({
+export default DetailTransactionSection = ({
   title,
-  availability,
-  roomCount,
   city,
   subdistrict,
   province,
@@ -64,7 +62,7 @@ export default DetailsSection = ({
             </Text>
             <Image
               style={{
-                width: type == "campur" ? 35 : 20,
+                width: type == "campur" ? 35 : 25,
                 height: type == "campur" ? 25 : 20,
               }}
               source={gender}
@@ -72,40 +70,6 @@ export default DetailsSection = ({
           </View>
         </View>
         <View>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            {roomCount !== 0 ? (
-              <View
-                style={{
-                  height: 30,
-                  width: 70,
-                  backgroundColor: Colors.GREEN,
-                  borderRadius: 5,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ color: Colors.WHITE }}>{availability}</Text>
-              </View>
-            ) : (
-              <View
-                style={{
-                  height: 30,
-                  width: 110,
-                  backgroundColor: Colors.RED,
-                  borderRadius: 5,
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <Text style={{ color: Colors.WHITE }}>{availability}</Text>
-              </View>
-            )}
-            {roomCount !== 0 && (
-              <Text style={{ fontSize: 13, marginLeft: 5 }}>
-                {roomCount} room
-              </Text>
-            )}
-          </View>
           <View style={{ marginTop: 10, flexDirection: "row" }}>
             {wifi !== false && (
               <View style={style.facility}>
