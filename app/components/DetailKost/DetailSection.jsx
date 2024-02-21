@@ -60,7 +60,7 @@ export default DetailsSection = ({
           )}
           <View style={{ flexDirection: "row" }}>
             <Text style={{ fontSize: 16, color: Colors.GREY }}>
-              Gender type:{""}
+              Kost type:{""}
             </Text>
             <Image
               style={{
