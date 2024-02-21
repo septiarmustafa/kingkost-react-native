@@ -26,7 +26,6 @@ export default function BottomTabNavigation() {
         headerShown: false,
         tabBarActiveTintColor: Colors.PRIMARY_COLOR,
         tabBarStyle: {
-          marginBottom: 7,
           backgroundColor: Colors.WHITE,
           color : Colors.WHITE,
           elevation : 0
