@@ -25,15 +25,6 @@ export default function LoginScreen({ navigation }) {
     password: "",
   });
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("focus", () => {
-      setUsername("");
-      setPassword("");
-    });
-
-    return unsubscribe;
-  }, [navigation]);
-
   const handleUsername = (text) => {
     setUsername(text);
     setErrorMessages({ ...errorMessages, username: "" });

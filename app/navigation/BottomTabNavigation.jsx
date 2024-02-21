@@ -14,10 +14,13 @@ const Tab = createBottomTabNavigator();
 export default function BottomTabNavigation() {
   const [role, setRole] = useState();
 
-  useEffect(async () => {
-    const role = await AsyncStorage.getItem("role");
-
-    setRole(role);
+  useEffect(() => {
+    const fetchData = async () => {
+      const role = await AsyncStorage.getItem("role");
+      setRole(role);
+    };
+  
+    fetchData();
   }, []);
 
   return (
