@@ -6,7 +6,7 @@ export default TotalPrice = ({ text, calculateTotalPrice, onPress }) => {
   return (
     <View style={styles.container}>
       <View>
-        <Text style={styles.totalPriceText}>Total Price</Text>
+        <Text style={styles.totalPriceText}>Price</Text>
         <Text style={styles.totalPriceValue}>{calculateTotalPrice()}</Text>
       </View>
       <View style={styles.bookNowContainer}>

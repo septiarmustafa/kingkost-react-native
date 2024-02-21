@@ -11,7 +11,6 @@ import {
 } from "react-native";
 import Colors from "../../utils/Colors";
 import { StatusBar } from "expo-status-bar";
-import DetailSection from "../../components/DetailKost/DetailSection";
 import SellerInfo from "../../components/DetailKost/SellerInfo";
 import { OpenWhatsApp } from "../../utils/OpenWhatsapp";
 import MonthTypeConverter from "../../utils/MonthTypeConverter";
@@ -19,16 +18,21 @@ import apiInstance from "../../config/apiInstance";
 import LoadingComponent from "../../components/LoadingComponent";
 import BackgroundImage from "../../components/DetailKost/BackgroundImage";
 import ImageCardList from "../../components/DetailKost/ImageCardList";
-import ImageModal from "../../components/DetailKost/ImageModal";
 import BookingPeriod from "../../components/DetailTransaction/BookingPeriod";
 import TotalPriceAndCancel from "../../components/DetailTransaction/TotalPriceAndCancel";
+import DetailTransactionSection from "../../components/DetailTransaction/DetailTransactionSection";
+import formatCurrencyIDR from "../../utils/formatCurrencyIDR";
+import ImageModal from "../../components/DetailKost/ImageModal";
 const { width } = Dimensions.get("screen");
 
 export default DetailTransactionScreen = ({ navigation, route }) => {
   const { transactionId } = route.params;
   const [transaction, setTransaction] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [images, setImages] = useState([]);
+
+  console.log(images);
 
   useEffect(() => {
     const fetchTransaction = async () => {
@@ -37,6 +41,11 @@ export default DetailTransactionScreen = ({ navigation, route }) => {
           `/transactions/${transactionId}`
         );
         setTransaction(response.data.data);
+        console.log(response.data.data.kost.images);
+        const image = response.data.data.kost.images.map((image) => ({
+          uri: `${image.url}`,
+        }));
+        setImages(image);
       } catch (error) {
         console.error("Error fetching transaction:", error);
       }
@@ -47,14 +56,19 @@ export default DetailTransactionScreen = ({ navigation, route }) => {
 
   const openModal = (index) => {
     setSelectedImageIndex(index);
-    setIsModalVisible(true);
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+    setSelectedImageIndex(null);
   };
 
   const calculateTotalPrice = () => {
     const selectedMonths = MonthTypeConverter.getMonthCount(
       transaction.monthType.name
     );
-    const monthlyPrice = transaction.kost.kostPrices[0].price;
+    const monthlyPrice = transaction.kost.kostPrice.price;
     const totalPrice = selectedMonths * monthlyPrice;
 
     return formatCurrencyIDR(totalPrice);
@@ -88,12 +102,12 @@ export default DetailTransactionScreen = ({ navigation, route }) => {
               horizontal
               showsHorizontalScrollIndicator={false}
               keyExtractor={(_, key) => key.toString()}
-              data={transaction.kost.images}
+              data={images}
               renderItem={({ item, index }) => (
                 <ImageCardList
                   interior={item}
                   index={index}
-                  onPress={() => openModal(index)}
+                  onPress={openModal}
                 />
               )}
             />
@@ -105,7 +119,13 @@ export default DetailTransactionScreen = ({ navigation, route }) => {
           )}
         </View>
 
-        <DetailSection
+        <ImageModal
+          visible={isModalVisible}
+          closeModal={closeModal}
+          imageSource={images[selectedImageIndex]}
+        />
+
+        <DetailTransactionSection
           title={transaction.kost.name}
           availability={
             transaction.kost.availableRoom != 0 ? "Available" : "Not Available"
@@ -118,6 +138,7 @@ export default DetailTransactionScreen = ({ navigation, route }) => {
           parking={transaction.isParking}
           airConditioner={transaction.isAc}
           description={transaction.kost.description}
+          type={transaction.kost.genderType.name}
           gender={
             transaction.kost.genderType.name === "MALE"
               ? require("../../../assets/icons/male.jpg")
@@ -149,6 +170,7 @@ export default DetailTransactionScreen = ({ navigation, route }) => {
           transactionStatus={transaction.aprStatus}
           transactionId={transaction.id}
           customerId={transaction.customer.id}
+          onCancelBooking={() => navigation.goBack()}
         />
       </ScrollView>
     </SafeAreaView>

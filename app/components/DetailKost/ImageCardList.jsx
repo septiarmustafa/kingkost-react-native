@@ -1,7 +1,6 @@
-import React from 'react';
-import { TouchableOpacity, Image, StyleSheet, Dimensions } from 'react-native';
+import React from "react";
+import { TouchableOpacity, Image, StyleSheet, Dimensions } from "react-native";
 const { width } = Dimensions.get("screen");
-
 
 export default ImageCardList = ({ interior, index, onPress }) => (
   <TouchableOpacity onPress={() => onPress(index)}>

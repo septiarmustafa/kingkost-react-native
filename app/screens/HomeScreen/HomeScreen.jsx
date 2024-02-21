@@ -22,9 +22,9 @@ export default HomeScreen = ({ navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-     async function fetchData() {
+    async function fetchData() {
       try {
-        const response = await apiInstance.get('/kost?page=0');
+        const response = await apiInstance.get("/kost?page=0");
         const data = response.data;
         const kostData = data.data.map((item) => ({
           id: item.id,
@@ -56,8 +56,8 @@ export default HomeScreen = ({ navigation }) => {
         setIsLoading(false);
       }
     }
-    fetchData()
-  }, [])
+    fetchData();
+  }, [listKost]);
 
   const navigateToPopularKostScreen = async (provinceId, cityId) => {
     navigation.navigate("PopularKostArea", { provinceId, cityId });

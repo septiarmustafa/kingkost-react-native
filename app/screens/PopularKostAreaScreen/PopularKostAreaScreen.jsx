@@ -6,6 +6,7 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
+  RefreshControl,
 } from "react-native";
 import Colors from "../../utils/Colors";
 import { StatusBar } from "expo-status-bar";
@@ -25,51 +26,59 @@ export default PopularKostArea = ({ navigation, route }) => {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPage, setTotalPage] = useState(1);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const handleReload = () => {
+    setRefreshing(true);
+    fetchKostData();
+    setRefreshing(false);
+  };
 
   useEffect(() => {
-    const fetchKostData = async () => {
-      setLoading(true);
-      try {
-        let url = `/kost?page=${currentPage}`;
-        if (provinceId) {
-          url += `&province_id=${provinceId}`;
-        }
-        if (cityId) {
-          url += `&city_id=${cityId}`;
-        }
-        console.log(url);
-        const response = await apiInstance.get(url);
-        const { data, paggingResponse } = response.data;
-        const newData = data.map((item) => ({
-          id: item.id,
-          title: item.name,
-          image: item.images[0].url,
-          subdistrict: item.subdistrict.name,
-          city: item.city.name,
-          description: item.description,
-          province: item.city.province.name,
-          gender: item.genderType.name.toLowerCase(),
-          price: item.kostPrice.price,
-          sellerName: item.seller.fullName,
-          sellerPhone: item.seller.phoneNumber,
-          availableRoom: item.availableRoom,
-          isWifi: item.isWifi,
-          isAc: item.isAc,
-          isParking: item.isParking,
-          images: item.images.map((image) => ({
-            uri: `${image.url}`,
-          })),
-        }));
-        setOriginalKostData(newData);
-        setKostData(newData);
-        setTotalPage(paggingResponse.totalPage);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-      setLoading(false);
-    };
     fetchKostData();
   }, [currentPage]);
+
+  const fetchKostData = async () => {
+    setLoading(true);
+    try {
+      let url = `/kost?page=${currentPage}`;
+      if (provinceId) {
+        url += `&province_id=${provinceId}`;
+      }
+      if (cityId) {
+        url += `&city_id=${cityId}`;
+      }
+      console.log(url);
+      const response = await apiInstance.get(url);
+      const { data, paggingResponse } = response.data;
+      const newData = data.map((item) => ({
+        id: item.id,
+        title: item.name,
+        image: item.images[0].url,
+        subdistrict: item.subdistrict.name,
+        city: item.city.name,
+        description: item.description,
+        province: item.city.province.name,
+        gender: item.genderType.name.toLowerCase(),
+        price: item.kostPrice.price,
+        sellerName: item.seller.fullName,
+        sellerPhone: item.seller.phoneNumber,
+        availableRoom: item.availableRoom,
+        isWifi: item.isWifi,
+        isAc: item.isAc,
+        isParking: item.isParking,
+        images: item.images.map((image) => ({
+          uri: `${image.url}`,
+        })),
+      }));
+      setOriginalKostData(newData);
+      setKostData(newData);
+      setTotalPage(paggingResponse.totalPage);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+    setLoading(false);
+  };
 
   const handleSearch = async (text) => {
     setSearchQuery(text);
@@ -158,6 +167,12 @@ export default PopularKostArea = ({ navigation, route }) => {
             keyExtractor={(item) => item.id}
             contentContainerStyle={styles.flatListContainer}
             showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={handleReload}
+              />
+            }
           />
         )}
       </View>

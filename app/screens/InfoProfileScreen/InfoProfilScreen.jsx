@@ -16,8 +16,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import LoadingComponent from "../../components/LoadingComponent";
 import apiInstance from "../../config/apiInstance";
-import axios from "axios";
-import { BASE_HOST } from "../../config/BaseUrl";
 
 export default function InfoProfileScreen({ navigation, route }) {
   const [userData, setUserData] = useState({
@@ -32,7 +30,6 @@ export default function InfoProfileScreen({ navigation, route }) {
     url: "",
   });
   const [isLoading, setIsLoading] = useState(false);
-
   const [genders, setGenders] = useState([]);
 
   useEffect(() => {
@@ -62,6 +59,7 @@ export default function InfoProfileScreen({ navigation, route }) {
 
   const fetchUserData = async (userId) => {
     try {
+      setIsLoading(true);
       const response = await apiInstance.get(`/customer/user/${userId}`);
       if (
         !response.data.data.code === 200 ||
@@ -71,15 +69,17 @@ export default function InfoProfileScreen({ navigation, route }) {
       }
       const userData = await response.data.data;
       setUserData(userData);
-
       handleChange("genderTypeId", userData.genderTypeId.id);
     } catch (error) {
       console.error("Error fetching user data:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleUpdateProfile = async () => {
     try {
+      setIsLoading(true);
       const response = await apiInstance.put(`/customer/v1`, userData);
 
       if (!response.data.code === 201 || !response.data.code === 200) {
@@ -92,6 +92,8 @@ export default function InfoProfileScreen({ navigation, route }) {
     } catch (error) {
       console.error("Error updating user data:", error);
       Alert.alert("Error", "Failed to update user data. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -111,6 +113,8 @@ export default function InfoProfileScreen({ navigation, route }) {
 
   const handleFileInputChange = async () => {
     try {
+      setIsLoading(true);
+
       let result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
@@ -129,13 +133,12 @@ export default function InfoProfileScreen({ navigation, route }) {
         });
 
         console.log(formData);
-        const token = await AsyncStorage.getItem('token');
+        const token = await AsyncStorage.getItem("token");
         console.log(token);
 
-        setIsLoading(true);
         console.log("user id ", userData.id);
-        const response = await axios.post(
-          `${BASE_HOST}/customer/v1/upload/${userData.id}`,
+        const response = await apiInstance.post(
+          `/customer/v1/upload/${userData.id}`,
           formData,
           {
             headers: {
@@ -161,8 +164,9 @@ export default function InfoProfileScreen({ navigation, route }) {
     } catch (error) {
       console.error("Error uploading image:", error);
       Alert.alert("Error", "Failed to upload image. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
   };
 
   if (isLoading) {
